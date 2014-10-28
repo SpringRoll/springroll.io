@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "dependencies": {
+    "colors": "^1.0.3",
+    "fs.extra": "^1.2.1"
+  }
+}
