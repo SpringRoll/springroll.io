@@ -6,11 +6,11 @@
 		"src/main.less"
 	],
 	"libraries": [
-		"components/normalize-css/normalize.css",
+		"components/normalize-less/normalize.less",
 		"components/jquery/dist/jquery.min.js"
 	],
 	"librariesDebug": [
-		"components/normalize-css/normalize.css",
+		"components/normalize-less/normalize.less",
 		"components/jquery/dist/jquery.js"
 	]
 }
