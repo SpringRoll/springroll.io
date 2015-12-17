@@ -1,8 +1,0 @@
-{
-	"site" : {
-		"repo" : "https://github.com/SpringRoll/springroll.io",
-		"name" : "SpringRoll",
-		"path" : "dev.springroll.io",
-		"pathLive" : "springroll.io"
-	}
-}

@@ -1,8 +1,10 @@
 {
-	"private": true,
-	"version": "1.0.2",
-	"dependencies": {
-		"grunt": "~0.4.5",
-		"project-grunt": "*"
-	}
+  "private": true,
+  "version": "1.0.3",
+  "name": "SpringRoll",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "project-grunt": "*",
+    "grunt-contrib-jade": "^0.15.0"
+  }
 }

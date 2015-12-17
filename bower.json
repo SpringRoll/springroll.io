@@ -1,8 +1,7 @@
 {
-	"name": "MyApp",
-	"version": "1.0.2",
+	"name": "SpringRoll",
+	"version": "1.0.3",
 	"dependencies": {
-		"jquery": "~1",
 		"normalize-less": "*"
 	},
 	"ignore": [

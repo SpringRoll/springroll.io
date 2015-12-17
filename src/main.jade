@@ -1,0 +1,25 @@
+doctype html
+html
+	head
+		meta(charset='utf-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+		title=name
+		meta(name='description', content='')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0')
+		link(rel='stylesheet', href='assets/css/libraries.css?v=#{version}')
+		link(rel='stylesheet', href='assets/css/main.css?v=#{version}')
+		link(rel='shortcut icon', type='image/png', href='assets/images/favicon.ico')
+		link(href='http://fonts.googleapis.com/css?family=Titillium+Web:300', rel='stylesheet', type='text/css')
+	body: .frame
+		.splash
+			a(href='http://github.springroll.io')
+				img(src='assets/images/logo.png?v=#{version}', alt='SpringRoll logo', width='128', height='128')
+			h1=name
+			.links
+				a(href='http://github.springroll.io') Code | 
+				a(href='http://wiki.springroll.io') Wiki | 
+				a(href='http://api.springroll.io') API Docs | 
+				a(href='http://examples.springroll.io') Examples
+		.glow
+		footer &copy; CloudKid #{year}. MIT License.
+	script(src='assets/js/main.js?v=#{version}')

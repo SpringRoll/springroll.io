@@ -1,16 +1,14 @@
 {
 	"name": "SpringRoll",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"main": [
 		"src/main.js",
 		"src/main.less"
 	],
 	"libraries": [
-		"components/normalize-less/normalize.less",
-		"components/jquery/dist/jquery.min.js"
+		"components/normalize-less/normalize.less"
 	],
 	"librariesDebug": [
-		"components/normalize-less/normalize.less",
-		"components/jquery/dist/jquery.js"
+		"components/normalize-less/normalize.less"
 	]
 }
