@@ -18,4 +18,9 @@ module.exports = function(grunt)
 	grunt.registerTask('_pre-build-debug', [
 		'html-debug'
 	]);
+
+	grunt.registerTask('deploy', [
+		'default',
+		'copy:deploy'
+	]);
 };
