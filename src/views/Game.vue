@@ -1,10 +1,10 @@
 <template>
   <div class="game__container">
-    <iframe id="demo-game" class="game" src="http://springroll.io/springroll-io-demo-game/" frameborder="0" />
+    <iframe id="demo-game" class="game" :src=gameUrl frameborder="0" />
     <div class="game__events">
       <h2 class="game__header">Game Options</h2>
-      <v-btn @click="pause" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">Pause</v-btn>
-      <v-btn @click="mute" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">Mute</v-btn>
+      <v-btn @click="pause" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ paused ? 'Unpause' : 'Pause'}}</v-btn>
+      <v-btn @click="mute" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ muted ? 'Unmute' : 'Mute'}}</v-btn>
       <h2 class="game__header">Game Events</h2>
       <div v-for="(event, key) in events" :key=key :class="{'--active': event.on }" class="game__event">{{event.label}}</div>
     </div>
@@ -26,11 +26,13 @@ export default {
         'pauseScreenActive': { label: 'Pause',  on: false },
         'soundMute': { label: 'Sound Mute',  on: false },
         'captionStart': { label: 'Captions Start',  on: false },
-      }
+      },
+      gameUrl: location.protocol + '//springroll.io/springroll-io-demo-game/'
     };
   },
   methods: {
     pause() {
+      console.log(location.protocol );
       this.bellhop.send('pause', this.paused = !this.paused);
     },
     mute() {
@@ -59,12 +61,11 @@ export default {
 
 
 <style lang="scss">
-@import '~@/scss/colors';
-@import '~@/scss/mixins';
+@import "~@/scss/colors";
+@import "~@/scss/mixins";
 .game {
   height: 52rem;
   width: 65rem;
-
 
   &__events {
     color: $accent;

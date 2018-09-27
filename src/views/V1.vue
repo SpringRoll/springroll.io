@@ -1,6 +1,17 @@
 <template>
-  <iframe class="v1" src="/v1.html" frameborder="0"></iframe>
+  <iframe class="v1" :src=url frameborder="0"></iframe>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      url: location.protocol + '//springroll.io/springroll.io.v1/'
+    };
+  }
+};
+</script>
+
 
 <style lang="scss">
 .v1 {
