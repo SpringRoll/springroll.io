@@ -1,10 +1,14 @@
 <template>
   <div class="game__container">
-    <iframe id="demo-game" class="game" :src=gameUrl frameborder="0" />
+    <div class="game__wrapper">
+      <iframe id="demo-game" class="game" :src=gameUrl frameborder="0" />
+      <a class="game__source"  href="https://github.com/SpringRoll/springroll-io-demo-game">Source Code for the Game</a>
+    </div>
     <div class="game__events">
       <h2 class="game__header">Game Options</h2>
       <v-btn @click="pause" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ paused ? 'Unpause' : 'Pause'}}</v-btn>
       <v-btn @click="mute" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ muted ? 'Unmute' : 'Mute'}}</v-btn>
+      <v-btn @click="hint" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">Hint</v-btn>
       <h2 class="game__header">Game Events</h2>
       <div v-for="(event, key) in events" :key=key :class="{'--active': event.on }" class="game__event">{{event.label}}</div>
     </div>
@@ -21,6 +25,7 @@ export default {
       paused: false,
       muted: false,
       events: {
+        'playHelp': { label: 'Hint', on: false},
         'localizerResolve': { label: 'Localiztion', on: false},
         'speechSynthStart': { label: 'Speech Synch',  on: false },
         'pauseScreenActive': { label: 'Pause',  on: false },
@@ -37,6 +42,9 @@ export default {
     },
     mute() {
       this.bellhop.send('soundMuted', this.muted = !this.muted);
+    },
+    hint() {
+      this.bellhop.send('playHelp');
     }
   },
   mounted() {
@@ -85,6 +93,18 @@ export default {
 
   &__button {
     height: 4.4rem !important;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding-top: 3.5rem;
+  }
+
+  &__source {
+    align-self: flex-end;
+    padding-right: 2rem;
   }
 
   &__container {
