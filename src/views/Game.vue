@@ -25,7 +25,7 @@ export default {
       paused: false,
       muted: false,
       events: {
-        'playHelp': { label: 'Hint', on: false},
+      //  'playHelp': { label: 'Hint', on: false},
         'localizerResolve': { label: 'Localiztion', on: false},
         'speechSynthStart': { label: 'Speech Synch',  on: false },
         'pauseScreenActive': { label: 'Pause',  on: false },
