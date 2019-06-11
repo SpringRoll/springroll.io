@@ -90,7 +90,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
       drawer: false
@@ -101,8 +101,8 @@ export default {
 
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/fonts";
+@import '~@/scss/colors';
+@import '~@/scss/fonts';
 .nav {
   &__bar {
     .v-toolbar__content {

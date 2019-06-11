@@ -1,55 +1,90 @@
 <template>
   <div class="game__container">
     <div class="game__wrapper">
-      <iframe id="demo-game" class="game" :src=gameUrl frameborder="0" />
-      <a class="game__source"  href="https://github.com/SpringRoll/springroll-io-demo-game">Source Code for the Game</a>
+      <iframe id="demo-game" class="game" :src="gameUrl" frameborder="0"/>
+      <a
+        class="game__source"
+        href="https://github.com/SpringRoll/springroll-io-demo-game"
+      >Source Code for the Game</a>
     </div>
     <div class="game__events">
       <h2 class="game__header">Game Options</h2>
-      <v-btn @click="pause" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ paused ? 'Unpause' : 'Pause'}}</v-btn>
-      <v-btn @click="mute" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">{{ muted ? 'Unmute' : 'Mute'}}</v-btn>
-      <v-btn @click="hint" block color="primary" class="game__event game__button --capital font-16 font-semi-bold">Hint</v-btn>
+      <v-btn
+        @click="pause"
+        block
+        color="primary"
+        class="game__event game__button --capital font-16 font-semi-bold"
+      >{{ paused ? 'Unpause' : 'Pause'}}</v-btn>
+      <v-btn
+        id="game-sound-mute"
+        @click="mute"
+        block
+        color="primary"
+        class="game__event game__button --capital font-16 font-semi-bold"
+      >{{ muted ? 'Unmute' : 'Mute'}}</v-btn>
+      <v-btn
+        @click="hint"
+        block
+        color="primary"
+        class="game__event game__button --capital font-16 font-semi-bold"
+      >Hint</v-btn>
       <h2 class="game__header">Game Events</h2>
-      <div v-for="(event, key) in events" :key=key :class="{'--active': event.on }" class="game__event">{{event.label}}</div>
+      <div
+        v-for="(event, key) in events"
+        :key="key"
+        :class="{'--active': event.on }"
+        class="game__event"
+      >{{event.label}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import { Bellhop } from 'bellhop-iframe';
+import {
+  Container,
+  // PausePlugin,
+  // CaptionsPlugin,
+  // FocusPlugin,
+  // HelpPlugin,
+  SoundPlugin
+} from 'springroll-container';
+import { setTimeout } from 'timers';
+console.log(Container);
 
 export default {
   data() {
     return {
+      container: null,
+      soundPlugin: null,
       bellhop: new Bellhop('demo-game'),
       paused: false,
       muted: false,
       events: {
-      //  'playHelp': { label: 'Hint', on: false},
-        'localizerResolve': { label: 'Localiztion', on: false},
-        'speechSynthStart': { label: 'Speech Synch',  on: false },
-        'pauseScreenActive': { label: 'Pause',  on: false },
-        'soundMute': { label: 'Sound Mute',  on: false },
-        'captionStart': { label: 'Captions Start',  on: false },
+        localizerResolve: { label: 'Localiztion', on: false },
+        speechSynthStart: { label: 'Speech Synch', on: false },
+        pauseScreenActive: { label: 'Pause', on: false },
+        soundMute: { label: 'Sound Mute', on: false },
+        captionStart: { label: 'Captions Start', on: false }
       },
       gameUrl: location.protocol + '//springroll.io/springroll-io-demo-game/'
     };
   },
   methods: {
     pause() {
-      console.log(location.protocol );
-      this.bellhop.send('pause', this.paused = !this.paused);
+      // console.log(location.protocol);
+      // this.bellhop.send('pause', (this.paused = !this.paused));
     },
     mute() {
-      this.bellhop.send('soundMuted', this.muted = !this.muted);
+      console.log(this.soundPlugin.client);
+      // this.bellhop.send('soundMuted', (this.muted = !this.muted));
     },
     hint() {
-      this.bellhop.send('playHelp');
+      // this.bellhop.send('playHelp');
     }
   },
   mounted() {
     const key = Object.keys(this.events);
-
 
     for (let i = 0, l = key.length; i < l; i++) {
       this.bellhop.on(key[i], () => {
@@ -57,20 +92,24 @@ export default {
 
         setTimeout(() => {
           this.events[key[i]].on = false;
-        }, (250));
+        }, 250);
       });
     }
 
-    this.bellhop.connect(document.getElementById('demo-game'));
+    this.soundPlugin = new SoundPlugin({ soundButton: '#game-sound-mute' });
+    this.container = new Container({
+      iframeSelector: '#demo-game',
+      plugins: [this.soundPlugin]
+    });
+    this.container.setupPlugins();
   }
 };
-
 </script>
 
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/mixins";
+@import '~@/scss/colors';
+@import '~@/scss/mixins';
 .game {
   height: 52rem;
   width: 65rem;
