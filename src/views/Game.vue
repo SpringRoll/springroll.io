@@ -1,7 +1,7 @@
 <template>
   <div class="game__container">
     <div class="game__wrapper">
-      <iframe id="demo-game" class="game" :src="gameUrl" frameborder="0"/>
+      <iframe id="demo-game" class="game" frameborder="0"/>
       <a
         class="game__source"
         href="https://github.com/SpringRoll/springroll-io-demo-game"
@@ -11,19 +11,21 @@
       <h2 class="game__header">Game Options</h2>
       <v-btn
         @click="pause"
+        id="pause-button"
         block
         color="primary"
         class="game__event game__button --capital font-16 font-semi-bold"
       >{{ paused ? 'Unpause' : 'Pause'}}</v-btn>
       <v-btn
-        id="game-sound-mute"
         @click="mute"
+        id="game-sound-mute"
         block
         color="primary"
         class="game__event game__button --capital font-16 font-semi-bold"
       >{{ muted ? 'Unmute' : 'Mute'}}</v-btn>
       <v-btn
         @click="hint"
+        id="hint-button"
         block
         color="primary"
         class="game__event game__button --capital font-16 font-semi-bold"
@@ -40,18 +42,16 @@
 </template>
 
 <script>
-import { Bellhop } from 'bellhop-iframe';
 import {
   Container,
-  // PausePlugin,
+  PausePlugin,
   // CaptionsPlugin,
   // FocusPlugin,
-  // HelpPlugin,
+  HelpPlugin,
   SoundPlugin
 } from 'springroll-container';
 import { setTimeout } from 'timers';
-console.log(Container);
-
+import { Bellhop } from 'bellhop-iframe';
 export default {
   data() {
     return {
@@ -72,23 +72,30 @@ export default {
   },
   methods: {
     pause() {
-      // console.log(location.protocol);
-      // this.bellhop.send('pause', (this.paused = !this.paused));
+      this.paused = !this.paused;
     },
     mute() {
-      console.log(this.soundPlugin.client);
-      // this.bellhop.send('soundMuted', (this.muted = !this.muted));
+      this.muted = !this.muted;
     },
     hint() {
-      // this.bellhop.send('playHelp');
+      //this.bellhop.send('playHelp');
     }
   },
   mounted() {
     const key = Object.keys(this.events);
 
+    this.soundPlugin = new SoundPlugin({ sfxButton: '#game-sound-mute' });
+    this.pausePlugin = new PausePlugin('#pause-button');
+    this.helpPlugin = new HelpPlugin('#hint-button');
+    this.container = new Container({
+      iframeSelector: '#demo-game',
+      plugins: [this.soundPlugin, this.pausePlugin, this.helpPlugin]
+    });
+
     for (let i = 0, l = key.length; i < l; i++) {
-      this.bellhop.on(key[i], () => {
+      this.container.client.on(key[i], () => {
         this.events[key[i]].on = true;
+        console.log(this.events[key[i]].label);
 
         setTimeout(() => {
           this.events[key[i]].on = false;
@@ -96,12 +103,8 @@ export default {
       });
     }
 
-    this.soundPlugin = new SoundPlugin({ soundButton: '#game-sound-mute' });
-    this.container = new Container({
-      iframeSelector: '#demo-game',
-      plugins: [this.soundPlugin]
-    });
-    this.container.setupPlugins();
+    //doesn't work with current game build. Needs updated Springroll I think??
+    this.container.openPath('http://127.0.0.1:5500/docs/index.html');
   }
 };
 </script>
