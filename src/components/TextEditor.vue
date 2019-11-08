@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import TimeStampInput from "./TimeStampInput";
-import { EventBus } from "@/class/EventBus";
+import TimeStampInput from './TimeStampInput';
+import { EventBus } from '@/class/EventBus';
 export default {
   components: {
     TimeStampInput
@@ -61,26 +61,26 @@ export default {
   data() {
     return {
       index: 0,
-      content: "",
+      content: '',
       start: 0,
       end: 0,
       lastIndex: 0,
       canEmit: false,
       sizeOptions: [
-        { value: "10px", label: "Small", default: false },
-        { value: "16px", label: "Normal", default: true },
-        { value: "18px", label: "Large", default: false },
-        { value: "32px", label: "Huge", default: false }
+        { value: '10px', label: 'Small', default: false },
+        { value: '16px', label: 'Normal', default: true },
+        { value: '18px', label: 'Large', default: false },
+        { value: '32px', label: 'Huge', default: false }
       ],
       colorOptions: [
-        { value: "#000000", default: true },
-        { value: "#FFFFFF", default: false },
-        { value: "#FF0000", default: false },
-        { value: "#00FF00", default: false },
-        { value: "#0000FF", default: false },
-        { value: "#FFFF00", default: false },
-        { value: "#00FFFF", default: false },
-        { value: "#FF00FF", default: false }
+        { value: '#000000', default: true },
+        { value: '#FFFFFF', default: false },
+        { value: '#FF0000', default: false },
+        { value: '#00FF00', default: false },
+        { value: '#0000FF', default: false },
+        { value: '#FFFF00', default: false },
+        { value: '#00FFFF', default: false },
+        { value: '#FF00FF', default: false }
       ]
     };
   },
@@ -97,19 +97,19 @@ export default {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit("caption_update", { content: $event.text.trim() }); //.trim() removes the `\n` newline that .text returns
+      EventBus.$emit('caption_update', { content: $event.text.trim() }); //.trim() removes the `\n` newline that .text returns
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit("caption_update", { start: $event });
+      EventBus.$emit('caption_update', { start: $event });
     },
     onEndTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit("caption_update", { end: $event });
+      EventBus.$emit('caption_update', { end: $event });
     },
     onUpdate($event) {
       const { content, start, end } = $event.data;
@@ -121,10 +121,10 @@ export default {
       this.canEmit = true;
     },
     addCaption() {
-      EventBus.$emit("caption_add_index");
+      EventBus.$emit('caption_add_index');
     },
     removeCaption() {
-      EventBus.$emit("caption_remove_index");
+      EventBus.$emit('caption_remove_index');
     },
     escapeString() {
       const isEscaped = /^{{.*}}$/;
@@ -134,7 +134,7 @@ export default {
       const baseString = selection.anchorNode.data;
       const text = baseString.slice(offset, endset).trim();
 
-      const parent = document.getElementById("quill-editor");
+      const parent = document.getElementById('quill-editor');
 
       if (
         !parent.contains(selection.anchorNode) ||
@@ -151,26 +151,26 @@ export default {
     },
     reset() {
       this.canEmit = false;
-      this.content = "";
+      this.content = '';
       this.start = this.end = 0;
     }
   },
 
   mounted() {
-    EventBus.$on("caption_changed", this.onUpdate);
-    EventBus.$on("caption_reset", this.reset);
+    EventBus.$on('caption_changed', this.onUpdate);
+    EventBus.$on('caption_reset', this.reset);
   },
   destroyed() {
-    EventBus.$off("caption_changed", this.onUpdate);
-    EventBus.$off("caption_reset", this.reset);
+    EventBus.$off('caption_changed', this.onUpdate);
+    EventBus.$off('caption_reset', this.reset);
   }
 };
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/fonts";
-@import "~@/scss/sizes";
+@import '~@/scss/colors';
+@import '~@/scss/fonts';
+@import '~@/scss/sizes';
 .editor {
   $quill: 20rem;
   $controls: 10.8rem;
