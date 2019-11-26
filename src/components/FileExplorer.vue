@@ -1,13 +1,29 @@
 <template>
   <div class="explorer">
-    <v-text-field class="explorer__search" @input="filter" prepend-inner-icon="search" placeholder="Search file names" solo />
+    <v-text-field
+      class="explorer__search"
+      @input="filter"
+      prepend-inner-icon="search"
+      placeholder="Search file names"
+      solo
+    />
     <h3 class="font-28 font-semi-bold explorer__header">Files</h3>
     <div class="explorer__dir">
-      <file-directory v-for="(value, key) in directory.dir" :key="key" :directory="value" :name="key" :active="active" />
+      <file-directory
+        v-for="(value, key) in directory.dir"
+        :key="key"
+        :directory="value"
+        :name="key"
+        :active="active"
+      />
     </div>
-    <div color="accent" class="v-btn accent explorer__input font-semi-bold font-16">
+    <div color="accent" class="v-btn accent explorer__input --directory font-semi-bold font-16">
+      <span>Import Directories</span>
+      <input class="explorer__file-input" @change="loadFiles" type="file" webkitdirectory multiple= />
+    </div>
+    <div color="accent" class="v-btn accent explorer__input --file font-semi-bold font-16">
       <span>Import Files</span>
-      <input class="explorer__file-input" @change="loadFiles" type="file" webkitdirectory="" multiple="">
+      <input class="explorer__file-input" @change="loadFiles" type="file" multiple= />
     </div>
   </div>
 </template>
@@ -24,7 +40,7 @@ export default {
     return {
       directory: FileProcessor.getDirectory(),
       rawFiles: null,
-      active: null,
+      active: null
     };
   },
   methods: {
@@ -56,7 +72,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
+@import '~@/scss/colors';
 .explorer {
   width: 28.2rem;
   min-width: 28.2rem;
@@ -76,6 +92,13 @@ export default {
     position: relative;
     margin: 3rem 0 !important;
     flex: end;
+
+    &.--directory {
+      margin: 3rem 0 1rem 0 !important;
+    }
+    &.--file {
+      margin: 0 0 3rem 0 !important;
+    }
   }
 
   &__header {

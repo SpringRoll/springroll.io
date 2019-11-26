@@ -3,17 +3,36 @@
     <v-list-group class="directory" :value="true" prepend-icon="folder">
       <v-list-tile slot="activator" class="directory__dir-name">
         <v-list-tile-content>
-          <v-list-tile-title class="directory__name font-semi-bold font-16"> {{ name }} </v-list-tile-title>
+          <v-list-tile-title class="directory__name font-semi-bold font-16">{{ name }}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile-content v-for="(value, index) in files" :key="index">
         <label class="directory__file">
           <v-icon class="directory__icon" :class="{'--active': value.active}">audiotrack</v-icon>
-          <input :id="`${index}_${value.file.name}`" class="directory__select" @change="emit" type="radio" name="selectedFile" :value="value.file" :checked="value.active" />
-          <label :for="`${index}_${value.file.name}`" class="font-16 directory__label">{{value.file.name}}</label>
+          <input
+            :id="`${index}_${value.file.name}`"
+            class="directory__select"
+            @change="emit"
+            type="radio"
+            name="selectedFile"
+            :value="value.file"
+            :checked="value.active"
+          />
+          <label
+            :for="`${index}_${value.file.name}`"
+            class="font-16 directory__label"
+          >{{value.file.name}}</label>
         </label>
       </v-list-tile-content>
-      <file-directory v-for="(value, key) in directory.dir" :key="key" class="directory__nested" :directory="value" :name="key" :sub="true" :active="active" />
+      <file-directory
+        v-for="(value, key) in directory.dir"
+        :key="key"
+        class="directory__nested"
+        :directory="value"
+        :name="key"
+        :sub="true"
+        :active="active"
+      />
     </v-list-group>
   </v-list>
 </template>
@@ -44,13 +63,13 @@ export default {
   },
   computed: {
     files() {
-      return this.directory.files.map(file => {
+      return this.directory.files.map((file) => {
         return {
           active: this.active === file,
           file
         };
       });
-    },
+    }
   },
   watch: {
     directory() {
@@ -65,35 +84,39 @@ export default {
     },
     nextFile() {
       if (this.hasActive) {
-        EventBus.$emit('file_selected', {file: this.directory.nextFile()});
+        EventBus.$emit('file_selected', { file: this.directory.nextFile() });
       }
     },
     previousFile() {
       if (this.hasActive) {
-        EventBus.$emit('file_selected', {file: this.directory.previousFile()});
+        EventBus.$emit('file_selected', {
+          file: this.directory.previousFile()
+        });
       }
     },
     emit($event) {
       this.hasActive = $event.target.checked;
       if (this.hasActive) {
-        EventBus.$emit('file_selected', {file:  this.directory.selectByFile($event.target._value) });
+        EventBus.$emit('file_selected', {
+          file: this.directory.selectByFile($event.target._value)
+        });
       }
     }
   },
   mounted() {
     EventBus.$on('next_file', this.nextFile);
-    EventBus.$on('previous_file',this.previousFile);
+    EventBus.$on('previous_file', this.previousFile);
   },
   destroyed() {
     EventBus.$off('next_file', this.nextFile);
-    EventBus.$off('previous_file',this.previousFile);
+    EventBus.$off('previous_file', this.previousFile);
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import "~@/scss/fonts";
-@import "~@/scss/colors";
+@import '~@/scss/fonts';
+@import '~@/scss/colors';
 .directory {
   $this: &;
 
@@ -133,7 +156,7 @@ export default {
 
     &:checked + #{$this}__label::before {
       position: absolute;
-      content: " ";
+      content: ' ';
       z-index: 0;
       left: -10rem;
       right: -10rem;

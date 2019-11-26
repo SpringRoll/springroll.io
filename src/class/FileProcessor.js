@@ -37,7 +37,6 @@ class FileProcessor {
     if (!(files instanceof FileList)) {
       return;
     }
-
     this.clear();
 
     for (let i = 0, l = files.length; i < l; i++) {
@@ -49,7 +48,6 @@ class FileProcessor {
         this.hasFiles = true;
       }
     }
-
     return this.directory;
   }
 
