@@ -10,7 +10,7 @@
           <v-icon>skip_previous</v-icon>
         </v-btn>
         <v-btn @click="play" :disabled="!hasFile" class="wave__button" icon small>
-          <v-icon> {{ isPlaying ? 'pause' : 'play_arrow' }}</v-icon>
+          <v-icon>{{ isPlaying ? 'pause' : 'play_arrow' }}</v-icon>
         </v-btn>
         <v-btn @click="next" :disabled="!hasFile" class="wave__button" icon small>
           <v-icon>skip_next</v-icon>
@@ -20,7 +20,7 @@
         </v-btn>
       </div>
       <div class="wave__timer">
-        <TimeStamp :time="currentTime"/>
+        <TimeStamp :time="currentTime" />
       </div>
     </div>
   </div>
@@ -30,6 +30,7 @@
 import { EventBus } from '@/class/EventBus';
 import TimeStamp from './TimeStamp';
 import WaveSurfer from 'wavesurfer.js';
+import RegionsPlugin from 'wavesurfer.js/src/plugin/regions.js';
 
 export default {
   components: {
@@ -40,12 +41,14 @@ export default {
       wave: null,
       isPlaying: false,
       hasFile: false,
-      currentTime: 0
+      currentTime: 0,
+      currentRegion: null,
+      completeRegions: []
     };
   },
   methods: {
     updateTimeStamp() {
-      this.currentTime = this.wave.getCurrentTime() * 1000 | 0;
+      this.currentTime = (this.wave.getCurrentTime() * 1000) | 0;
       this.emitTime();
     },
     initWave() {
@@ -60,9 +63,14 @@ export default {
         progressColor: 'rgba(0,0,0,0)',
         responsive: true,
         waveColor: '#0C7AC0',
+        plugins: [
+          RegionsPlugin.create({
+            dragSelection: true
+          })
+        ]
       });
 
-      this.wave.on('audioprocess',  this.updateTimeStamp);
+      this.wave.on('audioprocess', this.updateTimeStamp);
       this.wave.on('seek', this.updateTimeStamp);
       this.wave.on('finish', this.finish);
     },
@@ -105,7 +113,16 @@ export default {
       }
     },
     emitTime() {
-      EventBus.$emit('time_current', {time: this.currentTime});
+      EventBus.$emit('time_current', { time: this.currentTime });
+    },
+    onNewRegion(region) {
+      if (this.currentRegion) {
+        this.currentRegion.remove();
+      }
+      this.curentRegion = region;
+    },
+    onUpdateRegion(region) {
+      this.currentRegion = region;
     }
   },
   mounted() {
@@ -113,6 +130,8 @@ export default {
     EventBus.$on('file_selected', this.loadFile);
     EventBus.$on('time_get', this.emitTime);
     EventBus.$on('caption_reset', this.empty);
+    this.wave.on('region-created', this.onNewRegion);
+    this.wave.on('region-updated', this.onUpdateRegion);
   },
   destroyed() {
     EventBus.$off('file_selected', this.loadFile);
@@ -120,13 +139,12 @@ export default {
     EventBus.$off('caption_reset', this.empty);
     this.wave.destroy();
   }
-
 };
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/sizes";
+@import '~@/scss/colors';
+@import '~@/scss/sizes';
 
 .wave {
   &__container {
