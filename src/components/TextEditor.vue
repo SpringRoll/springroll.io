@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <quill-editor id="quill-editor" v-model=content @change="onEdit" class="editor__quill">
+    <quill-editor id="quill-editor" v-model="content" @change="onEdit" class="editor__quill">
       <div id="toolbar" slot="toolbar">
         <select class="ql-font">
           <option selected="selected"></option>
@@ -8,21 +8,46 @@
           <option value="monospace"></option>
         </select>
         <select class="ql-size">
-          <option v-for="size in sizeOptions" :key="size.value"  :value="size.value" :selected="size.default">{{size.label}}</option>
+          <option
+            v-for="size in sizeOptions"
+            :key="size.value"
+            :value="size.value"
+            :selected="size.default"
+          >{{size.label}}</option>
         </select>
         <select class="ql-color">
-          <option v-for="color in colorOptions" :key="color.value"  :value="color.value" :selected="color.default"/>
+          <option
+            v-for="color in colorOptions"
+            :key="color.value"
+            :value="color.value"
+            :selected="color.default"
+          />
         </select>
         <button class="ql-bold">Bold</button>
-        <button @click=escapeString class="editor__escape-button"><span v-pre>&#123;&#123; &#125;&#125;</span></button>
+        <button @click="escapeString" class="editor__escape-button">
+          <span v-pre>&#123;&#123; &#125;&#125;</span>
+        </button>
       </div>
     </quill-editor>
     <div class="editor__controls">
-      <TimeStampInput @time=onStartTimeUpdated :default=start name="start"/>
-      <TimeStampInput @time=onEndTimeUpdated :default=end name="end"/>
+      <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
+      <TimeStampInput @time="onEndTimeUpdated" :default="end" name="end" />
     </div>
-    <v-btn v-if=canRemove @click=removeCaption :block=true color="accent" class="editor__button font-16 font-semi-bold capitalize">Remove Caption</v-btn>
-    <v-btn v-else @click=addCaption :disabled=!canAdd :block=true color="accent" class="editor__button font-16 font-semi-bold capitalize">Add Caption</v-btn>
+    <v-btn
+      v-if="canRemove"
+      @click="removeCaption"
+      :block="true"
+      color="accent"
+      class="editor__button font-16 font-semi-bold capitalize"
+    >Remove Caption</v-btn>
+    <v-btn
+      v-else
+      @click="addCaption"
+      :disabled="!canAdd"
+      :block="true"
+      color="accent"
+      class="editor__button font-16 font-semi-bold capitalize"
+    >Add Caption</v-btn>
   </div>
 </template>
 
@@ -42,20 +67,20 @@ export default {
       lastIndex: 0,
       canEmit: false,
       sizeOptions: [
-        { value: '10px', label: 'Small',  default: false},
-        { value: '16px', label: 'Normal', default: true},
-        { value: '18px', label: 'Large', default: false},
-        { value: '32px', label: 'Huge', default: false}
+        { value: '10px', label: 'Small', default: false },
+        { value: '16px', label: 'Normal', default: true },
+        { value: '18px', label: 'Large', default: false },
+        { value: '32px', label: 'Huge', default: false }
       ],
       colorOptions: [
-        {value: '#000000', default: true },
-        {value: '#FFFFFF', default: false },
-        {value: '#FF0000', default: false },
-        {value: '#00FF00', default: false },
-        {value: '#0000FF', default: false },
-        {value: '#FFFF00', default: false },
-        {value: '#00FFFF', default: false },
-        {value: '#FF00FF', default: false },
+        { value: '#000000', default: true },
+        { value: '#FFFFFF', default: false },
+        { value: '#FF0000', default: false },
+        { value: '#00FF00', default: false },
+        { value: '#0000FF', default: false },
+        { value: '#FFFF00', default: false },
+        { value: '#00FFFF', default: false },
+        { value: '#FF00FF', default: false }
       ]
     };
   },
@@ -72,7 +97,7 @@ export default {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', {content: $event.html });
+      EventBus.$emit('caption_update', { content: $event.html });
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
@@ -87,7 +112,7 @@ export default {
       EventBus.$emit('caption_update', { end: $event });
     },
     onUpdate($event) {
-      const {content, start, end} = $event.data;
+      const { content, start, end } = $event.data;
       this.content = content;
       this.start = start;
       this.end = end;
@@ -111,11 +136,18 @@ export default {
 
       const parent = document.getElementById('quill-editor');
 
-      if (!parent.contains(selection.anchorNode) || isEscaped.test(text) || !text.trim()) {
+      if (
+        !parent.contains(selection.anchorNode) ||
+        isEscaped.test(text) ||
+        !text.trim()
+      ) {
         return;
       }
 
-      selection.anchorNode.data = baseString.substring(0, offset) + `{{${text}}}` + baseString.substring(endset, baseString.length);
+      selection.anchorNode.data =
+        baseString.substring(0, offset) +
+        `{{${text}}}` +
+        baseString.substring(endset, baseString.length);
     },
     reset() {
       this.canEmit = false;
@@ -136,9 +168,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/fonts";
-@import "~@/scss/sizes";
+@import '~@/scss/colors';
+@import '~@/scss/fonts';
+@import '~@/scss/sizes';
 .editor {
   $quill: 20rem;
   $controls: 10.8rem;

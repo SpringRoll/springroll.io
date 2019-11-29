@@ -116,13 +116,50 @@ export default {
       EventBus.$emit('time_current', { time: this.currentTime });
     },
     onNewRegion(region) {
+      console.log('new');
       if (this.currentRegion) {
         this.currentRegion.remove();
       }
-      this.curentRegion = region;
+      this.currentRegion = region;
+      this.currentRegion.on('update', () => {
+        console.log('***updated***');
+      });
     },
     onUpdateRegion(region) {
+      EventBus.$emit('caption_update', {
+        start: Math.round(region.start * 1000),
+        end: Math.round(region.end * 1000)
+      });
       this.currentRegion = region;
+    },
+    onRegionTimeUpdate($event) {
+      if (!this.currentRegion) {
+        return;
+      }
+
+      const { start, end } = $event.data;
+
+      this.currentRegion.start = start
+        ? start / 1000
+        : this.currentRegion.start;
+      this.currentRegion.end = end ? end / 1000 : this.currentRegion.end;
+
+      //this is messed up don't run it.
+      this.currentRegion.update({
+        start: start ? start / 1000 : this.currentRegion.start,
+        end: end ? end / 1000 : this.currentRegion.end
+      });
+
+      // const tempRegion = this.currentRegion;
+
+      // this.currentRegion.remove();
+
+      // this.currentRegion = this.wave.addRegion({
+      //   start: start ? start / 1000 : tempRegion.start,
+      //   end: end ? end / 1000 : tempRegion.end
+      // });
+      // console.log(this.currentRegion);
+      // tempRegion.remove();
     }
   },
   mounted() {
@@ -130,6 +167,7 @@ export default {
     EventBus.$on('file_selected', this.loadFile);
     EventBus.$on('time_get', this.emitTime);
     EventBus.$on('caption_reset', this.empty);
+    EventBus.$on('caption_changed', this.onRegionTimeUpdate);
     this.wave.on('region-created', this.onNewRegion);
     this.wave.on('region-updated', this.onUpdateRegion);
   },
