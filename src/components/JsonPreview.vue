@@ -3,25 +3,38 @@
     <pre v-highlightjs="json"><code class="javascript code-block --wide json__container"></code></pre>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
-        <v-btn slot="activator" color="error" class="font-semi-bold --capital json__button-cancel">Clear</v-btn>
+        <v-btn
+          slot="activator"
+          color="error"
+          class="font-semi-bold --capital json__button-cancel"
+        >Clear</v-btn>
         <v-card>
           <v-card-title class="error" primary-title>
             <h2 class="font-semi-bold json__dialog-title">Warning</h2>
           </v-card-title>
           <v-card-text>
-            <span class="">This will clear all captions.</span>
+            <span class>This will clear all captions.</span>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="accent" @click="dialog = false" class="font-semi-bold font-16 --capital">Cancel</v-btn>
+            <v-btn
+              color="accent"
+              @click="dialog = false"
+              class="font-semi-bold font-16 --capital"
+            >Cancel</v-btn>
             <v-btn color="error" @click="reset" class="font-semi-bold font-16 --capital">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-btn download="export.json" target="_blank" :href=blob color="accent" class="font-semi-bold --capital json__button-export">Export Code</v-btn>
+      <v-btn
+        download="export.json"
+        target="_blank"
+        :href="blob"
+        color="accent"
+        class="font-semi-bold --capital json__button-export"
+      >Export Code</v-btn>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -54,7 +67,7 @@ export default {
           continue;
         }
 
-        const filtered = data[key[i]].filter(e =>  {
+        const filtered = data[key[i]].filter((e) => {
           return e.content.trim() && e.start < e.end;
         });
 
@@ -66,12 +79,7 @@ export default {
     },
     createBlob() {
       this.blob = URL.createObjectURL(
-        new Blob(
-          [
-            JSON.stringify(this.data)
-          ],
-          { type: 'application/json' }
-        )
+        new Blob([JSON.stringify(this.data)], { type: 'application/json' })
       );
     },
     reset() {
@@ -119,7 +127,8 @@ export default {
       height: 3.6rem;
     }
 
-    &-cancel, &-export {
+    &-cancel,
+    &-export {
       margin: 0 !important;
     }
 

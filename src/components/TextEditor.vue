@@ -86,7 +86,7 @@ export default {
   },
   computed: {
     canAdd() {
-      return this.index >= this.lastIndex;
+      return this.index >= this.lastIndex && this.content.trim();
     },
     canRemove() {
       return this.index < this.lastIndex;

@@ -51,7 +51,6 @@ class CaptionManager {
   }
 
   addIndex() {
-    console.log('addindex');
     this.data[this.activeCaption].push({
       start: this.data[this.activeCaption][this.activeIndex].end,
       end: this.data[this.activeCaption][this.activeIndex].end + (this.data[this.activeCaption][this.activeIndex].end - this.data[this.activeCaption][this.activeIndex].start),

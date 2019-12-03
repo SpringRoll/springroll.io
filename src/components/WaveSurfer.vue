@@ -144,10 +144,10 @@ export default {
         end: Math.round(region.end * 1000)
       });
       this.activeRegion = region;
-      console.log(this.activeRegion);
     },
     onCaptionChange($event) {
       const { index, data } = $event;
+      this.captionContent = data.content;
 
       if (data.start === 0 && data.end === 0) {
         this.activeIndex = index;
@@ -175,8 +175,7 @@ export default {
       } else {
         if (this.activeRegion && this.inactiveRegions[this.activeIndex]) {
           this.makeActiveCaptionInactive();
-          this.activeIndex = index;
-          this.activeRegion = this.inactiveRegions[this.activeIndex];
+          this.activeRegion = this.inactiveRegions[index];
         }
 
         this.activeIndex = index;
@@ -189,7 +188,6 @@ export default {
       }
     },
     onAddCaption() {
-      //TODO: don't allow the region to be created if there's no content?
       if (this.activeRegion) {
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
