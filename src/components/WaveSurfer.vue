@@ -42,9 +42,15 @@ export default {
       isPlaying: false,
       hasFile: false,
       currentTime: 0,
-      currentRegion: null,
-      completeRegions: []
+      activeIndex: 0,
+      activeRegion: null,
+      inactiveRegions: []
     };
+  },
+  computed: {
+    lastIndex() {
+      return this.inactiveRegions.length - 1 || 0;
+    }
   },
   methods: {
     updateTimeStamp() {
@@ -105,6 +111,11 @@ export default {
     },
     loadFile($event) {
       if ($event.file instanceof File) {
+        /**
+         * TODO:
+         * When picking a new file, read in the data attribute emitted
+         * and build out a bunch of regions based on that.
+         */
         this.isPlaying = false;
         this.hasFile = true;
 
@@ -116,65 +127,101 @@ export default {
       EventBus.$emit('time_current', { time: this.currentTime });
     },
     onNewRegion(region) {
-      console.log('new');
-      if (this.currentRegion) {
-        this.currentRegion.remove();
+      if (this.activeRegion) {
+        this.activeRegion.remove();
       }
-      this.currentRegion = region;
-      this.currentRegion.on('update', () => {
-        console.log('***updated***');
-      });
+      this.activeRegion = region;
+      this.activeRegion.color = 'rgba(0, 255, 0, 0.1)';
+      this.activeRegion.updateRender();
     },
     onUpdateRegion(region) {
+      if (region.id !== this.activeRegion.id) {
+        return;
+      }
       EventBus.$emit('caption_update', {
         start: Math.round(region.start * 1000),
         end: Math.round(region.end * 1000)
       });
-      this.currentRegion = region;
+      this.activeRegion = region;
+      console.log(this.activeRegion);
     },
-    onRegionTimeUpdate($event) {
-      if (!this.currentRegion) {
+    onCaptionChange($event) {
+      const { index, data } = $event;
+
+      if (data.start === 0 && data.end === 0) {
+        this.activeIndex = index;
         return;
       }
 
-      const { start, end } = $event.data;
+      if (!this.activeRegion && index === this.inactiveRegions.length) {
+        this.wave.addRegion({
+          start: data.start,
+          end: data.end,
+          color: 'rgba(0, 255, 0, 0.1)'
+        });
+      }
 
-      this.currentRegion.start = start
-        ? start / 1000
-        : this.currentRegion.start;
-      this.currentRegion.end = end ? end / 1000 : this.currentRegion.end;
+      if (index === this.activeIndex) {
+        if (this.activeRegion) {
+          this.activeRegion.start = data.start
+            ? data.start / 1000
+            : this.activeRegion.start;
+          this.activeRegion.end = data.end
+            ? data.end / 1000
+            : this.activeRegion.end;
+          this.activeRegion.updateRender();
+        }
+      } else {
+        if (this.activeRegion && this.inactiveRegions[this.activeIndex]) {
+          this.makeActiveCaptionInactive();
+          this.activeIndex = index;
+          this.activeRegion = this.inactiveRegions[this.activeIndex];
+        }
 
-      //this is messed up don't run it.
-      this.currentRegion.update({
-        start: start ? start / 1000 : this.currentRegion.start,
-        end: end ? end / 1000 : this.currentRegion.end
-      });
+        this.activeIndex = index;
 
-      // const tempRegion = this.currentRegion;
+        if (!this.activeRegion) {
+          return;
+        }
 
-      // this.currentRegion.remove();
-
-      // this.currentRegion = this.wave.addRegion({
-      //   start: start ? start / 1000 : tempRegion.start,
-      //   end: end ? end / 1000 : tempRegion.end
-      // });
-      // console.log(this.currentRegion);
-      // tempRegion.remove();
+        this.makeActiveCaptionActive();
+      }
+    },
+    onAddCaption() {
+      if (this.activeRegion) {
+        this.makeActiveCaptionInactive();
+        this.inactiveRegions.push(this.activeRegion);
+        this.activeRegion = false;
+      }
+      this.activeIndex++;
+    },
+    makeActiveCaptionInactive() {
+      this.activeRegion.color = 'rgba(0,0,0,0.1)';
+      this.activeRegion.drag = false;
+      this.activeRegion.resize = false;
+      this.activeRegion.updateRender();
+    },
+    makeActiveCaptionActive() {
+      this.activeRegion.color = 'rgba(0,255,0,0.1)';
+      this.activeRegion.drag = true;
+      this.activeRegion.resize = true;
+      this.activeRegion.updateRender();
     }
   },
   mounted() {
     this.initWave();
-    EventBus.$on('file_selected', this.loadFile);
-    EventBus.$on('time_get', this.emitTime);
-    EventBus.$on('caption_reset', this.empty);
-    EventBus.$on('caption_changed', this.onRegionTimeUpdate);
-    this.wave.on('region-created', this.onNewRegion);
-    this.wave.on('region-updated', this.onUpdateRegion);
+    EventBus.$on('file_selected', this.loadFile.bind(this));
+    EventBus.$on('time_get', this.emitTime.bind(this));
+    EventBus.$on('caption_reset', this.empty.bind(this));
+    EventBus.$on('caption_add_index', this.onAddCaption.bind(this));
+    EventBus.$on('caption_changed', this.onCaptionChange.bind(this));
+    this.wave.on('region-created', this.onNewRegion.bind(this));
+    this.wave.on('region-updated', this.onUpdateRegion.bind(this));
   },
   destroyed() {
-    EventBus.$off('file_selected', this.loadFile);
-    EventBus.$off('time_get', this.emitTime);
-    EventBus.$off('caption_reset', this.empty);
+    EventBus.$off('file_selected', this.loadFile.bind(this));
+    EventBus.$off('time_get', this.emitTime.bind(this));
+    EventBus.$off('caption_reset', this.empty.bind(this));
     this.wave.destroy();
   }
 };
