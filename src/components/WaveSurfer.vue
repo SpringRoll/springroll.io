@@ -116,6 +116,7 @@ export default {
          * When picking a new file, read in the data attribute emitted
          * and build out a bunch of regions based on that.
          */
+        this.wave.clearRegions();
         this.isPlaying = false;
         this.hasFile = true;
 
@@ -188,12 +189,18 @@ export default {
       }
     },
     onAddCaption() {
+      //TODO: don't allow the region to be created if there's no content?
       if (this.activeRegion) {
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
         this.activeRegion = false;
       }
       this.activeIndex++;
+    },
+    onRemoveCaption() {
+      /**
+       * TODO
+       */
     },
     makeActiveCaptionInactive() {
       this.activeRegion.color = 'rgba(0,0,0,0.1)';
