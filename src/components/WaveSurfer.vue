@@ -44,18 +44,16 @@ export default {
       currentTime: 0,
       activeIndex: 0,
       activeRegion: null,
-      inactiveRegions: []
+      inactiveRegions: [],
+      captionData: []
     };
-  },
-  computed: {
-    lastIndex() {
-      return this.inactiveRegions.length - 1 || 0;
-    }
   },
   methods: {
     updateTimeStamp() {
       this.currentTime = (this.wave.getCurrentTime() * 1000) | 0;
-      this.emitTime();
+      if (this.isPlaying) {
+        this.emitTime();
+      }
     },
     initWave() {
       this.wave = WaveSurfer.create({
@@ -79,6 +77,8 @@ export default {
       this.wave.on('audioprocess', this.updateTimeStamp);
       this.wave.on('seek', this.updateTimeStamp);
       this.wave.on('finish', this.finish);
+
+      this.wave.enableDragSelection({});
     },
 
     forward() {
@@ -111,17 +111,17 @@ export default {
     },
     loadFile($event) {
       if ($event.file instanceof File) {
-        /**
-         * TODO:
-         * When picking a new file, read in the data attribute emitted
-         * and build out a bunch of regions based on that.
-         */
+        this.inactiveRegions = [];
         this.wave.clearRegions();
+        this.activeRegion = null;
+
         this.isPlaying = false;
         this.hasFile = true;
 
         console.log($event.file);
+
         this.wave.loadBlob($event.file);
+        this.generateRegions();
       }
     },
     emitTime() {
@@ -136,30 +136,39 @@ export default {
       this.activeRegion.updateRender();
     },
     onUpdateRegion(region) {
-      if (region.id !== this.activeRegion.id) {
-        return;
+      /**
+       * W.I.P
+       * currently resizes annoyingly when resizing. Dragging works fine.
+       * Unsure how to differentiate.
+       */
+      for (let i = 0, l = this.inactiveRegions.length; i < l; i++) {
+        if (
+          region.start < this.inactiveRegions[i].end &&
+          region.start >= this.inactiveRegions[i].start
+        ) {
+          region.end =
+            region.end + (region.start - this.inactiveRegions[i].end);
+          region.start = this.inactiveRegions[i].end;
+        } else if (
+          region.end > this.inactiveRegions[i].start &&
+          region.end <= this.inactiveRegions[i].end
+        ) {
+          region.start =
+            region.start - (region.end - this.inactiveRegions[i].start);
+          region.end = this.inactiveRegions[i].start;
+        }
       }
       EventBus.$emit('caption_update', {
         start: Math.round(region.start * 1000),
         end: Math.round(region.end * 1000)
       });
-      this.activeRegion = region;
     },
     onCaptionChange($event) {
       const { index, data } = $event;
-      this.captionContent = data.content;
 
       if (data.start === 0 && data.end === 0) {
         this.activeIndex = index;
         return;
-      }
-
-      if (!this.activeRegion && index === this.inactiveRegions.length) {
-        this.wave.addRegion({
-          start: data.start,
-          end: data.end,
-          color: 'rgba(0, 255, 0, 0.1)'
-        });
       }
 
       if (index === this.activeIndex) {
@@ -171,15 +180,28 @@ export default {
             ? data.end / 1000
             : this.activeRegion.end;
           this.activeRegion.updateRender();
+        } else {
+          console.log(data);
+          this.activeRegion = this.wave.addRegion({
+            start: data.start / 1000,
+            end: data.end / 1000,
+            color: 'rgba(0,255,0,0.1)',
+            drag: true,
+            resize: true
+          });
         }
       } else {
         if (this.activeRegion && this.inactiveRegions[this.activeIndex]) {
           this.makeActiveCaptionInactive();
           this.activeRegion = this.inactiveRegions[index];
+        } else if (this.inactiveRegions[index]) {
+          if (this.activeRegion) {
+            this.activeRegion.remove();
+          }
+          this.activeRegion = this.inactiveRegions[index];
         }
 
         this.activeIndex = index;
-
         if (!this.activeRegion) {
           return;
         }
@@ -189,16 +211,62 @@ export default {
     },
     onAddCaption() {
       if (this.activeRegion) {
+        // console.log(this.activeRegion.end, this.wave.getDuration());
+        const seekToRatio = this.activeRegion.end / this.wave.getDuration();
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
         this.activeRegion = false;
+        this.wave.seekTo(seekToRatio);
       }
       this.activeIndex++;
     },
-    onRemoveCaption() {
+    onRemoveCaption($event) {
+      if ('undefined' === typeof this.inactiveRegions[$event]) {
+        return;
+      }
+
+      this.inactiveRegions[$event].remove();
+      this.inactiveRegions.splice($event, 1);
+    },
+    onRegionClick($event) {
+      let index = this.inactiveRegions.findIndex((reg) => reg.id === $event.id);
+      index = index - this.activeIndex;
+
+      EventBus.$emit('caption_move_index', index);
+    },
+    isFileCaptioned() {
       /**
-       * TODO
+       * check if the file is fully captioned somehow
+       * add an icon to the file name if it has.
        */
+    },
+    generateRegions() {
+      this.wave.un('region-created', this.onNewRegion);
+      this.wave.un('region-updated', this.onUpdateRegion);
+      for (let i = 0, l = this.captionData.length - 1; i < l; i++) {
+        if (i === 0) {
+          this.activeRegion = this.wave.addRegion({
+            start: this.captionData[i].start / 1000,
+            end: this.captionData[i].end / 1000,
+            color: 'rgba(0,255,0,0.1)',
+            drag: true,
+            resize: true
+          });
+          this.inactiveRegions.push(this.activeRegion);
+        } else {
+          this.inactiveRegions.push(
+            this.wave.addRegion({
+              start: this.captionData[i].start / 1000,
+              end: this.captionData[i].end / 1000,
+              color: 'rgba(0,0,0,0.1)',
+              drag: false,
+              resize: false
+            })
+          );
+        }
+      }
+      this.wave.on('region-created', this.onNewRegion);
+      this.wave.on('region-updated', this.onUpdateRegion);
     },
     makeActiveCaptionInactive() {
       this.activeRegion.color = 'rgba(0,0,0,0.1)';
@@ -215,18 +283,25 @@ export default {
   },
   mounted() {
     this.initWave();
-    EventBus.$on('file_selected', this.loadFile.bind(this));
-    EventBus.$on('time_get', this.emitTime.bind(this));
-    EventBus.$on('caption_reset', this.empty.bind(this));
-    EventBus.$on('caption_add_index', this.onAddCaption.bind(this));
-    EventBus.$on('caption_changed', this.onCaptionChange.bind(this));
-    this.wave.on('region-created', this.onNewRegion.bind(this));
-    this.wave.on('region-updated', this.onUpdateRegion.bind(this));
+    EventBus.$on('file_selected', this.loadFile);
+    EventBus.$on('time_get', this.emitTime);
+    EventBus.$on('caption_reset', this.empty);
+    EventBus.$on('caption_add_index', this.onAddCaption);
+    EventBus.$on('caption_changed', this.onCaptionChange);
+    EventBus.$on('file_changed', (e) => (this.captionData = e));
+    EventBus.$on('caption_removed', this.onRemoveCaption);
+    this.wave.on('region-created', this.onNewRegion);
+    this.wave.on('region-updated', this.onUpdateRegion);
+    this.wave.on('region-click', this.onRegionClick);
   },
   destroyed() {
-    EventBus.$off('file_selected', this.loadFile.bind(this));
-    EventBus.$off('time_get', this.emitTime.bind(this));
-    EventBus.$off('caption_reset', this.empty.bind(this));
+    EventBus.$off('file_selected', this.loadFile);
+    EventBus.$off('time_get', this.emitTime);
+    EventBus.$off('caption_reset', this.empty);
+    EventBus.$off('caption_add_index', this.onAddCaption);
+    EventBus.$off('caption_changed', this.onCaptionChange);
+    EventBus.$off('file_changed', this.generateRegions);
+    this.wave.unAll();
     this.wave.destroy();
   }
 };

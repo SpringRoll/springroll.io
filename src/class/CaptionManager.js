@@ -33,6 +33,7 @@ class CaptionManager {
       this.activeCaption = name;
       this.activeIndex = 0;
       this.emitCurrent();
+      EventBus.$emit('file_changed', this.data[name]);
     }
   }
 
@@ -45,7 +46,6 @@ class CaptionManager {
 
     this.activeCaption = key;
     this.activeIndex = 0;
-
     this.emitCurrent();
     this.emitData();
   }
@@ -53,9 +53,10 @@ class CaptionManager {
   addIndex() {
     this.data[this.activeCaption].push({
       start: this.data[this.activeCaption][this.activeIndex].end,
-      end: this.data[this.activeCaption][this.activeIndex].end + (this.data[this.activeCaption][this.activeIndex].end - this.data[this.activeCaption][this.activeIndex].start),
+      end: this.data[this.activeCaption][this.activeIndex].end,
       content: ' '
     });
+
     this.activeIndex++;
     this.emitCurrent();
     this.emitData();
@@ -99,6 +100,7 @@ class CaptionManager {
     }
 
     this.currentCaption.splice($event, 1);
+    EventBus.$emit('caption_removed', $event);
 
     if (0 < this.activeIndex) {
       this.activeIndex--;
