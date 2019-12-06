@@ -118,8 +118,6 @@ export default {
         this.isPlaying = false;
         this.hasFile = true;
 
-        console.log($event.file);
-
         this.wave.loadBlob($event.file);
         this.generateRegions();
       }
@@ -181,7 +179,6 @@ export default {
             : this.activeRegion.end;
           this.activeRegion.updateRender();
         } else {
-          console.log(data);
           this.activeRegion = this.wave.addRegion({
             start: data.start / 1000,
             end: data.end / 1000,
@@ -211,7 +208,6 @@ export default {
     },
     onAddCaption() {
       if (this.activeRegion) {
-        // console.log(this.activeRegion.end, this.wave.getDuration());
         const seekToRatio = this.activeRegion.end / this.wave.getDuration();
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
@@ -233,12 +229,6 @@ export default {
       index = index - this.activeIndex;
 
       EventBus.$emit('caption_move_index', index);
-    },
-    isFileCaptioned() {
-      /**
-       * check if the file is fully captioned somehow
-       * add an icon to the file name if it has.
-       */
     },
     generateRegions() {
       this.wave.un('region-created', this.onNewRegion);
