@@ -134,28 +134,6 @@ export default {
       this.activeRegion.updateRender();
     },
     onUpdateRegion(region) {
-      /**
-       * W.I.P
-       * currently resizes annoyingly when resizing. Dragging works fine.
-       * Unsure how to differentiate.
-       */
-      for (let i = 0, l = this.inactiveRegions.length; i < l; i++) {
-        if (
-          region.start < this.inactiveRegions[i].end &&
-          region.start >= this.inactiveRegions[i].start
-        ) {
-          region.end =
-            region.end + (region.start - this.inactiveRegions[i].end);
-          region.start = this.inactiveRegions[i].end;
-        } else if (
-          region.end > this.inactiveRegions[i].start &&
-          region.end <= this.inactiveRegions[i].end
-        ) {
-          region.start =
-            region.start - (region.end - this.inactiveRegions[i].start);
-          region.end = this.inactiveRegions[i].start;
-        }
-      }
       EventBus.$emit('caption_update', {
         start: Math.round(region.start * 1000),
         end: Math.round(region.end * 1000)
