@@ -163,7 +163,6 @@ export default {
     },
     onCaptionChange($event) {
       const { index, data } = $event;
-
       if (data.start === 0 && data.end === 0) {
         this.activeIndex = index;
         return;
@@ -227,7 +226,6 @@ export default {
     onRegionClick($event) {
       let index = this.inactiveRegions.findIndex((reg) => reg.id === $event.id);
       index = index - this.activeIndex;
-
       EventBus.$emit('caption_move_index', index);
     },
     generateRegions() {

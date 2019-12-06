@@ -1,16 +1,28 @@
 <template>
   <div class="captions">
-    <div class="captions__toolbar"/>
-    <div class="captions__content"/>
+    <div class="captions__toolbar" />
+    <div class="captions__content" />
     <div class="captions__navigation">
-      <v-btn color="accent" @click=prev class="font-semi-bold font-16 capitalize" :block=true :disabled="atStart">Previous</v-btn>
-      <v-btn color="accent" @click=next  class="font-semi-bold font-16 capitalize" :block=true :disabled="atEnd">Next</v-btn>
+      <v-btn
+        color="accent"
+        @click="prev"
+        class="font-semi-bold font-16 capitalize"
+        :block="true"
+        :disabled="atStart"
+      >Previous</v-btn>
+      <v-btn
+        color="accent"
+        @click="next"
+        class="font-semi-bold font-16 capitalize"
+        :block="true"
+        :disabled="atEnd"
+      >Next</v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import {CaptionFactory, CaptionPlayer, HtmlRenderer } from 'springroll';
+import { CaptionFactory, CaptionPlayer, HtmlRenderer } from 'springroll';
 import { EventBus } from '@/class/EventBus';
 export default {
   data() {
@@ -31,9 +43,11 @@ export default {
   },
   methods: {
     prev() {
+      console.log('prev');
       EventBus.$emit('caption_move_index', -1);
     },
     next() {
+      console.log('next');
       EventBus.$emit('caption_move_index', 1);
     },
     setActiveCaption($event) {
@@ -51,15 +65,19 @@ export default {
     loadCaptionData($event) {
       this.data = $event;
       this.captionPlayer.captions = CaptionFactory.createCaptionMap($event);
-      this.captionPlayer.start(this.name, this.data[this.name][this.index].start);
+      this.captionPlayer.start(
+        this.name,
+        this.data[this.name][this.index].start
+      );
     },
     onTimeChange($event) {
       this.captionPlayer.start(this.name, $event.time);
-      const i = this.captionPlayer.activeCaption.lineIndex - 1;
+
+      const i = this.captionPlayer.activeCaption.lineIndex;
       if (i !== this.index) {
-        EventBus.$emit('caption_move_index', i);
+        EventBus.$emit('caption_move_index', i - this.index);
       }
-    },
+    }
   },
   mounted() {
     this.setup();
@@ -78,8 +96,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
-@import "~@/scss/sizes";
+@import '~@/scss/colors';
+@import '~@/scss/sizes';
 .captions {
   $toolbar: 5.6rem;
   $navigation: 3.6rem;
