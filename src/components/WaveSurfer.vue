@@ -195,7 +195,7 @@ export default {
     },
     onAddCaption() {
       if (this.activeRegion) {
-        const seekToRatio = this.activeRegion.end / this.wave.getDuration();
+        const seekToRatio = this.activeRegion.end / this.currentDuration;
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
         this.activeRegion = false;
