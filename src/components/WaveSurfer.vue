@@ -42,11 +42,17 @@ export default {
       isPlaying: false,
       hasFile: false,
       currentTime: 0,
+      currentDuration: 0,
       activeIndex: 0,
       activeRegion: null,
       inactiveRegions: [],
       captionData: []
     };
+  },
+  computed: {
+    snapThreshold() {
+      return this.currentDuration / 20;
+    }
   },
   methods: {
     updateTimeStamp() {
@@ -128,6 +134,10 @@ export default {
     onNewRegion(region) {
       if (this.activeRegion) {
         this.activeRegion.remove();
+      }
+
+      if (this.inactiveRegions[this.activeIndex]) {
+        this.inactiveRegions.splice(this.activeIndex, 1);
       }
       this.activeRegion = region;
       this.activeRegion.color = 'rgba(0, 255, 0, 0.1)';
@@ -245,6 +255,48 @@ export default {
       this.activeRegion.drag = true;
       this.activeRegion.resize = true;
       this.activeRegion.updateRender();
+    },
+    onFinishUpdate(region) {
+      const regionDuration = region.end - region.start;
+      for (let i = 0, l = this.inactiveRegions.length; i < l; i++) {
+        if (region.id === this.inactiveRegions[i].id) {
+          continue;
+        }
+        if (
+          (region.start < this.inactiveRegions[i].end &&
+            region.start >= this.inactiveRegions[i].start) ||
+          (region.start < this.inactiveRegions[i].end &&
+            region.end >= this.inactiveRegions[i].end)
+        ) {
+          region.start = this.inactiveRegions[i].end;
+          region.end = region.start + regionDuration;
+        } else if (
+          (region.end > this.inactiveRegions[i].start &&
+            region.end <= this.inactiveRegions[i].end) ||
+          (region.end > this.inactiveRegions[i].start &&
+            region.start <= this.inactiveRegions[i].start)
+        ) {
+          region.end = this.inactiveRegions[i].start;
+          region.start = region.end - regionDuration;
+        }
+        if (
+          region.start <= this.inactiveRegions[i].end + this.snapThreshold &&
+          region.start >= this.inactiveRegions[i].end - this.snapThreshold
+        ) {
+          region.start = this.inactiveRegions[i].end;
+          region.end = region.start + regionDuration;
+        } else if (
+          region.end >= this.inactiveRegions[i].start - this.snapThreshold &&
+          region.end <= this.inactiveRegions[i].start + this.snapThreshold
+        ) {
+          region.end = this.inactiveRegions[i].start;
+          region.start = region.end - regionDuration;
+        }
+      }
+      EventBus.$emit('caption_update', {
+        start: Math.round(region.start * 1000),
+        end: Math.round(region.end * 1000)
+      });
     }
   },
   mounted() {
@@ -259,6 +311,11 @@ export default {
     this.wave.on('region-created', this.onNewRegion);
     this.wave.on('region-updated', this.onUpdateRegion);
     this.wave.on('region-click', this.onRegionClick);
+    this.wave.on('region-update-end', this.onFinishUpdate);
+    this.wave.on(
+      'ready',
+      () => (this.currentDuration = this.wave.getDuration())
+    );
   },
   destroyed() {
     EventBus.$off('file_selected', this.loadFile);
