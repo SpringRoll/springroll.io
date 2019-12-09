@@ -97,7 +97,7 @@ export default {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { content: $event.html });
+      EventBus.$emit('caption_update', { content: $event.text.trim() }); //.trim() removes the `\n` newline that .text returns
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
