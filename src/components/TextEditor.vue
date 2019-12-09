@@ -112,8 +112,7 @@ export default {
       EventBus.$emit('caption_update', { end: $event });
     },
     onUpdate($event) {
-      const { content, start, end } = $event.data;
-      this.content = content;
+      const { start, end } = $event.data;
       this.start = start;
       this.end = end;
       this.lastIndex = $event.lastIndex;
