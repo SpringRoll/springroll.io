@@ -35,6 +35,10 @@ export default class Directory {
 
     pathArray.length -= 1;
 
+    //If a singular file, or multiple files were uploaded rather than a directory set the directory name to /
+    if (pathArray.length <= 0) {
+      pathArray.push('/');
+    }
     let currentDir = this;
 
     for (let i = 0, l = pathArray.length; i < l; i++) {
@@ -51,7 +55,7 @@ export default class Directory {
   }
 
   /**
-   * Adds a already existing Directory instance to this directory as a nested directory. It will not add it if there is already a directory with the same name
+   * Adds an already existing Directory instance to this directory as a nested directory. It will not add it if there is already a directory with the same name
    * @param {Directory} dir
    * @memberof Directory
    */
