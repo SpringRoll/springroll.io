@@ -83,6 +83,14 @@ export default {
       this.wave.on('audioprocess', this.updateTimeStamp);
       this.wave.on('seek', this.updateTimeStamp);
       this.wave.on('finish', this.finish);
+      this.wave.on('region-created', this.onNewRegion);
+      this.wave.on('region-updated', this.onUpdateRegion);
+      this.wave.on('region-click', this.onRegionClick);
+      this.wave.on('region-update-end', this.onFinishUpdate);
+      this.wave.on(
+        'ready',
+        () => (this.currentDuration = this.wave.getDuration())
+      );
 
       this.wave.enableDragSelection({});
     },
@@ -198,7 +206,7 @@ export default {
         const seekToRatio = this.activeRegion.end / this.currentDuration;
         this.makeActiveCaptionInactive();
         this.inactiveRegions.push(this.activeRegion);
-        this.activeRegion = false;
+        this.activeRegion = null;
         this.wave.seekTo(seekToRatio);
       }
       this.activeIndex++;
@@ -308,14 +316,6 @@ export default {
     EventBus.$on('caption_changed', this.onCaptionChange);
     EventBus.$on('file_changed', (e) => (this.captionData = e));
     EventBus.$on('caption_removed', this.onRemoveCaption);
-    this.wave.on('region-created', this.onNewRegion);
-    this.wave.on('region-updated', this.onUpdateRegion);
-    this.wave.on('region-click', this.onRegionClick);
-    this.wave.on('region-update-end', this.onFinishUpdate);
-    this.wave.on(
-      'ready',
-      () => (this.currentDuration = this.wave.getDuration())
-    );
   },
   destroyed() {
     EventBus.$off('file_selected', this.loadFile);
