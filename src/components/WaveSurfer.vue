@@ -91,8 +91,6 @@ export default {
         'ready',
         () => (this.currentDuration = this.wave.getDuration())
       );
-
-      this.wave.enableDragSelection({});
     },
 
     forward() {
