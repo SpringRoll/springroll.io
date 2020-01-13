@@ -19,7 +19,7 @@
     </div>
     <div color="accent" class="v-btn accent explorer__input --file font-semi-bold font-16">
       <span>Import Files</span>
-      <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
+      <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3,.wav" multiple= />
     </div>
   </div>
 </template>
