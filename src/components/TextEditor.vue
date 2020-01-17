@@ -124,6 +124,7 @@ export default {
       this.content = content;
     },
     addCaption() {
+      this.content = ' ';
       EventBus.$emit('caption_add_index');
     },
     removeCaption() {

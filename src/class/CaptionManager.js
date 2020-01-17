@@ -17,6 +17,7 @@ class CaptionManager {
     EventBus.$on('caption_remove_index', this.removeAtIndex.bind(this));
     EventBus.$on('caption_emit', this.emit.bind(this));
     EventBus.$on('time_current', (e) => this.currentTime = e.time || 0);
+    EventBus.$on('json_update', this.onJSONUpdate.bind(this));
   }
 
   fileChanged($event) {
@@ -34,6 +35,22 @@ class CaptionManager {
       this.activeIndex = 0;
       this.emitCurrent();
     }
+  }
+
+  onJSONUpdate($event) {
+    Object.keys($event).forEach((key) => {
+      const current = this.currentCaptionIndex;
+      const newData = $event[key][0];
+
+      this.data[this.activeCaption][this.activeIndex] = {
+        content: newData.content || current.content,
+        end: 'number' === typeof newData.end ? newData.end : current.end,
+        start: 'number' === typeof newData.start ? newData.start : current.start,
+      };
+    });
+
+    this.emitCurrent();
+    this.emitData();
   }
 
   addCaption(key = this.activeCaption) {
@@ -117,6 +134,7 @@ class CaptionManager {
 
   emitData() {
     EventBus.$emit('caption_data', this.data);
+    console.log(this.data);
   }
 
   emit() {

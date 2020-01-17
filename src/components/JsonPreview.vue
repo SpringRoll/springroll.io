@@ -1,6 +1,7 @@
 <template>
   <div class="json">
-    <pre contenteditable v-highlightjs="json" @input="onEdit"><code class="javascript code-block --wide json__container"></code></pre>
+    <!-- <pre contenteditable v-highlightjs="json" @input="onEdit"><code class="javascript code-block --wide json__container"></code></pre> -->
+    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px" />
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
         <v-btn
@@ -39,6 +40,7 @@
 
 <script>
 import { EventBus } from '@/class/EventBus';
+import VJsoneditor from 'v-jsoneditor';
 export default {
   data() {
     const data = {};
@@ -47,16 +49,22 @@ export default {
       json,
       data,
       blob: null,
-      dialog: false
+      dialog: false,
+      options: {
+        onChangeJSON: this.onEdit
+      }
     };
+  },
+  components: {
+    VJsoneditor
   },
   methods: {
     onEdit($event) {
-      let data = JSON.parse($event.target.textContent, null, 2);
-      data = data[Object.keys(data)[0]][0];
-      console.log(data);
-      EventBus.$emit('caption_update', data);
-      EventBus.$emit('caption_content_update', data);
+      EventBus.$emit('json_update', $event);
+      // let data = JSON.parse($event.target.textContent, null, 2);
+      // data = data[Object.keys(data)[0]][0];
+      // EventBus.$emit('caption_update', data);
+      // EventBus.$emit('caption_content_update', data);
     },
     onUpdate() {
       EventBus.$emit('caption_get');
@@ -115,6 +123,9 @@ export default {
 
   .code-block {
     width: 100%;
+  }
+  .jsoneditor-menu {
+    background-color: $accent;
   }
 
   pre,
