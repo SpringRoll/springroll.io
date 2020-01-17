@@ -22,7 +22,7 @@
             :for="`${index}_${value.file.name}`"
             class="font-16 directory__label"
           >{{value.file.name}}</label>
-          <v-icon class="directory__icon" v-show="value.isCaptioned">done</v-icon>
+          <v-icon class="directory__icon" v-show="filesWithCaptions[value.file.name]">done</v-icon>
         </label>
       </v-list-tile-content>
       <file-directory
@@ -69,9 +69,6 @@ export default {
       return this.directory.files.map((file) => {
         return {
           active: this.active === file,
-          isCaptioned: this.filesWithCaptions[file.name]
-            ? this.filesWithCaptions[file.name]
-            : false,
           file
         };
       });
@@ -109,9 +106,7 @@ export default {
       }
     },
     onFileCaptionChange($event) {
-      console.log($event);
-      this.filesWithCaptions[$event.name] = $event.isCaptioned;
-      console.log(this.filesWithCaptions);
+      this.$set(this.filesWithCaptions, $event.name, $event.isCaptioned);
     }
   },
   mounted() {
