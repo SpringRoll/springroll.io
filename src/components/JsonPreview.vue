@@ -128,12 +128,12 @@ export default {
     background-color: $accent;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 45px;
-    padding: 5px;
+    height: 5.6rem;
+    padding: 1.5rem;
   }
 
-  .jsoneditor-frame {
-    margin: 5px;
+  .jsoneditor-search {
+    margin: 1rem;
   }
 
   .jsoneditor {
@@ -142,6 +142,8 @@ export default {
 
   .jsoneditor-tree {
     background-color: $white-background;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   pre,
@@ -171,7 +173,7 @@ export default {
       justify-content: space-between;
       width: 100%;
       align-items: center;
-      margin: 1.5rem 0 3rem;
+      margin: 3rem 0;
     }
   }
 
