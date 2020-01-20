@@ -126,6 +126,22 @@ export default {
   }
   .jsoneditor-menu {
     background-color: $accent;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 45px;
+    padding: 5px;
+  }
+
+  .jsoneditor-frame {
+    margin: 5px;
+  }
+
+  .jsoneditor {
+    border: none;
+  }
+
+  .jsoneditor-tree {
+    background-color: $white-background;
   }
 
   pre,
