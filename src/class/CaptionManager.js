@@ -70,6 +70,7 @@ class CaptionManager {
   addIndex() {
     this.data[this.activeCaption].push(this.template);
     this.activeIndex++;
+    EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: true });
     this.emitCurrent();
     this.emitData();
   }
@@ -116,6 +117,7 @@ class CaptionManager {
     if (0 < this.activeIndex) {
       this.activeIndex--;
     }
+    EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: !!(this.currentCaption.length > 1) });
 
     this.emitCurrent();
     this.emitData();
