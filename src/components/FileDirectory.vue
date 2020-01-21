@@ -39,7 +39,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { EventBus } from '@/class/EventBus';
 export default {
   name: 'file-directory',
