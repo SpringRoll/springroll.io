@@ -119,10 +119,6 @@ export default {
       this.index = $event.index;
       this.canEmit = true;
     },
-    updateContent($event) {
-      const content = $event.content;
-      this.content = content;
-    },
     addCaption() {
       this.content = ' ';
       EventBus.$emit('caption_add_index');
@@ -162,12 +158,10 @@ export default {
 
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
-    //EventBus.$on('caption_content_update', this.updateContent);
     EventBus.$on('caption_reset', this.reset);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
-    EventBus.$off('caption_content_update', this.updateContent);
     EventBus.$off('caption_reset', this.reset);
   }
 };
