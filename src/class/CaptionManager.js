@@ -134,7 +134,6 @@ class CaptionManager {
 
   emitData() {
     EventBus.$emit('caption_data', this.data);
-    console.log(this.data);
   }
 
   emit() {
