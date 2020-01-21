@@ -29,6 +29,7 @@ class CaptionManager {
 
     if (!Array.isArray(this.data[name])) {
       this.addCaption(name);
+      EventBus.$emit('file_changed', this.data[name]);
     } else {
       this.activeCaption = name;
       this.activeIndex = 0;

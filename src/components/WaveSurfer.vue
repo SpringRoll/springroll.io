@@ -46,12 +46,15 @@ export default {
       activeIndex: 0,
       activeRegion: null,
       inactiveRegions: [],
-      captionData: []
+      captionData: [],
     };
   },
   computed: {
     snapThreshold() {
       return this.currentDuration / 20;
+    },
+    skipLength() {
+      return this.currentDuration / 100;
     }
   },
   methods: {
@@ -73,6 +76,7 @@ export default {
         progressColor: 'rgba(0,0,0,0)',
         responsive: true,
         waveColor: '#0C7AC0',
+        interact: false,
         plugins: [
           RegionsPlugin.create({
             dragSelection: true
@@ -94,10 +98,10 @@ export default {
     },
 
     forward() {
-      this.wave.skipForward();
+      this.wave.skipForward(this.skipLength);
     },
     rewind() {
-      this.wave.skipBackward();
+      this.wave.skipBackward(this.skipLength);
     },
 
     finish() {
@@ -182,6 +186,7 @@ export default {
         }
       } else {
         if (this.activeRegion && this.inactiveRegions[this.activeIndex]) {
+          this.inactiveRegions[this.activeIndex] = this.activeRegion;
           this.makeActiveCaptionInactive();
           this.activeRegion = this.inactiveRegions[index];
         } else if (this.inactiveRegions[index]) {
@@ -221,6 +226,10 @@ export default {
       let index = this.inactiveRegions.findIndex((reg) => reg.id === $event.id);
       index = index - this.activeIndex;
       EventBus.$emit('caption_move_index', index);
+    },
+    onFileChange($event) {
+      this.captionData = $event;
+      this.generateRegions();
     },
     generateRegions() {
       this.wave.un('region-created', this.onNewRegion);
@@ -312,7 +321,7 @@ export default {
     EventBus.$on('caption_reset', this.empty);
     EventBus.$on('caption_add_index', this.onAddCaption);
     EventBus.$on('caption_changed', this.onCaptionChange);
-    EventBus.$on('file_changed', (e) => (this.captionData = e));
+    EventBus.$on('file_changed', this.onFileChange);
     EventBus.$on('caption_removed', this.onRemoveCaption);
   },
   destroyed() {
@@ -321,7 +330,7 @@ export default {
     EventBus.$off('caption_reset', this.empty);
     EventBus.$off('caption_add_index', this.onAddCaption);
     EventBus.$off('caption_changed', this.onCaptionChange);
-    EventBus.$off('file_changed', this.generateRegions);
+    EventBus.$off('file_changed', this.onFileChange);
     this.wave.unAll();
     this.wave.destroy();
   }

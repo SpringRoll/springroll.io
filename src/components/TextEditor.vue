@@ -162,6 +162,7 @@ export default {
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
+    EventBus.$on('file_changed', () => (this.content = ''));
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
