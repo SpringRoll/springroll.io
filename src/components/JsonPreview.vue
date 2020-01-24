@@ -61,10 +61,6 @@ export default {
   methods: {
     onEdit($event) {
       EventBus.$emit('json_update', $event);
-      // let data = JSON.parse($event.target.textContent, null, 2);
-      // data = data[Object.keys(data)[0]][0];
-      // EventBus.$emit('caption_update', data);
-      // EventBus.$emit('caption_content_update', data);
     },
     onUpdate() {
       EventBus.$emit('caption_get');
