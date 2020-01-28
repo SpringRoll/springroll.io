@@ -11,59 +11,58 @@
       >
       <template v-for="value in scaleValues">
         <!-- <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}: -->
-      <v-text-field
+        <v-text-field
         class="scaleManager__input"
-        v-model="value.value"
-        type="number"
-        :label="value.label"
-        :key="value.label"
-        required
-      ></v-text-field>
+          v-model="value.value"
+          type="number"
+          :label="value.label"
+          :key="value.label"
+          required
+        ></v-text-field>
         <!-- </label> -->
-      </template>
-      <v-btn @click="updateScaling" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
+        </template>
+        <v-btn @click="updateScaling" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
       </v-form>
       <v-form
       ref="anchorForm"
       v-model="anchorValid"
       >
-          <v-text-field
-            class="scaleManager__input"
-            id="positionX"
-            v-model="anchorValues.position.value.x"
-            label="Anchor Position X:"
-            type="number"
-          ></v-text-field>
-          <v-text-field
-            class="scaleManager__input"
-            id="positionY"
-            v-model="anchorValues.position.value.y"
-            label="Anchor Position Y:"
-            type="number"
-          ></v-text-field>
-          <v-text-field
-            class="scaleManager__input"
-            id="directionX"
-            v-model="anchorValues.direction.value.x"
-            label="Anchor Direction X:"
-            max="1"
-            min="-1"
-            step="0.1"
-            type="number"
-            :rules="anchorDirectionRules"
-          ></v-text-field>
-          <v-text-field
-            class="scaleManager__input"
-            id="directionY"
-
-            v-model="anchorValues.direction.value.y"
-            label="Anchor Direction Y:"
-            type="number"
-            max="1"
-            min="-1"
-            step="0.1"
-            :rules="anchorDirectionRules"
-          ></v-text-field>
+        <v-text-field
+          class="scaleManager__input"
+          id="positionX"
+          v-model="anchorValues.position.value.x"
+          label="Anchor Position X:"
+          type="number"
+        ></v-text-field>
+        <v-text-field
+          class="scaleManager__input"
+          id="positionY"
+          v-model="anchorValues.position.value.y"
+          label="Anchor Position Y:"
+          type="number"
+        ></v-text-field>
+        <v-text-field
+          class="scaleManager__input"
+          id="directionX"
+          v-model="anchorValues.direction.value.x"
+          label="Anchor Direction X:"
+          max="1"
+          min="-1"
+          step="0.1"
+          type="number"
+          :rules="anchorDirectionRules"
+        ></v-text-field>
+        <v-text-field
+          class="scaleManager__input"
+          id="directionY"
+          v-model="anchorValues.direction.value.y"
+          label="Anchor Direction Y:"
+          type="number"
+          max="1"
+          min="-1"
+          step="0.1"
+          :rules="anchorDirectionRules"
+        ></v-text-field>
       <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
       </v-form>
     </div>
@@ -140,13 +139,6 @@ export default {
         'position': { 'x': +this.anchorValues.position.value.x, 'y': +this.anchorValues.position.value.y },
         'direction': { 'x': +this.anchorValues.direction.value.x, 'y': +this.anchorValues.direction.value.y }
       });
-    },
-    onAnchorDirectionInput(e, axis) {
-      e = +e;
-      if (e <= 1 && e >= -1) {
-        return;
-      }
-      this.anchorValues.direction.value[axis] = e < -1 ? -1 : 1;
     },
     validateAnchor () {
       if (!this.$refs.anchorForm.validate()) {
