@@ -8,6 +8,8 @@
     <div class="scaleManager__events">
       <h2 class="scaleManager__header">Scaling Options</h2>
       <v-form
+      ref="scaleForm"
+      v-model="scaleValid"
       >
       <template v-for="value in scaleValues">
         <!-- <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}: -->
@@ -17,11 +19,12 @@
           type="number"
           :label="value.label"
           :key="value.label"
+          :rules="value.rules"
           required
         ></v-text-field>
         <!-- </label> -->
         </template>
-        <v-btn @click="updateScaling" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
+        <v-btn @click="validateScale" :disabled="!scaleValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
       </v-form>
       <v-form
       ref="anchorForm"
@@ -77,24 +80,41 @@ export default {
   data() {
     return {
       anchorValid: true,
+      scaleValid: true,
       publicPath: process.env.BASE_URL,
       bellhop: new Bellhop('scaleManager-demo'),
       scaleValues: {
         'maxWidth': {
           'value': 1320,
-          'label': 'Max Width'
+          'label': 'Max Width',
+          'rules': [
+            v => (v && v > 0) || 'Max Width must be greater than 0',
+            v => (v > this.scaleValues.safeWidth.value) || 'Max width must be more than safe width'
+          ],
         },
         'maxHeight': {
           'value': 780,
-          'label': 'Max Height'
+          'label': 'Max Height',
+          'rules':         [
+            v => (v && v > 0) || 'Max Height must be greater than 0',
+            v => (v > this.scaleValues.safeHeight.value) || 'Max height must be more than safe height'
+          ],
         },
         'safeWidth': {
           'value': 1024,
-          'label': 'Safe Width'
+          'label': 'Safe Width',
+          rules:         [
+            v => (v && v > 0) || 'Safe Width must be greater than 0',
+            v => (v < this.scaleValues.maxWidth.value) || 'Safe width must be less than max width'
+          ],
         },
         'safeHeight': {
           'value': 660,
-          'label': 'Safe Height'
+          'label': 'Safe Height',
+          'rules':         [
+            v => (v && v > 0) || 'Safe Height must be greater than 0',
+            v => (v < this.scaleValues.maxHeight.value) || 'Safe height must be less than max height'
+          ],
         },
       },
       anchorValues: {
@@ -110,6 +130,24 @@ export default {
       isFullScreen: false,
       anchorDirectionRules: [
         v => (v <= 1 && v >= -1) || 'Anchor Directions must be between -1 and 1'
+      ],
+      scalingRules: [
+        [
+          v => (v && v > 0) || 'Max Width must be greater than 0',
+          v => (v > this.scaleValues.safeWidth.value) || 'Max width must be more than safe width'
+        ],
+        [
+          v => (v && v > 0) || 'Max Height must be greater than 0',
+          v => (v > this.scaleValues.safeHeight.value) || 'Max height must be more than safe height'
+        ],
+        [
+          v => (v && v > 0) || 'Safe Width must be greater than 0',
+          v => (v < this.scaleValues.maxWidth.value) || 'Safe width must be less than max width'
+        ],
+        [
+          v => (v && v > 0) || 'Safe Height must be greater than 0',
+          v => (v < this.scaleValues.maxHeight.value) || 'Safe height must be less than max height'
+        ],
       ],
     };
   },
@@ -142,11 +180,17 @@ export default {
     },
     validateAnchor () {
       if (!this.$refs.anchorForm.validate()) {
-        console.log('invalid');
-        this.anchorValid = false;
+        return;
       }
 
       this.updateAnchor();
+    },
+    validateScale () {
+      if (!this.$refs.anchorForm.validate() && this.$refs.scaleForm.validate()) {
+        return;
+      }
+
+      this.updateScaling();
     },
   },
   mounted() {
@@ -161,8 +205,8 @@ export default {
 @import "~@/scss/colors";
 @import "~@/scss/mixins";
 .scaleManager {
-  height: 52rem;
-  width: 65rem;
+  height: 76.8rem;
+  width: 102.4rem;
   resize: both;
   overflow: auto;
 
