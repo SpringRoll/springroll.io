@@ -1,10 +1,15 @@
 <template>
   <div class="scaleManager__container">
+    <v-row>
+      <v-col cols="6">
     <div class="scaleManager__wrapper">
-      <a class="scaleManager__source"  href="https://github.com/SpringRoll/springroll-io-safe-scale-manager-demo/tree/feature/safe-scale-manager-demo">Source Code for the demo game</a>
       <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}SafeScaleManagerDemo`" frameborder="0" />
       <v-btn @click="fullScreen" block color="primary" class="scaleManager__button --fullScreen --capital font-16 font-semi-bold">Full Screen</v-btn>
+      <a class="scaleManager__readme"  href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/scale-manager">Scale Manager README</a>
+      <a class="scaleManager__source"  href="https://github.com/SpringRoll/springroll-io-safe-scale-manager-demo/tree/feature/safe-scale-manager-demo">Source Code for the demo game</a>
     </div>
+      </v-col>
+    <v-col cols="2">
     <div class="scaleManager__events">
       <h2 class="scaleManager__header">Scaling Options</h2>
       <v-form
@@ -14,12 +19,13 @@
       <template v-for="value in scaleValues">
         <!-- <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}: -->
         <v-text-field
-        class="scaleManager__input"
+        class="scaleManager__input mb-4"
           v-model="value.value"
           type="number"
           :label="value.label"
           :key="value.label"
           :rules="value.rules"
+          :hint="value.hint"
           required
         ></v-text-field>
         <!-- </label> -->
@@ -36,6 +42,7 @@
           v-model="anchorValues.position.value.x"
           label="Anchor Position X:"
           type="number"
+          hint="A horizontal offset from the anchored x position."
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -43,6 +50,7 @@
           v-model="anchorValues.position.value.y"
           label="Anchor Position Y:"
           type="number"
+          hint="A vertical offset from the anchored y position."
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -54,6 +62,7 @@
           step="0.1"
           type="number"
           :rules="anchorDirectionRules"
+          hint="A normalized value for a horizontal edge of the viewable area. Should be between -1 and 1."
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -65,9 +74,23 @@
           min="-1"
           step="0.1"
           :rules="anchorDirectionRules"
+          hint="A normalized value for a vertical edge of the viewable area. Should be between -1 and 1."
         ></v-text-field>
       <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
       </v-form>
+    </div>
+    </v-col>
+    </v-row>
+    <div class="scaleManager__info">
+      <h2>Safe Scale Manager</h2>
+      <p>
+        The SafeScaleManager is a tool that helps developers maintain the aspect ratio of their game
+        when required to provide a safe area for game content. The manager is initialized with a
+        maximum width and height, safe area width and height, and a callback that can be used to
+        in game to handle resizing. There are also a few helpful entities that can be registered
+        with the SafeScaleManager that will perform different behaviours upon a window resize
+        event, such as anchors.
+      </p>
     </div>
   </div>
 </template>
@@ -91,6 +114,7 @@ export default {
             v => (v && v > 0) || 'Max Width must be greater than 0',
             v => (v > this.scaleValues.safeWidth.value) || 'Max width must be more than safe width'
           ],
+          'hint': 'The maximum horizontal dimension in pixels of your game.'
         },
         'maxHeight': {
           'value': 780,
@@ -99,6 +123,7 @@ export default {
             v => (v && v > 0) || 'Max Height must be greater than 0',
             v => (v > this.scaleValues.safeHeight.value) || 'Max height must be more than safe height'
           ],
+          'hint': 'The maximum vertical dimension in pixels of your game.'
         },
         'safeWidth': {
           'value': 1024,
@@ -107,6 +132,7 @@ export default {
             v => (v && v > 0) || 'Safe Width must be greater than 0',
             v => (v < this.scaleValues.maxWidth.value) || 'Safe width must be less than max width'
           ],
+          'hint': 'The minimum horizontal dimension in pixel of the safe area in your game.'
         },
         'safeHeight': {
           'value': 660,
@@ -115,6 +141,7 @@ export default {
             v => (v && v > 0) || 'Safe Height must be greater than 0',
             v => (v < this.scaleValues.maxHeight.value) || 'Safe height must be less than max height'
           ],
+          'hint': 'The minimum vertical dimension in pixel of the safe area in your game.'
         },
       },
       anchorValues: {
@@ -210,6 +237,10 @@ export default {
   resize: both;
   overflow: auto;
 
+  &__info {
+    flex: 1 1 100%;
+  }
+
   &__events {
     color: $accent;
     display: flex;
@@ -255,6 +286,10 @@ export default {
     align-self: flex-end;
     padding-right: 2rem;
   }
+  &__readme {
+    align-self: flex-end;
+    padding-right: 2rem;
+  }
 
   &__container {
     align-items: center;
@@ -262,7 +297,7 @@ export default {
     height: 100%;
     justify-content: center;
     width: 100%;
-
+  flex-wrap: wrap;
   }
 
   &__input {
