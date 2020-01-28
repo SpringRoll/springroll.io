@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {
   Vuetify,
+  VForm,
   VApp,
   VBtn,
   VGrid,
@@ -19,6 +20,7 @@ import 'vuetify/src/stylus/app.styl';
 
 Vue.use(Vuetify, {
   components: {
+    VForm,
     VApp,
     VBtn,
     VGrid,

@@ -2,29 +2,74 @@
   <div class="scaleManager__container">
     <div class="scaleManager__wrapper">
       <a class="scaleManager__source"  href="https://github.com/SpringRoll/springroll-io-safe-scale-manager-demo/tree/feature/safe-scale-manager-demo">Source Code for the demo game</a>
-      <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}safe-scale-manager-demo`" frameborder="0" />
+      <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}SafeScaleManagerDemo`" frameborder="0" />
       <v-btn @click="fullScreen" block color="primary" class="scaleManager__button --fullScreen --capital font-16 font-semi-bold">Full Screen</v-btn>
     </div>
     <div class="scaleManager__events">
       <h2 class="scaleManager__header">Scaling Options</h2>
+      <v-form
+      >
       <template v-for="value in scaleValues">
-        <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}
-        <input class="scaleManager__input" type="number" min="0" step="1" id="value.key" :key="value.key" v-model="value.value">
-        </label>
+        <!-- <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}: -->
+      <v-text-field
+        class="scaleManager__input"
+        v-model="value.value"
+        type="number"
+        :label="value.label"
+        :key="value.label"
+        required
+      ></v-text-field>
+        <!-- </label> -->
       </template>
       <v-btn @click="updateScaling" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
-      <template v-for="value in anchorValues">
-        <label class="scaleManager__label" :for="value.key" :key="`${value.label}_X`">{{ `${value.label} X: ` }}
-          <input class="scaleManager__input" type="number" min="0" step="1" id="value.key" :key="value.key" v-model="value.value.x">
-        </label>
-        <label class="scaleManager__label" :for="value.key" :key="`${value.label}_Y`">{{ `${value.label} Y: ` }}
-          <input class="scaleManager__input" type="number" min="-1" step="0.1" max="1" id="value.key" :key="value.key" v-model="value.value.y">
-        </label>
-      </template>
-      <v-btn @click="updateAnchor" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
+      </v-form>
+      <v-form
+      ref="anchorForm"
+      v-model="anchorValid"
+      >
+          <v-text-field
+            class="scaleManager__input"
+            id="positionX"
+            v-model="anchorValues.position.value.x"
+            label="Anchor Position X:"
+            type="number"
+          ></v-text-field>
+          <v-text-field
+            class="scaleManager__input"
+            id="positionY"
+            v-model="anchorValues.position.value.y"
+            label="Anchor Position Y:"
+            type="number"
+          ></v-text-field>
+          <v-text-field
+            class="scaleManager__input"
+            id="directionX"
+            v-model="anchorValues.direction.value.x"
+            label="Anchor Direction X:"
+            max="1"
+            min="-1"
+            step="0.1"
+            type="number"
+            :rules="anchorDirectionRules"
+          ></v-text-field>
+          <v-text-field
+            class="scaleManager__input"
+            id="directionY"
+
+            v-model="anchorValues.direction.value.y"
+            label="Anchor Direction Y:"
+            type="number"
+            max="1"
+            min="-1"
+            step="0.1"
+            :rules="anchorDirectionRules"
+          ></v-text-field>
+      <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
+      </v-form>
     </div>
   </div>
 </template>
+
 
 <script>
 import { Bellhop } from 'bellhop-iframe';
@@ -32,6 +77,7 @@ import { Bellhop } from 'bellhop-iframe';
 export default {
   data() {
     return {
+      anchorValid: true,
       publicPath: process.env.BASE_URL,
       bellhop: new Bellhop('scaleManager-demo'),
       scaleValues: {
@@ -63,7 +109,9 @@ export default {
         },
       },
       isFullScreen: false,
-
+      anchorDirectionRules: [
+        v => (v <= 1 && v >= -1) || 'Anchor Directions must be between -1 and 1'
+      ],
     };
   },
   methods: {
@@ -92,7 +140,22 @@ export default {
         'position': { 'x': +this.anchorValues.position.value.x, 'y': +this.anchorValues.position.value.y },
         'direction': { 'x': +this.anchorValues.direction.value.x, 'y': +this.anchorValues.direction.value.y }
       });
-    }
+    },
+    onAnchorDirectionInput(e, axis) {
+      e = +e;
+      if (e <= 1 && e >= -1) {
+        return;
+      }
+      this.anchorValues.direction.value[axis] = e < -1 ? -1 : 1;
+    },
+    validateAnchor () {
+      if (!this.$refs.anchorForm.validate()) {
+        console.log('invalid');
+        this.anchorValid = false;
+      }
+
+      this.updateAnchor();
+    },
   },
   mounted() {
     this.bellhop.connect(document.getElementById('scaleManager-demo'));
@@ -116,12 +179,13 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     margin-left: 5rem;
   }
 
   &__header {
     margin: 1.5rem 0;
+    align-self: center;
   }
 
   &__event {
@@ -129,8 +193,11 @@ export default {
 
     &.scaleManager__button {
       width: 100%;
-    }
 
+      &:first-child {
+        margin-bottom: 5rem;
+      }
+    }
   }
 
   &__button {
@@ -163,14 +230,13 @@ export default {
   }
 
   &__input {
-    background-color: $white-background;
     margin-left: 1rem;
   }
   &__label {
     color: $light-label;
     display: flex;
     justify-content: space-between;
-    align-items: space-between;
+    align-items: center;
     margin: 2rem 0;
 
   }
