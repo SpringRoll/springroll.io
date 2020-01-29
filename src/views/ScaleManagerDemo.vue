@@ -8,6 +8,7 @@
     </div>
     <div class="scaleManager__events">
       <h2 class="scaleManager__header">Scaling Options</h2>
+      <div class="scaleManager__form-wrapper">
       <v-form
       ref="scaleForm"
       v-model="scaleValid"
@@ -72,6 +73,7 @@
         ></v-text-field>
       <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
       </v-form>
+      </div>
     </div>
   </div>
 </template>
@@ -225,6 +227,26 @@ export default {
     justify-content: center;
     align-items: flex-start;
     margin-left: 5rem;
+
+    @media (max-width: 1300px) {
+      width: 100%;
+      align-items: center;
+    }
+
+  }
+
+  &__form-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    @media (max-width: 1300px) {
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-end;
+      width: 50%;
+    }
   }
 
   &__header {
