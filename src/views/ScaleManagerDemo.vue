@@ -15,7 +15,7 @@
       >
       <template v-for="value in scaleValues">
         <v-text-field
-        class="scaleManager__input mb-4"
+        class="scaleManager__input my-4"
           v-model="value.value"
           type="number"
           :label="value.label"
@@ -25,14 +25,14 @@
           required
         ></v-text-field>
         </template>
-        <v-btn @click="validateScale" :disabled="!scaleValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
+        <v-btn @click="validateScale" :disabled="!scaleValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold mb-3">Update Scale Values</v-btn>
       </v-form>
       <v-form
       ref="anchorForm"
       v-model="anchorValid"
       >
         <v-text-field
-          class="scaleManager__input"
+          class="scaleManager__input my-4"
           id="positionX"
           v-model="anchorValues.position.value.x"
           label="Anchor Position X:"
@@ -41,7 +41,7 @@
           @input="validateAnchor"
         ></v-text-field>
         <v-text-field
-          class="scaleManager__input"
+          class="scaleManager__input my-4"
           id="positionY"
           v-model="anchorValues.position.value.y"
           label="Anchor Position Y:"
@@ -50,7 +50,7 @@
           @input="validateAnchor"
         ></v-text-field>
         <v-text-field
-          class="scaleManager__input"
+          class="scaleManager__input my-4"
           id="directionX"
           v-model="anchorValues.direction.value.x"
           label="Anchor Direction X:"
@@ -63,7 +63,7 @@
           @input="validateAnchor"
         ></v-text-field>
         <v-text-field
-          class="scaleManager__input"
+          class="scaleManager__input my-4"
           id="directionY"
           v-model="anchorValues.direction.value.y"
           label="Anchor Direction Y:"
