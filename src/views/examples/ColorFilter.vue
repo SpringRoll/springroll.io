@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     changeFilter(e) {
-      console.log(e);
       this.updateCodeExample(e);
       if (null === e) {
         this.filter.removeFilter();

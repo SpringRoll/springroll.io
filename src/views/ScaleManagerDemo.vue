@@ -13,7 +13,6 @@
       v-model="scaleValid"
       >
       <template v-for="value in scaleValues">
-        <!-- <label class="scaleManager__label" :for="value.label" :key="value.label">{{ value.label }}: -->
         <v-text-field
         class="scaleManager__input mb-4"
           v-model="value.value"
@@ -24,7 +23,6 @@
           :hint="value.hint"
           required
         ></v-text-field>
-        <!-- </label> -->
         </template>
         <v-btn @click="validateScale" :disabled="!scaleValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Scale Values</v-btn>
       </v-form>
