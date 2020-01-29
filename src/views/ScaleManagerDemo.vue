@@ -38,6 +38,7 @@
           label="Anchor Position X:"
           type="number"
           hint="A horizontal offset from the anchored x position."
+          @input="validateAnchor"
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -46,6 +47,7 @@
           label="Anchor Position Y:"
           type="number"
           hint="A vertical offset from the anchored y position."
+          @input="validateAnchor"
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -58,6 +60,7 @@
           type="number"
           :rules="anchorDirectionRules"
           hint="A normalized value for a horizontal edge of the viewable area. Should be between -1 and 1."
+          @input="validateAnchor"
         ></v-text-field>
         <v-text-field
           class="scaleManager__input"
@@ -70,8 +73,9 @@
           step="0.1"
           :rules="anchorDirectionRules"
           hint="A normalized value for a vertical edge of the viewable area. Should be between -1 and 1."
+          @input="validateAnchor"
         ></v-text-field>
-      <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
+      <!-- <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn> -->
       </v-form>
       </div>
     </div>
@@ -244,7 +248,7 @@ export default {
     @media (max-width: 1300px) {
       flex-direction: row;
       justify-content: space-around;
-      align-items: flex-end;
+      align-items: flex-start;
       width: 50%;
     }
   }
@@ -301,6 +305,7 @@ export default {
 
   &__input {
     margin-left: 1rem;
+    max-width: 17.9rem;
   }
   &__label {
     color: $light-label;
