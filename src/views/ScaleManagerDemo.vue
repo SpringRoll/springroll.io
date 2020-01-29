@@ -1,15 +1,11 @@
 <template>
   <div class="scaleManager__container">
-    <v-row>
-      <v-col cols="6">
     <div class="scaleManager__wrapper">
+      <a class="scaleManager__readme"  href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/scale-manager">Scale Manager README</a>
       <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}SafeScaleManagerDemo`" frameborder="0" />
       <v-btn @click="fullScreen" block color="primary" class="scaleManager__button --fullScreen --capital font-16 font-semi-bold">Full Screen</v-btn>
-      <a class="scaleManager__readme"  href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/scale-manager">Scale Manager README</a>
       <a class="scaleManager__source"  href="https://github.com/SpringRoll/springroll-io-safe-scale-manager-demo/tree/feature/safe-scale-manager-demo">Source Code for the demo game</a>
     </div>
-      </v-col>
-    <v-col cols="2">
     <div class="scaleManager__events">
       <h2 class="scaleManager__header">Scaling Options</h2>
       <v-form
@@ -78,19 +74,6 @@
         ></v-text-field>
       <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn>
       </v-form>
-    </div>
-    </v-col>
-    </v-row>
-    <div class="scaleManager__info">
-      <h2>Safe Scale Manager</h2>
-      <p>
-        The SafeScaleManager is a tool that helps developers maintain the aspect ratio of their game
-        when required to provide a safe area for game content. The manager is initialized with a
-        maximum width and height, safe area width and height, and a callback that can be used to
-        in game to handle resizing. There are also a few helpful entities that can be registered
-        with the SafeScaleManager that will perform different behaviours upon a window resize
-        event, such as anchors.
-      </p>
     </div>
   </div>
 </template>
@@ -236,10 +219,6 @@ export default {
   width: 102.4rem;
   resize: both;
   overflow: auto;
-
-  &__info {
-    flex: 1 1 100%;
-  }
 
   &__events {
     color: $accent;
