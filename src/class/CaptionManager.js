@@ -39,14 +39,17 @@ class CaptionManager {
 
   onJSONUpdate($event) {
     Object.keys($event).forEach((key) => {
-      const current = this.currentCaptionIndex;
-      const newData = $event[key][0];
+      $event[key].forEach((caption, index) => {
+        const current = this.data[key];
 
-      this.data[this.activeCaption][this.activeIndex] = {
-        content: newData.content || current.content,
-        end: 'number' === typeof newData.end ? newData.end : current.end,
-        start: 'number' === typeof newData.start ? newData.start : current.start,
-      };
+        this.data[key][index] = {
+          content: caption.content || current.content,
+          end: 'number' === typeof caption.end ? caption.end : current.end,
+          start: 'number' === typeof caption.start ? caption.start : current.start,
+        };
+      });
+
+
     });
 
     this.emitCurrent();
