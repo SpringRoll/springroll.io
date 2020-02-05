@@ -15,7 +15,7 @@
         <TextEditor id="c-editor" class="caption__component" />
       </div>
       <div class="caption__element">
-        <label class="caption__label" for="c-code">Code</label>
+        <label class="caption__label" for="c-code">JSON Preview</label>
         <JsonPreview id="c-code" class="caption__component" />
       </div>
     </div>

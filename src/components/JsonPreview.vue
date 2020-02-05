@@ -51,7 +51,8 @@ export default {
       blob: null,
       dialog: false,
       options: {
-        onChangeJSON: this.onEdit
+        onChangeJSON: this.onEdit,
+        mode: 'form'
       }
     };
   },

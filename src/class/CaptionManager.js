@@ -48,8 +48,6 @@ class CaptionManager {
           start: 'number' === typeof caption.start ? caption.start : current.start,
         };
       });
-
-
     });
 
     this.emitCurrent();
