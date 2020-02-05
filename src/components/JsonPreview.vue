@@ -1,7 +1,7 @@
 <template>
   <div class="json">
     <!-- <pre contenteditable v-highlightjs="json" @input="onEdit"><code class="javascript code-block --wide json__container"></code></pre> -->
-    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px" />
+    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px"/>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
         <v-btn
@@ -52,7 +52,25 @@ export default {
       dialog: false,
       options: {
         onChangeJSON: this.onEdit,
-        mode: 'form'
+        mode: 'form',
+        //schema: this.validationSchema,
+      },
+      validationSchema: {
+        'title': 'caption-json',
+        'description': 'Object containing caption data',
+        'type': 'object',
+        'additionalProperties': {
+          'type': 'array',
+          'items': {
+            'type': 'object',
+            'properties': {
+              'content': {'type': 'string', 'minLength': 1},
+              'start': {'type': 'number'},
+              'end': {'type': 'number'}
+            },
+            'required': ['content', 'start', 'end']
+          }
+        }
       }
     };
   },
@@ -61,7 +79,13 @@ export default {
   },
   methods: {
     onEdit($event) {
-      EventBus.$emit('json_update', $event);
+      const errors = this.validateJSON($event);
+      //these errors need to be shown somewhere? Also disable the export button.
+      if (!errors) {
+        EventBus.$emit('json_update', $event);
+      } else {
+        console.log(errors);
+      }
     },
     onUpdate() {
       EventBus.$emit('caption_get');
@@ -98,6 +122,29 @@ export default {
       EventBus.$emit('caption_reset');
       this.dialog = false;
       this.update({});
+    },
+    validateJSON(json) {
+      //This shoiuld also probably validate that the start or end isn't greater than
+      //the length of the audio track. But this is hard to do if you're editing a caption
+      //from a non active file. Maybe track this in the caption manager with an event to
+      // set the time length of each track taht has a caption set?
+      const errors = [];
+      Object.keys(json).forEach(key => {
+        const file = json[key];
+        file.forEach((caption, index) => {
+          if (!caption.content || caption.content === ' ') {
+            errors.push(`Error at caption ${key}, index ${index}: Caption content must be non-empty`);
+          }
+          if (!'number' === typeof caption.start || caption.start < 0) {
+            errors.push(`Error at caption ${key}, index ${index}: Caption start must have a positive number value`);
+          }
+          if (!'number' === typeof caption.end || caption.end < 0) {
+            errors.push(`Error at caption ${key}, index ${index}: Caption end must have a positive number value`);
+          }
+        });
+      });
+
+      return errors;
     }
   },
   mounted() {
