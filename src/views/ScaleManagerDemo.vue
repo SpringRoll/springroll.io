@@ -75,7 +75,6 @@
           hint="A normalized value for a vertical edge of the viewable area. Should be between -1 and 1."
           @input="validateAnchor"
         ></v-text-field>
-      <!-- <v-btn @click="validateAnchor" :disabled="!anchorValid" block color="primary" class="scaleManager__event scaleManager__button --capital font-16 font-semi-bold">Update Anchor</v-btn> -->
       </v-form>
       </div>
     </div>
