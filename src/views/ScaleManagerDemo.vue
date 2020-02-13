@@ -2,7 +2,9 @@
   <div class="scaleManager__container">
     <div class="scaleManager__wrapper">
       <a class="scaleManager__readme"  href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/scale-manager">Scale Manager README</a>
-      <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}SafeScaleManagerDemo`" frameborder="0" />
+      <div id="iframeWrapper">
+        <iframe id="scaleManager-demo" allow="fullscreen" class="scaleManager" :src="`${publicPath}SafeScaleManagerDemo`" frameborder="0" />
+      </div>
       <v-btn @click="fullScreen" block color="primary" class="scaleManager__button --fullScreen --capital font-16 font-semi-bold">Full Screen</v-btn>
       <a class="scaleManager__source"  href="https://github.com/SpringRoll/springroll-io-safe-scale-manager-demo/tree/feature/safe-scale-manager-demo">Source Code for the demo game</a>
     </div>
@@ -217,11 +219,16 @@ export default {
 <style lang="scss">
 @import "~@/scss/colors";
 @import "~@/scss/mixins";
-.scaleManager {
-  height: 76.8rem;
+
+#iframeWrapper {
+    height: 76.8rem;
   width: 102.4rem;
   resize: both;
-  overflow: auto;
+  overflow: hidden;
+}
+.scaleManager {
+  height: 100%;
+  width: 100%;
 
   &__events {
     color: $accent;
