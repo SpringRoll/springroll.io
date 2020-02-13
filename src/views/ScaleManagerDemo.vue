@@ -35,24 +35,6 @@
       >
         <v-text-field
           class="scaleManager__input my-4"
-          id="positionX"
-          v-model="anchorValues.position.value.x"
-          label="Anchor Position X:"
-          type="number"
-          hint="A horizontal offset from the anchored x position."
-          @input="validateAnchor"
-        ></v-text-field>
-        <v-text-field
-          class="scaleManager__input my-4"
-          id="positionY"
-          v-model="anchorValues.position.value.y"
-          label="Anchor Position Y:"
-          type="number"
-          hint="A vertical offset from the anchored y position."
-          @input="validateAnchor"
-        ></v-text-field>
-        <v-text-field
-          class="scaleManager__input my-4"
           id="directionX"
           v-model="anchorValues.direction.value.x"
           label="Anchor Direction X:"
@@ -75,6 +57,24 @@
           step="0.1"
           :rules="anchorDirectionRules"
           hint="A normalized value for a vertical edge of the viewable area. Should be between -1 and 1."
+          @input="validateAnchor"
+        ></v-text-field>
+        <v-text-field
+          class="scaleManager__input my-4"
+          id="positionX"
+          v-model="anchorValues.position.value.x"
+          label="Anchor Position X:"
+          type="number"
+          hint="A horizontal offset from the anchored x position."
+          @input="validateAnchor"
+        ></v-text-field>
+        <v-text-field
+          class="scaleManager__input my-4"
+          id="positionY"
+          v-model="anchorValues.position.value.y"
+          label="Anchor Position Y:"
+          type="number"
+          hint="A vertical offset from the anchored y position."
           @input="validateAnchor"
         ></v-text-field>
       </v-form>
