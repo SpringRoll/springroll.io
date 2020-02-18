@@ -2,6 +2,11 @@
   <div class="json">
     <!-- <pre contenteditable v-highlightjs="json" @input="onEdit"><code class="javascript code-block --wide json__container"></code></pre> -->
     <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px"/>
+      <ul class="json__errors">
+        <li v-for="(error, index) in jsonErrors" :key="index">
+          {{ error }}
+        </li>
+      </ul>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
         <v-btn
@@ -33,6 +38,7 @@
         :href="blob"
         color="accent"
         class="font-semi-bold --capital json__button-export"
+        :disabled="jsonErrors.length > 0"
       >Export Code</v-btn>
     </div>
   </div>
@@ -50,6 +56,7 @@ export default {
       data,
       blob: null,
       dialog: false,
+      jsonErrors: false,
       options: {
         onChangeJSON: this.onEdit,
         mode: 'form',
@@ -81,9 +88,11 @@ export default {
     onEdit($event) {
       const errors = this.validateJSON($event);
       //these errors need to be shown somewhere? Also disable the export button.
-      if (!errors) {
+      if (errors.length <= 0) {
+        this.jsonErrors = false;
         EventBus.$emit('json_update', $event);
       } else {
+        this.jsonErrors = errors;
         console.log(errors);
       }
     },
@@ -133,13 +142,16 @@ export default {
         const file = json[key];
         file.forEach((caption, index) => {
           if (!caption.content || caption.content === ' ') {
-            errors.push(`Error at caption ${key}, index ${index}: Caption content must be non-empty`);
+            errors.push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
           }
-          if (!'number' === typeof caption.start || caption.start < 0) {
-            errors.push(`Error at caption ${key}, index ${index}: Caption start must have a positive number value`);
+          if ('number' !== typeof caption.start || caption.start < 0) {
+            errors.push(`Error at caption [${key}], index [${index}]: Caption start must have a positive number value`);
           }
-          if (!'number' === typeof caption.end || caption.end < 0) {
-            errors.push(`Error at caption ${key}, index ${index}: Caption end must have a positive number value`);
+          if ('number' !== typeof caption.end || caption.end < 0) {
+            errors.push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
+          }
+          if (caption.start >= caption.end) {
+            errors.push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
           }
         });
       });
@@ -188,6 +200,12 @@ export default {
     background-color: $white-background;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+  }
+
+  &__errors {
+    position: relative;
+    top: 2.25rem;
+    color: red;
   }
 
   pre,
