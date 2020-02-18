@@ -56,9 +56,11 @@ export default {
       blob: null,
       dialog: false,
       jsonErrors: false,
+      currentIndex: 0,
       options: {
         onChangeJSON: this.onEdit,
         mode: 'form',
+        onEvent: this.onEvent
       },
     };
   },
@@ -73,11 +75,24 @@ export default {
         EventBus.$emit('json_update', $event);
       } else {
         this.jsonErrors = errors;
-        console.log(errors);
       }
     },
     onUpdate() {
       EventBus.$emit('caption_get');
+    },
+    onEvent(node, event) {
+      if (event.type !== 'focus') {
+        return;
+      }
+      //const file = node[0];
+      const index = node.path[1];
+      //const captionName = node[2];
+      const indexDelta = index - this.currentIndex;
+      EventBus.$emit('caption_move_index', indexDelta);
+    },
+    onCaptionChange({ index }) {
+      console.log(index);
+      this.currentIndex = index;
     },
     update(data) {
       this.data = this.cleanData(data);
@@ -138,11 +153,13 @@ export default {
   mounted() {
     this.createBlob();
     EventBus.$on('caption_update', this.onUpdate);
+    EventBus.$on('caption_changed', this.onCaptionChange);
     EventBus.$on('caption_data', this.update);
   },
   destroyed() {
     EventBus.$off('caption_update', this.onUpdate);
-    EventBus.$on('caption_data', this.update);
+    EventBus.$off('caption_data', this.update);
+    EventBus.$off('caption_changed', this.onCaptionChange);
   }
 };
 </script>

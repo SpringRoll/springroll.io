@@ -104,6 +104,8 @@ class CaptionManager {
       } else {
         this.activeIndex = newIndex;
       }
+
+      console.log('captionamanager',this.activeIndex);
       this.emitCurrent();
     }
   }
