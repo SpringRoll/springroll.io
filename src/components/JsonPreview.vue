@@ -1,6 +1,5 @@
 <template>
   <div class="json">
-    <!-- <pre contenteditable v-highlightjs="json" @input="onEdit"><code class="javascript code-block --wide json__container"></code></pre> -->
     <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px"/>
       <ul class="json__errors">
         <li v-for="(error, index) in jsonErrors" :key="index">
@@ -60,25 +59,7 @@ export default {
       options: {
         onChangeJSON: this.onEdit,
         mode: 'form',
-        //schema: this.validationSchema,
       },
-      validationSchema: {
-        'title': 'caption-json',
-        'description': 'Object containing caption data',
-        'type': 'object',
-        'additionalProperties': {
-          'type': 'array',
-          'items': {
-            'type': 'object',
-            'properties': {
-              'content': {'type': 'string', 'minLength': 1},
-              'start': {'type': 'number'},
-              'end': {'type': 'number'}
-            },
-            'required': ['content', 'start', 'end']
-          }
-        }
-      }
     };
   },
   components: {
@@ -87,7 +68,6 @@ export default {
   methods: {
     onEdit($event) {
       const errors = this.validateJSON($event);
-      //these errors need to be shown somewhere? Also disable the export button.
       if (errors.length <= 0) {
         this.jsonErrors = false;
         EventBus.$emit('json_update', $event);
@@ -133,10 +113,6 @@ export default {
       this.update({});
     },
     validateJSON(json) {
-      //This shoiuld also probably validate that the start or end isn't greater than
-      //the length of the audio track. But this is hard to do if you're editing a caption
-      //from a non active file. Maybe track this in the caption manager with an event to
-      // set the time length of each track taht has a caption set?
       const errors = [];
       Object.keys(json).forEach(key => {
         const file = json[key];
