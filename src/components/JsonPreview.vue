@@ -1,6 +1,6 @@
 <template>
   <div class="json">
-    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
+    <v-jsoneditor :options="options" :plus="false" height="400px" ref="jsonEditor"/>
       <ul class="json__errors">
         <li v-for="(error, index) in jsonErrors" :key="index">
           {{ error }}
@@ -57,6 +57,7 @@ export default {
       dialog: false,
       jsonErrors: false,
       currentIndex: 0,
+      origin: 'JsonPreview',
       options: {
         onChangeJSON: this.onEdit,
         mode: 'form',
@@ -72,7 +73,7 @@ export default {
       const errors = this.validateJSON($event);
       if (errors.length <= 0) {
         this.jsonErrors = false;
-        EventBus.$emit('json_update', $event);
+        EventBus.$emit('json_update', $event, this.origin);
       } else {
         this.jsonErrors = errors;
       }
@@ -93,13 +94,21 @@ export default {
       const index = node.path[1];
       //const captionName = node[2];
       const indexDelta = index - this.currentIndex;
-      EventBus.$emit('caption_move_index', indexDelta);
+      if (indexDelta !== 0) {
+        EventBus.$emit('caption_move_index', indexDelta, this.origin);
+      }
     },
-    onCaptionChange({ index }) {
+    onCaptionChange({ index }, $origin) {
+
+      if ($origin === this.origin) {
+        return;
+      }
       this.currentIndex = index;
+
     },
     update(data) {
       this.data = this.cleanData(data);
+      this.$refs.jsonEditor.editor.update(this.data);
       this.json = JSON.stringify(this.data, null, 2);
       this.createBlob();
     },

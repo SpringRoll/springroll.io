@@ -4,6 +4,7 @@
       id="quill-editor"
       class="editor__quill"
       ref="Quill"
+      @change="onEdit"
      >
       <div id="toolbar" slot="toolbar">
         <select class="ql-font">
@@ -67,11 +68,11 @@ export default {
       index: 0,
       content: '',
       fileName: '',
-      htmlContent: '',
       start: 0,
       end: 0,
       lastIndex: 0,
       canEmit: false,
+      origin: 'TextEditor',
       sizeOptions: [
         { value: '10px', label: 'Small', default: false },
         { value: '16px', label: 'Normal', default: true },
@@ -99,35 +100,33 @@ export default {
     }
   },
   methods: {
-    onEdit(delta, oldDelta, source) {
-      if (!this.canEmit || source !== 'user') {
+    onEdit($event) {
+      if (!this.canEmit) {
         return;
       }
-      this.content = this.$refs.Quill.quill.getText().trim();
-      EventBus.$emit('caption_update', { content: this.$refs.Quill.quill.getText().trim() }); //.trim() removes the `\n` newline that .text returns
-    },
-    onJSONUpdate($event) {
-      console.log($event[this.fileName][this.index]);
-      this.$refs.Quill.quill.setText($event[this.fileName][this.index].content);
+      EventBus.$emit('caption_update', { content: $event.text.trim() }, this.origin); //.trim() removes the `\n` newline that .text returns
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { start: $event });
+      EventBus.$emit('caption_update', { start: $event }, this.origin);
     },
     onEndTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { end: $event });
+      EventBus.$emit('caption_update', { end: $event }, this.origin);
     },
-    onUpdate($event) {
+    onUpdate($event, $origin) {
+      if ($origin === this.origin) {
+        return;
+      }
       const { start, end, content } = $event.data;
-      console.log($event.file);
       this.start = start;
       this.end = end;
       this.content = content;
+      this.$refs.Quill.quill.setText(content);
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
       this.fileName = $event.name;
@@ -135,10 +134,10 @@ export default {
     },
     addCaption() {
       this.content = ' ';
-      EventBus.$emit('caption_add_index');
+      EventBus.$emit('caption_add_index', this.origin );
     },
     removeCaption() {
-      EventBus.$emit('caption_remove_index');
+      EventBus.$emit('caption_remove_index', this.origin );
     },
     escapeString() {
       const isEscaped = /^{{.*}}$/;
@@ -173,14 +172,10 @@ export default {
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
-    this.$refs.Quill.quill.on('text-change', this.onEdit);
-    EventBus.$on('json_update', this.onJSONUpdate);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
-    this.$refs.Quill.quill.off('text-change', this.onEdit);
-    EventBus.$off('json_update', this.onJSONUpdate);
   }
 };
 </script>

@@ -33,7 +33,7 @@ class CaptionManager {
    * Function called when the user selects a new file in the FileDirectory. If no caption exits
    * for that file, it creates a new Caption.
    */
-  fileChanged($event) {
+  fileChanged($event, $origin) {
     const name = $event.file.name.replace(/.(ogg|mp3|mpeg)$/, '').trim();
     if (!name || name === this.activeCaption) {
       return;
@@ -46,7 +46,7 @@ class CaptionManager {
     } else {
       this.activeCaption = name;
       this.activeIndex = 0;
-      this.emitCurrent();
+      this.emitCurrent($origin);
     }
   }
 
@@ -58,7 +58,7 @@ class CaptionManager {
    * the entire JSON structure this method iterates over the entire JSON object and updates every
    * Caption.
    */
-  onJSONUpdate($event) {
+  onJSONUpdate($event, $origin) {
     Object.keys($event).forEach((key) => {
       $event[key].forEach((caption, index) => {
         const current = this.data[key];
@@ -71,14 +71,14 @@ class CaptionManager {
       });
     });
 
-    this.emitCurrent();
+    this.emitCurrent($origin);
     this.emitData();
   }
   /**
    *
    * @param String key
    */
-  addCaption(key = this.activeCaption) {
+  addCaption(key = this.activeCaption, $origin) {
     if ('string' !== typeof key || !key) {
       return;
     }
@@ -88,7 +88,7 @@ class CaptionManager {
     this.activeCaption = key;
     this.activeIndex = 0;
 
-    this.emitCurrent();
+    this.emitCurrent($origin);
     this.emitData();
   }
 
@@ -96,11 +96,11 @@ class CaptionManager {
    * Fired when the user hits the Add Caption Button in TextEditor. Moves the activeIndex forward,
    * and creates a new empty caption. Also "saves" the previously active caption in the data object.
    */
-  addIndex() {
+  addIndex($origin) {
     this.data[this.activeCaption].push(this.template);
     this.activeIndex++;
     EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: true });
-    this.emitCurrent();
+    this.emitCurrent($origin);
     this.emitData();
   }
 
@@ -109,7 +109,7 @@ class CaptionManager {
    * Called whenever the TextEditor component updates the content, or start/end times of the caption.
    * simply upates the currently active caption with whatever new data is provided.
    */
-  updateActiveCaption({ content, start, end }) {
+  updateActiveCaption({ content, start, end }, $origin) {
     const current = this.currentCaptionIndex;
 
     this.data[this.activeCaption][this.activeIndex] = {
@@ -118,7 +118,11 @@ class CaptionManager {
       start: 'number' === typeof start ? start : current.start,
     };
 
-    this.emitCurrent();
+    if ($origin) {
+      this.emitCurrent($origin);
+    } else {
+      this.emitCurrent();
+    }
   }
 
   /**
@@ -136,7 +140,7 @@ class CaptionManager {
    *
    * Fired whenever a component needs to update the index that points to the active caption.
    */
-  moveIndex($event) {
+  moveIndex( $event, $origin) {
     if ('number' === typeof $event) {
       const newIndex = this.activeIndex + $event;
       if (0 > newIndex) {
@@ -146,7 +150,7 @@ class CaptionManager {
       } else {
         this.activeIndex = newIndex;
       }
-      this.emitCurrent();
+      this.emitCurrent($origin);
     }
   }
 
@@ -156,7 +160,7 @@ class CaptionManager {
    *
    * Used to delete a single caption. Uses the index to look up which caption should be removed. Almost always will be the current caption.
    */
-  removeAtIndex($event = this.activeIndex) {
+  removeAtIndex($event = this.activeIndex, $origin) {
     if ('undefined' === typeof this.currentCaption[$event]) {
       return;
     }
@@ -168,7 +172,7 @@ class CaptionManager {
     }
     EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: !!(this.currentCaption.length > 1) });
 
-    this.emitCurrent();
+    this.emitCurrent($origin);
     this.emitData();
   }
 
@@ -176,15 +180,16 @@ class CaptionManager {
    * Emits the currently active caption data along with index, and file name information.
    * This is used to replicate caption updates, and a change of active caption across all components.
    */
-  emitCurrent() {
+  emitCurrent($origin = '') {
+    console.log('Emit Current: ', $origin);
     EventBus.$emit('caption_changed', {
       data: this.currentCaptionIndex,
       file: this.file,
       index: this.activeIndex,
       lastIndex: this.lastIndex,
       name: this.activeCaption,
-      time: this.currentTime
-    });
+      time: this.currentTime,
+    }, $origin);
   }
 
   /**
