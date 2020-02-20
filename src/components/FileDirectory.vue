@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       hasActive: false,
+      origin: 'FileDirectory',
       filesWithCaptions: {}
     };
   },
@@ -86,14 +87,14 @@ export default {
     },
     nextFile() {
       if (this.hasActive) {
-        EventBus.$emit('file_selected', { file: this.directory.nextFile() });
+        EventBus.$emit('file_selected', { file: this.directory.nextFile() }, this.origin);
       }
     },
     previousFile() {
       if (this.hasActive) {
         EventBus.$emit('file_selected', {
           file: this.directory.previousFile()
-        });
+        }, this.origin);
       }
     },
     emit($event) {
@@ -101,7 +102,7 @@ export default {
       if (this.hasActive) {
         EventBus.$emit('file_selected', {
           file: this.directory.selectByFile($event.target._value)
-        });
+        }, this.origin);
       }
     },
     onFileCaptionChange($event) {
