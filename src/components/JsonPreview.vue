@@ -1,6 +1,6 @@
 <template>
   <div class="json">
-    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px"/>
+    <v-jsoneditor v-model="data" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
       <ul class="json__errors">
         <li v-for="(error, index) in jsonErrors" :key="index">
           {{ error }}
@@ -85,13 +85,17 @@ export default {
         return;
       }
       //const file = node[0];
+      /**
+       * Note: currently this will updatre the active caption even if another file's entry it updated. So there needs to be a check if t
+       * the current file is the correct one.
+       * if the actiuve file should be changed then that will need to be added. Depenedant on the feedback from client.
+       */
       const index = node.path[1];
       //const captionName = node[2];
       const indexDelta = index - this.currentIndex;
       EventBus.$emit('caption_move_index', indexDelta);
     },
     onCaptionChange({ index }) {
-      console.log(index);
       this.currentIndex = index;
     },
     update(data) {

@@ -1,6 +1,10 @@
 <template>
   <div class="editor">
-    <quill-editor id="quill-editor" v-model="content" @change="onEdit" class="editor__quill">
+    <quill-editor
+      id="quill-editor"
+      class="editor__quill"
+      ref="Quill"
+     >
       <div id="toolbar" slot="toolbar">
         <select class="ql-font">
           <option selected="selected"></option>
@@ -62,6 +66,8 @@ export default {
     return {
       index: 0,
       content: '',
+      fileName: '',
+      htmlContent: '',
       start: 0,
       end: 0,
       lastIndex: 0,
@@ -93,11 +99,16 @@ export default {
     }
   },
   methods: {
-    onEdit($event) {
-      if (!this.canEmit) {
+    onEdit(delta, oldDelta, source) {
+      if (!this.canEmit || source !== 'user') {
         return;
       }
-      EventBus.$emit('caption_update', { content: $event.text.trim() }); //.trim() removes the `\n` newline that .text returns
+      this.content = this.$refs.Quill.quill.getText().trim();
+      EventBus.$emit('caption_update', { content: this.$refs.Quill.quill.getText().trim() }); //.trim() removes the `\n` newline that .text returns
+    },
+    onJSONUpdate($event) {
+      console.log($event[this.fileName][this.index]);
+      this.$refs.Quill.quill.setText($event[this.fileName][this.index].content);
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
@@ -112,11 +123,14 @@ export default {
       EventBus.$emit('caption_update', { end: $event });
     },
     onUpdate($event) {
-      const { start, end } = $event.data;
+      const { start, end, content } = $event.data;
+      console.log($event.file);
       this.start = start;
       this.end = end;
+      this.content = content;
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
+      this.fileName = $event.name;
       this.canEmit = true;
     },
     addCaption() {
@@ -159,10 +173,14 @@ export default {
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
+    this.$refs.Quill.quill.on('text-change', this.onEdit);
+    EventBus.$on('json_update', this.onJSONUpdate);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
+    this.$refs.Quill.quill.off('text-change', this.onEdit);
+    EventBus.$off('json_update', this.onJSONUpdate);
   }
 };
 </script>
