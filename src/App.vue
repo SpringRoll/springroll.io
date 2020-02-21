@@ -3,6 +3,7 @@
     <v-toolbar app class="nav__bar --full">
       <router-link exact-active-class="--active" class="nav__button --logo" to="/"><img class=" nav__logo" src="@/assets/logo.png" alt="logo" /></router-link>
       <router-link active-class="--active" class="nav__button nav__text font font-21" to="/game">Game Demo</router-link>
+      <router-link active-class="--active" class="nav__button nav__text font font-21" to="/scalemanagerdemo">Scale Manager</router-link>
       <router-link active-class="--active" class="nav__button nav__text font font-21" to="/examples">Examples</router-link>
       <router-link active-class="--active" class="nav__button nav__text font font-21" to="/docs">Docs</router-link>
       <router-link active-class="--active" class="nav__button nav__text font font-21" to="/captions">Caption Studio</router-link>
@@ -20,6 +21,8 @@
       <v-spacer/>
       <v-list dense>
         <router-link exact-active-class="--active" class="nav__button nav__text font font-21" to="/">Home</router-link>
+        <router-link active-class="--active" class="nav__button nav__text font font-21" to="/game">Game Demo</router-link>
+        <router-link active-class="--active" class="nav__button nav__text font font-21" to="/scalemanagerdemo">Scale Manager</router-link>
         <router-link active-class="--active" class="nav__button nav__text font font-21" to="/examples">Examples</router-link>
         <router-link active-class="--active" class="nav__button nav__text font font-21" to="/docs">Docs</router-link>
         <router-link active-class="--active" class="nav__button nav__text font font-21" to="/captions">Caption Studio</router-link>

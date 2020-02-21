@@ -6,6 +6,7 @@ import Main from '@/views/Main';
 import Docs from '@/views/Docs';
 import CaptionStudio from '@/views/CaptionStudio';
 import Game from '@/views/Game';
+import ScaleManagerDemo from '@/views/ScaleManagerDemo';
 import V1 from '@/views/V1';
 
 // Example views
@@ -21,6 +22,7 @@ export default new Router({
   routes: [
     { path: '/', name: 'home', component: Main, title: 'Main', icon: 'home' },
     { path: '/game', name: 'game', component: Game, title: 'Game Demo', icon: 'code'},
+    { path: '/scalemanagerdemo', name: 'scalemanagerdemo', component: ScaleManagerDemo, title: 'Scale Manager Demo', icon: 'code'},
     {
       path: '/docs',
       name: 'docs',
