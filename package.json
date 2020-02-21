@@ -11,7 +11,7 @@
     "bellhop-iframe": "^2.1.2",
     "lodash-es": "^4.17.10",
     "quill": "^1.3.6",
-    "springroll": "git+https://github.com/SpringRoll/SpringRoll.git#v2",
+    "springroll": "2.2.0",
     "springroll-container": "^1.1.2",
     "v-jsoneditor": "^1.2.3",
     "vue": "^2.5.17",
