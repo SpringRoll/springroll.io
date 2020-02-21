@@ -105,6 +105,11 @@ export default {
         }, this.origin);
       }
     },
+    jsonEmit($event) {
+      EventBus.$emit('file_selected', {
+        file: this.directory.selectByFile($event)
+      }, this.origin);
+    },
     onFileCaptionChange($event) {
       this.$set(this.filesWithCaptions, $event.name, $event.isCaptioned);
     }
@@ -113,11 +118,13 @@ export default {
     EventBus.$on('next_file', this.nextFile);
     EventBus.$on('previous_file', this.previousFile);
     EventBus.$on('file_captioned', this.onFileCaptionChange);
+    EventBus.$on('json_file_selected', this.jsonEmit);
   },
   destroyed() {
     EventBus.$off('next_file', this.nextFile);
     EventBus.$off('previous_file', this.previousFile);
     EventBus.$off('file_captioned', this.onFileCaptionChange);
+    EventBus.$off('json_file_selected', this.jsonEmit);
   }
 };
 </script>

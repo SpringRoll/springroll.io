@@ -49,6 +49,8 @@ class CaptionManager {
       this.activeIndex = 0;
       this.emitCurrent($origin);
     }
+    //used only when the JSON editor updates the selected file
+    EventBus.$emit('selected_file_updated');
   }
 
   /**

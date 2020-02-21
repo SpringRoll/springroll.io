@@ -58,6 +58,7 @@ export default {
       jsonErrors: false,
       currentIndex: 0,
       origin: 'JsonPreview',
+      fileNameMap: {},
       options: {
         onChangeJSON: this.onEdit,
         mode: 'form',
@@ -86,20 +87,23 @@ export default {
       if (event.type !== 'focus') {
         return;
       }
-      //const file = node[0];
-      /**
-       * Note: currently this will updatre the active caption even if another file's entry it updated. So there needs to be a check if t
-       * the current file is the correct one.
-       * if the actiuve file should be changed then that will need to be added. Depenedant on the feedback from client.
-       */
+
+      const file = this.fileNameMap[node.path[0]];
       const index = node.path[1];
-      //const captionName = node[2];
       const indexDelta = index - this.currentIndex;
-      if (indexDelta !== 0) {
-        EventBus.$emit('caption_move_index', indexDelta, this.origin);
-      }
+
+      EventBus.$emit('json_file_selected', file);
+
+      EventBus.$once('selected_file_updated', () => {
+        if (indexDelta !== 0) {
+          EventBus.$emit('caption_move_index', indexDelta, this.origin);
+        }
+      });
+
     },
-    onCaptionChange({ index }, $origin) {
+    onCaptionChange({ index, file, name }, $origin) {
+
+      this.fileNameMap[name] = file;
 
       if ($origin === this.origin) {
         return;
