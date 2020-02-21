@@ -78,8 +78,9 @@ export default {
         this.jsonErrors = errors;
       }
     },
-    onUpdate() {
-      EventBus.$emit('caption_get');
+    onUpdate(data, $origin) {
+      //Pass the origin of the original component on through in this call, since that is the origin that matters
+      EventBus.$emit('caption_get', $origin);
     },
     onEvent(node, event) {
       if (event.type !== 'focus') {
@@ -106,8 +107,10 @@ export default {
       this.currentIndex = index;
 
     },
-    update(data) {
-      this.data = this.cleanData(data);
+    update(data, $origin) {
+      if ($origin !== this.origin) {
+        this.data = this.cleanData(data);
+      }
       this.$refs.jsonEditor.editor.update(this.data);
       this.json = JSON.stringify(this.data, null, 2);
       this.createBlob();
@@ -120,12 +123,15 @@ export default {
           continue;
         }
 
-        const filtered = data[key[i]].filter((e) => {
-          return e.content.trim() && e.start < e.end;
-        });
+        const reduced = data[key[i]].reduce((filtered, e) => {
+          if ( e.content.trim() && e.start < e.end ) {
+            filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
+          }
+          return filtered;
+        }, []);
 
-        if (filtered.length) {
-          output[key[i]] = filtered;
+        if (reduced.length) {
+          output[key[i]] = reduced;
         }
       }
       return output;

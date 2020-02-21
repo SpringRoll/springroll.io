@@ -74,7 +74,7 @@ class CaptionManager {
     });
 
     this.emitCurrent($origin);
-    this.emitData();
+    this.emitData($origin);
   }
   /**
    *
@@ -95,7 +95,7 @@ class CaptionManager {
     this.activeIndex = 0;
 
     this.emitCurrent($origin);
-    this.emitData();
+    this.emitData($origin);
   }
 
   /**
@@ -109,7 +109,7 @@ class CaptionManager {
     this.activeIndex++;
     EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: true });
     this.emitCurrent($origin);
-    this.emitData();
+    this.emitData($origin);
   }
 
   /**
@@ -127,11 +127,7 @@ class CaptionManager {
       start: 'number' === typeof start ? start : current.start,
     };
 
-    if ($origin) {
-      this.emitCurrent($origin);
-    } else {
-      this.emitCurrent();
-    }
+    this.emitCurrent($origin);
   }
 
   /**
@@ -184,7 +180,7 @@ class CaptionManager {
     EventBus.$emit('file_captioned', { name: this.file.name, isCaptioned: !!(this.currentCaption.length > 1) });
 
     this.emitCurrent($origin);
-    this.emitData();
+    this.emitData($origin);
   }
 
   /**
@@ -205,8 +201,8 @@ class CaptionManager {
   /**
    * Emits the entirety of the current data object, which contains all caption files, and associated captions.
    */
-  emitData() {
-    EventBus.$emit('caption_data', this.data);
+  emitData( $origin = '' ) {
+    EventBus.$emit('caption_data', this.data, $origin);
   }
 
   /**
