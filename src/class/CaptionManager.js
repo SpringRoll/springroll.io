@@ -83,7 +83,7 @@ class CaptionManager {
    * @param String key string that represents the curent active caption
    * @param String $origin String that contains the component origin. Used on some components to filter out their own updates.
    *
-   * Creates a new caption entry on the data object if one does not already exist and updates the active caption and index to point
+   * Creates a new caption entry on the data object and updates the active caption and index to point
    * at this new caption.
    */
   addCaption(key = this.activeCaption, $origin = '') {
