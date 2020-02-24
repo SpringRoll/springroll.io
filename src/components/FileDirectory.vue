@@ -22,6 +22,7 @@
             :for="`${index}_${value.file.name}`"
             class="font-16 directory__label"
           >{{value.file.name}}</label>
+          <v-icon class="directory__icon" v-show="filesWithCaptions[value.file.name]">done</v-icon>
         </label>
       </v-list-tile-content>
       <file-directory
@@ -58,7 +59,8 @@ export default {
   },
   data() {
     return {
-      hasActive: false
+      hasActive: false,
+      filesWithCaptions: {}
     };
   },
   computed: {
@@ -101,15 +103,20 @@ export default {
           file: this.directory.selectByFile($event.target._value)
         });
       }
+    },
+    onFileCaptionChange($event) {
+      this.$set(this.filesWithCaptions, $event.name, $event.isCaptioned);
     }
   },
   mounted() {
     EventBus.$on('next_file', this.nextFile);
     EventBus.$on('previous_file', this.previousFile);
+    EventBus.$on('file_captioned', this.onFileCaptionChange);
   },
   destroyed() {
     EventBus.$off('next_file', this.nextFile);
     EventBus.$off('previous_file', this.previousFile);
+    EventBus.$off('file_captioned', this.onFileCaptionChange);
   }
 };
 </script>
