@@ -58,6 +58,7 @@ export default {
       jsonErrors: false,
       currentIndex: 0,
       origin: 'JsonPreview',
+      activeFile: '',
       fileNameMap: {},
       options: {
         onChangeJSON: this.onEdit,
@@ -71,13 +72,8 @@ export default {
   },
   methods: {
     onEdit($event) {
-      const errors = this.validateJSON($event);
-      if (errors.length <= 0) {
-        this.jsonErrors = false;
-        EventBus.$emit('json_update', $event, this.origin);
-      } else {
-        this.jsonErrors = errors;
-      }
+      this.checkErrors($event);
+      EventBus.$emit('json_update', $event, this.origin);
     },
     onUpdate(data, $origin) {
       //Pass the origin of the original component on through in this call, since that is the origin that matters
@@ -92,6 +88,11 @@ export default {
       const index = node.path[1];
       const indexDelta = index - this.currentIndex;
 
+      if (this.activeFile === node.path[0]) {
+        EventBus.$emit('caption_move_index', indexDelta, this.origin);
+        return;
+      }
+
       EventBus.$emit('json_file_selected', file);
 
       EventBus.$once('selected_file_updated', () => {
@@ -102,7 +103,7 @@ export default {
 
     },
     onCaptionChange({ index, file, name }, $origin) {
-
+      this.activeFile = name;
       this.fileNameMap[name] = file;
 
       if ($origin === this.origin) {
@@ -112,9 +113,13 @@ export default {
 
     },
     update(data, $origin) {
+
+      this.checkErrors(data);
+
       if ($origin !== this.origin) {
         this.data = this.cleanData(data);
       }
+
       this.$refs.jsonEditor.editor.update(this.data);
       this.json = JSON.stringify(this.data, null, 2);
       this.createBlob();
@@ -128,9 +133,7 @@ export default {
         }
 
         const reduced = data[key[i]].reduce((filtered, e) => {
-          if ( e.content.trim() && e.start < e.end ) {
-            filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
-          }
+          filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
           return filtered;
         }, []);
 
@@ -155,7 +158,7 @@ export default {
       Object.keys(json).forEach(key => {
         const file = json[key];
         file.forEach((caption, index) => {
-          if (!caption.content || caption.content === ' ') {
+          if (!caption.content) {
             errors.push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
           }
           if ('number' !== typeof caption.start || caption.start < 0) {
@@ -164,13 +167,18 @@ export default {
           if ('number' !== typeof caption.end || caption.end < 0) {
             errors.push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
           }
-          if (caption.start >= caption.end) {
-            errors.push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
-          }
         });
       });
 
       return errors;
+    },
+    checkErrors(data) {
+      const errors = this.validateJSON(data);
+      if (errors.length <= 0) {
+        this.jsonErrors = false;
+      } else {
+        this.jsonErrors = errors;
+      }
     }
   },
   mounted() {
