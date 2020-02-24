@@ -152,6 +152,7 @@ export default {
       this.activeRegion = region;
       this.activeRegion.color = 'rgba(0, 255, 0, 0.1)';
       this.activeRegion.updateRender();
+      this.inactiveRegions[this.activeIndex] = this.activeRegion;
     },
     onUpdateRegion(region) {
       EventBus.$emit('caption_update', {
@@ -160,6 +161,7 @@ export default {
       });
     },
     onCaptionChange($event) {
+      //TODO: Origin echeck from other PR? Might fix issue with this being called too frequently?
       const { index, data } = $event;
       if (data.start === 0 && data.end === 0) {
         this.activeIndex = index;
@@ -188,13 +190,14 @@ export default {
         if (this.activeRegion && this.inactiveRegions[this.activeIndex]) {
           this.inactiveRegions[this.activeIndex] = this.activeRegion;
           this.makeActiveCaptionInactive();
-          this.activeRegion = this.inactiveRegions[index];
+
         } else if (this.inactiveRegions[index]) {
           if (this.activeRegion) {
             this.activeRegion.remove();
           }
-          this.activeRegion = this.inactiveRegions[index];
         }
+
+        this.activeRegion = this.inactiveRegions[index];
 
         this.activeIndex = index;
         if (!this.activeRegion) {
@@ -228,6 +231,7 @@ export default {
       EventBus.$emit('caption_move_index', index);
     },
     onFileChange($event) {
+      console.log($event);
       this.captionData = $event;
       this.generateRegions();
     },
@@ -235,7 +239,7 @@ export default {
       this.wave.un('region-created', this.onNewRegion);
       this.wave.un('region-updated', this.onUpdateRegion);
       for (let i = 0, l = this.captionData.length - 1; i < l; i++) {
-        if (i === 0) {
+        if (i === this.activeIndex) {
           this.activeRegion = this.wave.addRegion({
             start: this.captionData[i].start / 1000,
             end: this.captionData[i].end / 1000,
