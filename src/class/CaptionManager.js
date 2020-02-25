@@ -67,6 +67,8 @@ class CaptionManager {
       $event[key].forEach((caption, index) => {
         const current = this.data[key];
 
+        console.log(current.content, caption.content);
+
         this.data[key][index] = {
           content: caption.content || current.content,
           end: 'number' === typeof caption.end ? caption.end : current.end,
@@ -76,7 +78,7 @@ class CaptionManager {
     });
 
     this.emitCurrent($origin);
-    this.emitData($origin);
+    //this.emitData($origin);
   }
   /**
    *

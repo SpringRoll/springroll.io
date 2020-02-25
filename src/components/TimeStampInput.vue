@@ -21,7 +21,8 @@ export default {
   mixins: [TimeStampMixin],
   data() {
     return {
-      time: 0
+      time: 0,
+      defaultChanged: false,
     };
   },
   props: {
@@ -33,9 +34,13 @@ export default {
   },
   watch: {
     time() {
-      this.$emit('time', this.time);
+      if (!this.defaultChanged) {
+        this.$emit('time', this.time);
+      }
+      this.defaultChanged = false;
     },
     default() {
+      this.defaultChanged = true;
       this.time = this.default;
     }
   },

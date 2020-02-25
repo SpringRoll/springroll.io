@@ -4,7 +4,6 @@
       id="quill-editor"
       class="editor__quill"
       ref="Quill"
-      @change="onEdit"
      >
       <div id="toolbar" slot="toolbar">
         <select class="ql-font">
@@ -48,7 +47,7 @@
     <v-btn
       v-else
       @click="addCaption"
-      :disabled="!canAdd || jsonErrors"
+      :disabled="!canAdd"
       :block="true"
       color="accent"
       class="editor__button font-16 font-semi-bold capitalize"
@@ -94,18 +93,27 @@ export default {
   },
   computed: {
     canAdd() {
-      return this.index >= this.lastIndex;
+      let hasErrors = false;
+      if (this.jsonErrors[this.fileName] && this.jsonErrors[this.fileName].length > 0) {
+        hasErrors = true;
+      }
+      return (this.index >= this.lastIndex) && (!hasErrors);
     },
     canRemove() {
       return this.index < this.lastIndex;
     }
   },
   methods: {
-    onEdit($event) {
+    onEdit(delta, oldContents, source) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { content: $event.text }, this.origin);
+      if (source !== 'user') {
+        return;
+      }
+      const text = this.$refs.Quill.quill.getText();
+      this.content = text;
+      EventBus.$emit('caption_update', { content: text }, this.origin);
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
@@ -127,7 +135,7 @@ export default {
       this.start = start;
       this.end = end;
       this.content = content;
-      this.$refs.Quill.quill.setText(content);
+      this.$refs.Quill.quill.setText(content ? content : ' '); // empty string prevents unnecessary console errors
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
       this.fileName = $event.name;
@@ -174,6 +182,7 @@ export default {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
     EventBus.$on('json_errors', (e) => this.jsonErrors = e);
+    this.$refs.Quill.quill.on('text-change', this.onEdit);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);

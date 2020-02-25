@@ -1,8 +1,8 @@
 <template>
   <div class="json">
     <v-jsoneditor :options="options" :plus="false" height="400px" ref="jsonEditor"/>
-      <ul class="json__errors">
-        <li v-for="(error, index) in jsonErrors" :key="index">
+      <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
+        <li v-for="(error, index) in file" :key="index">
           {{ error }}
         </li>
       </ul>
@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     onEdit($event) {
+      console.log($event);
       this.checkErrors($event);
       EventBus.$emit('json_update', $event, this.origin);
     },
@@ -113,8 +114,9 @@ export default {
 
     },
     update(data, $origin) {
-
+      console.log('hello?');
       this.checkErrors(data);
+      console.log(data, `t${$origin}t`);
 
       if ($origin !== this.origin) {
         this.data = this.cleanData(data);
@@ -133,8 +135,10 @@ export default {
         }
 
         const reduced = data[key[i]].reduce((filtered, e) => {
-          if ( (e.content.trim() && e.start < e.end) ) {
-            filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
+          if ( (e.content && e.start < e.end) ) {
+            if (e.content.trim()) {
+              filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
+            }
           }
           return filtered;
         }, []);
@@ -156,21 +160,22 @@ export default {
       this.update({});
     },
     validateJSON(json) {
-      const errors = [];
+      const errors = {};
       Object.keys(json).forEach(key => {
+        errors[key] = [];
         const file = json[key];
         file.forEach((caption, index) => {
           if (!caption.content.trim() ) {
-            errors.push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
+            errors[key].push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
           }
           if ('number' !== typeof caption.start || caption.start < 0) {
-            errors.push(`Error at caption [${key}], index [${index}]: Caption start must have a positive number value`);
+            errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must have a positive number value`);
           }
           if ('number' !== typeof caption.end || caption.end < 0) {
-            errors.push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
+            errors[key].push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
           }
           if (caption.start >= caption.end) {
-            errors.push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
+            errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
           }
         });
       });
@@ -185,7 +190,7 @@ export default {
         this.jsonErrors = errors;
       }
 
-      EventBus.$emit('json_errors', !!this.jsonErrors);
+      EventBus.$emit('json_errors', this.jsonErrors);
     }
   },
   mounted() {
