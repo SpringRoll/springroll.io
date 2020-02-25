@@ -48,7 +48,7 @@
     <v-btn
       v-else
       @click="addCaption"
-      :disabled="!canAdd"
+      :disabled="!canAdd || jsonErrors"
       :block="true"
       color="accent"
       class="editor__button font-16 font-semi-bold capitalize"
@@ -73,6 +73,7 @@ export default {
       lastIndex: 0,
       canEmit: false,
       origin: 'TextEditor',
+      jsonErrors: false,
       sizeOptions: [
         { value: '10px', label: 'Small', default: false },
         { value: '16px', label: 'Normal', default: true },
@@ -172,6 +173,7 @@ export default {
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
+    EventBus.$on('json_errors', (e) => this.jsonErrors = e);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);

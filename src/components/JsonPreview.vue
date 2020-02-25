@@ -133,7 +133,9 @@ export default {
         }
 
         const reduced = data[key[i]].reduce((filtered, e) => {
-          filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
+          if ( (e.content.trim() && e.start < e.end) ) {
+            filtered.push({content: e.content.replace(/\n$/, ''), start: e.start, end: e.end});
+          }
           return filtered;
         }, []);
 
@@ -158,7 +160,7 @@ export default {
       Object.keys(json).forEach(key => {
         const file = json[key];
         file.forEach((caption, index) => {
-          if (!caption.content) {
+          if (!caption.content.trim() ) {
             errors.push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
           }
           if ('number' !== typeof caption.start || caption.start < 0) {
@@ -166,6 +168,9 @@ export default {
           }
           if ('number' !== typeof caption.end || caption.end < 0) {
             errors.push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
+          }
+          if (caption.start >= caption.end) {
+            errors.push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
           }
         });
       });
@@ -179,6 +184,8 @@ export default {
       } else {
         this.jsonErrors = errors;
       }
+
+      EventBus.$emit('json_errors', !!this.jsonErrors);
     }
   },
   mounted() {
