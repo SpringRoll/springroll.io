@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     onEdit($event) {
-      console.log($event);
       this.checkErrors($event);
       EventBus.$emit('json_update', $event, this.origin);
     },
@@ -114,9 +113,7 @@ export default {
 
     },
     update(data, $origin) {
-      console.log('hello?');
       this.checkErrors(data);
-      console.log(data, `t${$origin}t`);
 
       if ($origin !== this.origin) {
         this.data = this.cleanData(data);

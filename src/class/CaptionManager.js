@@ -67,8 +67,6 @@ class CaptionManager {
       $event[key].forEach((caption, index) => {
         const current = this.data[key];
 
-        console.log(current.content, caption.content);
-
         this.data[key][index] = {
           content: caption.content || current.content,
           end: 'number' === typeof caption.end ? caption.end : current.end,
@@ -171,12 +169,12 @@ class CaptionManager {
    *
    * Used to delete a single caption. Uses the index to look up which caption should be removed. Almost always will be the current caption.
    */
-  removeAtIndex($event = this.activeIndex, $origin = '') {
-    if ('undefined' === typeof this.currentCaption[$event]) {
+  removeAtIndex($origin = '') {
+    if ('undefined' === typeof this.currentCaption[this.activeIndex]) {
       return;
     }
 
-    this.currentCaption.splice($event, 1);
+    this.currentCaption.splice(this.activeIndex, 1);
 
     if (0 < this.activeIndex) {
       this.activeIndex--;
