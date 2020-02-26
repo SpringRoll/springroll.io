@@ -143,10 +143,14 @@ export default {
     },
     addCaption() {
       this.content = ' ';
-      EventBus.$emit('caption_add_index', this.origin );
+      //Uses a different origin from TextEditor so that when a caption is added,
+      //it will force an update on TextEditor
+      EventBus.$emit('caption_add_index', 'TextEditorAddButton' );
     },
     removeCaption() {
-      EventBus.$emit('caption_remove_index', this.origin );
+      //Uses a different origin from TextEditor so that when a caption is removed,
+      //it will force an update on TextEditor
+      EventBus.$emit('caption_remove_index', 'TextEditorRemoveButton' );
     },
     escapeString() {
       const isEscaped = /^{{.*}}$/;
