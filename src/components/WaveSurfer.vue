@@ -76,7 +76,7 @@ export default {
         progressColor: 'rgba(0,0,0,0)',
         responsive: true,
         waveColor: '#0C7AC0',
-        interact: false,
+        // interact: false,
         plugins: [
           RegionsPlugin.create({
             dragSelection: true
