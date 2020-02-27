@@ -63,6 +63,7 @@ class CaptionManager {
    * Caption.
    */
   onJSONUpdate($event, $origin = '') {
+
     Object.keys($event).forEach((key) => {
       $event[key].forEach((caption, index) => {
         const current = this.data[key];
@@ -75,6 +76,7 @@ class CaptionManager {
       });
     });
 
+    this.currentCaptionIndex.edited = true;
     this.emitCurrent($origin);
     //this.emitData($origin);
   }
@@ -127,6 +129,7 @@ class CaptionManager {
       content: content || current.content,
       end: 'number' === typeof end ? end : current.end,
       start: 'number' === typeof start ? start : current.start,
+      edited: true,
     };
 
     this.emitCurrent($origin);
@@ -239,7 +242,8 @@ class CaptionManager {
     return {
       start: 0,
       end: 0,
-      content: ' '
+      content: ' ',
+      edited: false
     };
   }
 }

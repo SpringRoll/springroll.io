@@ -37,7 +37,7 @@
         :href="blob"
         color="accent"
         class="font-semi-bold --capital json__button-export"
-        :disabled="jsonErrors.length > 0"
+        :disabled="Object.keys(jsonErrors).length > 0"
       >Export Code</v-btn>
     </div>
   </div>
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     onEdit($event) {
-      this.checkErrors($event);
+      this.checkErrors($event, this.origin);
       EventBus.$emit('json_update', $event, this.origin);
     },
     onUpdate(data, $origin) {
@@ -106,14 +106,18 @@ export default {
       this.activeFile = name;
       this.fileNameMap[name] = file;
 
+
       if ($origin === this.origin) {
+        //EventBus.$emit('caption_get', $origin);
         return;
       }
       this.currentIndex = index;
 
+
+
     },
     update(data, $origin) {
-      this.checkErrors(data);
+      this.checkErrors(data, $origin);
 
       if ($origin !== this.origin) {
         this.data = this.cleanData(data);
@@ -156,34 +160,39 @@ export default {
       this.dialog = false;
       this.update({});
     },
-    validateJSON(json) {
+    validateJSON(json, $origin) {
       const errors = {};
       Object.keys(json).forEach(key => {
         errors[key] = [];
         const file = json[key];
         file.forEach((caption, index) => {
-          if (!caption.content.trim() ) {
-            errors[key].push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
-          }
-          if ('number' !== typeof caption.start || caption.start < 0) {
-            errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must have a positive number value`);
-          }
-          if ('number' !== typeof caption.end || caption.end < 0) {
-            errors[key].push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
-          }
-          if (caption.start >= caption.end) {
-            errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
+          if (caption.edited || $origin === this.origin) {
+            if (!caption.content.trim() ) {
+              errors[key].push(`Error at caption [${key}], index [${index}]: Caption content must be non-empty`);
+            }
+            if ('number' !== typeof caption.start || caption.start < 0) {
+              errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must have a positive number value`);
+            }
+            if ('number' !== typeof caption.end || caption.end < 0) {
+              errors[key].push(`Error at caption [${key}], index [${index}]: Caption end must have a positive number value`);
+            }
+            if (caption.start >= caption.end) {
+              errors[key].push(`Error at caption [${key}], index [${index}]: Caption start must be less than the caption end`);
+            }
           }
         });
+
+        if (errors[key].length <= 0) {
+          delete errors[key];
+        }
       });
 
       return errors;
     },
-    checkErrors(data) {
-      const errors = this.validateJSON(data);
-      if (errors.length <= 0) {
-        this.jsonErrors = false;
-      } else {
+    checkErrors(data, $origin) {
+      this.jsonErrors = false;
+      const errors = this.validateJSON(data, $origin);
+      if (Object.keys(errors).length > 0) {
         this.jsonErrors = errors;
       }
 

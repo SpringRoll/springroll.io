@@ -69,6 +69,7 @@ export default {
       fileName: '',
       start: 0,
       end: 0,
+      edited: false,
       lastIndex: 0,
       canEmit: false,
       origin: 'TextEditor',
@@ -97,7 +98,7 @@ export default {
       if (this.jsonErrors[this.fileName] && this.jsonErrors[this.fileName].length > 0) {
         hasErrors = true;
       }
-      return (this.index >= this.lastIndex) && (!hasErrors);
+      return (this.index >= this.lastIndex) && (!hasErrors) && this.edited;
     },
     canRemove() {
       return this.index < this.lastIndex;
@@ -129,12 +130,15 @@ export default {
     },
     onUpdate($event, $origin) {
       if ($origin === this.origin) {
+        this.edited = $event.data.edited;
         return;
       }
-      const { start, end, content } = $event.data;
+      const { start, end, content, edited } = $event.data;
+      console.log(start, end, content, edited);
       this.start = start;
       this.end = end;
       this.content = content;
+      this.edited = edited;
       this.$refs.Quill.quill.setText(content ? content : ' '); // empty string prevents unnecessary console errors
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
