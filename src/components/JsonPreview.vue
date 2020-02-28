@@ -85,11 +85,8 @@ export default {
       }
 
       const file = this.fileNameMap[node.path[0]];
-      console.log(this.fileNameMap);
       const index = node.path[1];
       const indexDelta = index - this.currentIndex;
-
-      console.log(this.activeFile, node.path[0]);
 
       if (this.activeFile === node.path[0]) {
         EventBus.$emit('caption_move_index', indexDelta, this.origin);
@@ -105,18 +102,11 @@ export default {
       });
 
     },
-    onCaptionChange({ index, file, name }, $origin) {
+    onCaptionChange({ index, file, name }) {
       this.activeFile = name;
       this.fileNameMap[name] = file;
 
-
-      if ($origin === this.origin) {
-        //EventBus.$emit('caption_get', $origin);
-        return;
-      }
       this.currentIndex = index;
-
-
 
     },
     update(data, $origin) {
