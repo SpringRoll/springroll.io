@@ -134,7 +134,6 @@ export default {
         return;
       }
       const { start, end, content, edited } = $event.data;
-      console.log(start, end, content, edited);
       this.start = start;
       this.end = end;
       this.content = content;

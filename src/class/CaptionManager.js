@@ -35,6 +35,9 @@ class CaptionManager {
    * for that file, it creates a new Caption.
    */
   fileChanged($event, $origin = '') {
+    if (!$event.file) {
+      return;
+    }
     const name = $event.file.name.replace(/.(ogg|mp3|mpeg)$/, '').trim();
     if (!name || name === this.activeCaption) {
       return;

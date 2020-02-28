@@ -106,8 +106,12 @@ export default {
       }
     },
     jsonEmit($event) {
+      const newFile = this.directory.selectByFile($event);
+      if (!newFile) {
+        return;
+      }
       EventBus.$emit('file_selected', {
-        file: this.directory.selectByFile($event)
+        file: newFile
       }, this.origin);
     },
     onFileCaptionChange($event) {
