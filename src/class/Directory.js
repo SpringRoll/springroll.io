@@ -100,7 +100,7 @@ export default class Directory {
    * @memberof Directory
    */
   selectByFile(file) {
-    const index = this.files.indexOf(file);
+    const index = this.getFileIndex(file);
 
     if (-1 === index) {
       return;
@@ -134,6 +134,21 @@ export default class Directory {
 
     this.selected = next;
     return this.currentFile();
+  }
+
+  /**
+   * Utility function to find the index of a file in the files array
+   * Use over indexOf as files can be re-uploaded and their object reference chanes
+   * @param {File} file
+   * @returns {number}
+   */
+  getFileIndex(file) {
+    for (let i = 0, l = this.files.length; i < l; i++) {
+      if (this.files[i].name === file.name) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**

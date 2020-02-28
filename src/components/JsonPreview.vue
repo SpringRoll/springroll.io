@@ -85,8 +85,11 @@ export default {
       }
 
       const file = this.fileNameMap[node.path[0]];
+      console.log(this.fileNameMap);
       const index = node.path[1];
       const indexDelta = index - this.currentIndex;
+
+      console.log(this.activeFile, node.path[0]);
 
       if (this.activeFile === node.path[0]) {
         EventBus.$emit('caption_move_index', indexDelta, this.origin);
