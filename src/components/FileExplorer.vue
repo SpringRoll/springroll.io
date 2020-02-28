@@ -73,13 +73,18 @@ export default {
   width: 28.2rem;
   min-width: 28.2rem;
   background-color: $white-background;
-  padding: 2.4rem 0 0;
+  padding: 4.8rem 0 0;
   position: fixed;
   height: calc(100vh - 5.7rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  transition: transform 0.5s;
+
+  &.--explorerHidden {
+    transform: translateX(-100%);
+  }
 
   &__input {
     width: 24.2rem;
