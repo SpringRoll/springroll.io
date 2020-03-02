@@ -73,7 +73,7 @@ export default {
   width: 28.2rem;
   min-width: 28.2rem;
   background-color: $white-background;
-  padding: 4.8rem 0 0;
+  padding: 2.4rem 0 0;
   position: fixed;
   height: calc(100vh - 5.7rem);
   display: flex;

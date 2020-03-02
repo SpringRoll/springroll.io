@@ -1,6 +1,6 @@
 <template>
   <div class="caption__studio" :class="{'--explorerHidden': explorerHidden}">
-    <v-icon @click="() => explorerHidden = !explorerHidden" class="caption__hide-sidebar">{{ explorerHidden ? 'arrow_forward' : 'arrow_back' }}</v-icon>
+    <v-icon @click="() => explorerHidden = !explorerHidden" class="caption__hide-sidebar">{{ explorerHidden ? 'arrow_forward_ios' : 'arrow_back_ios' }}</v-icon>
     <FileExplorer :class="{'--explorerHidden': explorerHidden}"/>
     <div class="caption__container" :class="{'--disabled': !enabled}">
       <div class="caption__element">
@@ -79,16 +79,24 @@ export default {
       }
       .caption__hide-sidebar {
         left: 0;
+
+        &:hover {
+          left: 0.5rem;
+        }
       }
     }
   }
 
   &__hide-sidebar {
     position: fixed !important;
-    top: 7.5rem;
-    left: 25.5rem;
-    transition: left 0.5s !important;
+    top: 50%;
+    left: 26.5rem;
+    transition: left 0.4s !important;
     z-index: 3;
+
+    &:hover {
+      left: 26rem;
+    }
   }
 
   &__container {
