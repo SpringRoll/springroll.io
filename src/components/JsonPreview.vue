@@ -102,6 +102,7 @@ export default {
     width: 100%;
   }
 
+
   pre,
   code {
     overflow: auto;
@@ -109,26 +110,35 @@ export default {
 
   &__container {
     width: 100%;
-    height: 20rem;
-    padding: 1rem;
+
+    //padding: 1rem;
   }
 
   &__button {
-    &-export {
-      width: 15.8rem;
-      height: 3.6rem;
+
+
+    &-cancel {
+      // width: 15.8rem;
+      // height: 3.6rem;
+      width: 100%;
     }
 
     &-cancel, &-export {
       margin: 0 !important;
+      border-radius: 0 !important;
     }
 
     &-group {
       display: flex;
-      justify-content: space-between;
       width: 100%;
+      min-height: 3.6rem;
       align-items: center;
-      margin: 1.5rem 0 3rem;
+      border-radius: 2rem;
+
+
+      &> * {
+        width: 50%;
+      }
     }
   }
 
