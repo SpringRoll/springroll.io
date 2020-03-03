@@ -112,10 +112,11 @@ export default {
     update(data, $origin) {
       this.checkErrors(data, $origin);
 
-      if ($origin !== this.origin) {
-        this.data = this.cleanData(data);
+      if ($origin === this.origin) {
+        return;
       }
 
+      this.data = this.cleanData(data);
       this.$refs.jsonEditor.editor.update(this.data);
       this.json = JSON.stringify(this.data, null, 2);
       this.createBlob();

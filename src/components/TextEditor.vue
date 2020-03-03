@@ -194,6 +194,7 @@ export default {
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
+    this.$refs.Quill.quill.off('text-change', this.onEdit);
   }
 };
 </script>

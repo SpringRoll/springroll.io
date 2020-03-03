@@ -81,7 +81,7 @@ class CaptionManager {
 
     this.currentCaptionIndex.edited = true;
     this.emitCurrent($origin);
-    //this.emitData($origin);
+    this.emitData($origin);
   }
   /**
    *
