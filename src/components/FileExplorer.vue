@@ -17,10 +17,37 @@
         :active="active"
       />
     </div>
-    <div color="accent" class="v-btn accent explorer__input --file font-semi-bold font-16">
+    <div v-if="!rawFiles" color="accent" class="v-btn accent explorer__input --file font-semi-bold font-16">
       <span>Import Files</span>
       <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
     </div>
+    <v-dialog v-else v-model="dialog" width="500">
+      <v-btn
+        slot="activator"
+        color="accent"
+        class="v-btn accent explorer__input --file font-semi-bold font-16"
+      >Import Files</v-btn>
+      <v-card>
+        <v-card-title class="error" primary-title>
+          <h2 class="font-semi-bold json__dialog-title">Warning</h2>
+        </v-card-title>
+        <v-card-text>
+          <span class>Importing new files will overwrite any work you have completed so far.</span>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="accent"
+            @click="dialog = false"
+            class="v-btn accent explorer__input --dialog font-semi-bold font-16"
+          >Cancel</v-btn>
+          <div class="v-btn error explorer__input --dialog font-semi-bold font-16">
+            <span>Import Files</span>
+            <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
+          </div>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -36,7 +63,8 @@ export default {
     return {
       directory: FileProcessor.getDirectory(),
       rawFiles: null,
-      active: null
+      active: null,
+      dialog: false,
     };
   },
   methods: {
@@ -45,6 +73,7 @@ export default {
       this.directory = FileProcessor.generateDirectories(this.rawFiles);
     },
     loadFiles($event) {
+      this.dialog = false;
       if (!$event.target.files.length) {
         return;
       }
@@ -99,6 +128,12 @@ export default {
     }
     &.--file {
       margin: 0 0 3rem 0 !important;
+    }
+
+    &.--dialog {
+      width: 15.8rem;
+      height: 3.6rem;
+      margin: 0 0 3rem 1rem !important;
     }
   }
 

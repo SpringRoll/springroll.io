@@ -9,15 +9,15 @@
       </div>
       <div class="caption__element">
         <label class="caption__label" for="c-preview">Text Preview</label>
-        <CaptionPreview id="c-preview" class="caption__component"/>
+        <CaptionPreview id="c-preview" class="caption__component" />
       </div>
       <div class="caption__element">
         <label class="caption__label" for="c-edtior">Text Editor</label>
-        <TextEditor id="c-editor" class="caption__component"/>
+        <TextEditor id="c-editor" class="caption__component" />
       </div>
       <div class="caption__element">
-        <label class="caption__label" for="c-code">Code</label>
-        <JsonPreview id="c-code" class="caption__component"/>
+        <label class="caption__label" for="c-code">JSON Preview</label>
+        <JsonPreview id="c-code" class="caption__component" />
       </div>
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
   },
   mounted() {
     EventBus.$on('file_selected', this.isEnabled);
-    EventBus.$on('caption_reset', () => this.enabled = false);
+    EventBus.$on('caption_reset', () => (this.enabled = false));
 
     if (this.enabled) {
       EventBus.$emit('caption_emit');
@@ -62,13 +62,13 @@ export default {
   },
   destroyed() {
     EventBus.$off('file_selected', this.isEnabled);
-    EventBus.$off('caption_reset', () => this.enabled = false);
+    EventBus.$off('caption_reset', () => (this.enabled = false));
   }
 };
 </script>
 
 <style lang="scss">
-@import "~@/scss/colors";
+@import '~@/scss/colors';
 .caption {
   &__studio {
     display: flex;

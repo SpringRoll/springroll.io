@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       hasActive: false,
+      origin: 'FileDirectory',
       filesWithCaptions: {}
     };
   },
@@ -86,14 +87,14 @@ export default {
     },
     nextFile() {
       if (this.hasActive) {
-        EventBus.$emit('file_selected', { file: this.directory.nextFile() });
+        EventBus.$emit('file_selected', { file: this.directory.nextFile() }, this.origin);
       }
     },
     previousFile() {
       if (this.hasActive) {
         EventBus.$emit('file_selected', {
           file: this.directory.previousFile()
-        });
+        }, this.origin);
       }
     },
     emit($event) {
@@ -101,8 +102,17 @@ export default {
       if (this.hasActive) {
         EventBus.$emit('file_selected', {
           file: this.directory.selectByFile($event.target._value)
-        });
+        }, this.origin);
       }
+    },
+    jsonEmit($event) {
+      const newFile = this.directory.selectByFile($event);
+      if (!newFile) {
+        return;
+      }
+      EventBus.$emit('file_selected', {
+        file: newFile
+      }, this.origin);
     },
     onFileCaptionChange($event) {
       this.$set(this.filesWithCaptions, $event.name, $event.isCaptioned);
@@ -112,11 +122,13 @@ export default {
     EventBus.$on('next_file', this.nextFile);
     EventBus.$on('previous_file', this.previousFile);
     EventBus.$on('file_captioned', this.onFileCaptionChange);
+    EventBus.$on('json_file_selected', this.jsonEmit);
   },
   destroyed() {
     EventBus.$off('next_file', this.nextFile);
     EventBus.$off('previous_file', this.previousFile);
     EventBus.$off('file_captioned', this.onFileCaptionChange);
+    EventBus.$off('json_file_selected', this.jsonEmit);
   }
 };
 </script>

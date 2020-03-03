@@ -1,6 +1,10 @@
 <template>
   <div class="editor">
-    <quill-editor id="quill-editor" v-model="content" @change="onEdit" class="editor__quill">
+    <quill-editor
+      id="quill-editor"
+      class="editor__quill"
+      ref="Quill"
+     >
       <div id="toolbar" slot="toolbar">
         <select class="ql-font">
           <option selected="selected"></option>
@@ -62,10 +66,14 @@ export default {
     return {
       index: 0,
       content: '',
+      fileName: '',
       start: 0,
       end: 0,
+      edited: false,
       lastIndex: 0,
       canEmit: false,
+      origin: 'TextEditor',
+      jsonErrors: false,
       sizeOptions: [
         { value: '10px', label: 'Small', default: false },
         { value: '16px', label: 'Normal', default: true },
@@ -86,44 +94,66 @@ export default {
   },
   computed: {
     canAdd() {
-      return this.index >= this.lastIndex;
+      let hasErrors = false;
+      if (this.jsonErrors[this.fileName] && this.jsonErrors[this.fileName].length > 0) {
+        hasErrors = true;
+      }
+      return (this.index >= this.lastIndex) && (!hasErrors) && this.edited;
     },
     canRemove() {
       return this.index < this.lastIndex;
     }
   },
   methods: {
-    onEdit($event) {
+    onEdit(delta, oldContents, source) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { content: $event.text.trim() }); //.trim() removes the `\n` newline that .text returns
+      if (source !== 'user') {
+        return;
+      }
+      const text = this.$refs.Quill.quill.getText();
+      this.content = text;
+      EventBus.$emit('caption_update', { content: text }, this.origin);
     },
     onStartTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { start: $event });
+      EventBus.$emit('caption_update', { start: $event }, this.origin);
     },
     onEndTimeUpdated($event) {
       if (!this.canEmit) {
         return;
       }
-      EventBus.$emit('caption_update', { end: $event });
+      EventBus.$emit('caption_update', { end: $event }, this.origin);
     },
-    onUpdate($event) {
-      const { start, end } = $event.data;
+    onUpdate($event, $origin) {
+      if ($origin === this.origin) {
+        this.edited = $event.data.edited;
+        return;
+      }
+      const { start, end, content, edited } = $event.data;
       this.start = start;
       this.end = end;
+      this.content = content;
+      this.edited = edited;
+      this.$refs.Quill.quill.setText(content ? content : ' '); // empty string prevents unnecessary console errors
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
+      this.fileName = $event.name;
       this.canEmit = true;
     },
     addCaption() {
-      EventBus.$emit('caption_add_index');
+      this.content = ' ';
+      //Uses a different origin from TextEditor so that when a caption is added,
+      //it will force an update on TextEditor
+      EventBus.$emit('caption_add_index', 'TextEditorAddButton' );
     },
     removeCaption() {
-      EventBus.$emit('caption_remove_index');
+      //Uses a different origin from TextEditor so that when a caption is removed,
+      //it will force an update on TextEditor
+      EventBus.$emit('caption_remove_index', 'TextEditorRemoveButton' );
     },
     escapeString() {
       const isEscaped = /^{{.*}}$/;
@@ -158,10 +188,13 @@ export default {
   mounted() {
     EventBus.$on('caption_changed', this.onUpdate);
     EventBus.$on('caption_reset', this.reset);
+    EventBus.$on('json_errors', (e) => this.jsonErrors = e);
+    this.$refs.Quill.quill.on('text-change', this.onEdit);
   },
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
+    this.$refs.Quill.quill.off('text-change', this.onEdit);
   }
 };
 </script>

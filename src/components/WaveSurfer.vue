@@ -99,8 +99,6 @@ export default {
       if ($event.file instanceof File) {
         this.isPlaying = false;
         this.hasFile = true;
-
-        console.log($event.file);
         this.wave.loadBlob($event.file);
       }
     },
