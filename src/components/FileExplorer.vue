@@ -109,6 +109,11 @@ export default {
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  transition: transform 0.5s;
+
+  &.--explorerHidden {
+    transform: translateX(-100%);
+  }
 
   &__input {
     width: 24.2rem;
