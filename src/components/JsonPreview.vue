@@ -1,11 +1,6 @@
 <template>
   <div class="json">
     <v-jsoneditor class="json__editor" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
-      <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
-        <li v-for="(error, index) in file" :key="index">
-          {{ error }}
-        </li>
-      </ul>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
         <v-btn
@@ -40,6 +35,11 @@
         :disabled="Object.keys(jsonErrors).length > 0"
       >Export Code</v-btn>
     </div>
+    <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
+      <li v-for="(error, index) in file" :key="index">
+        {{ error }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -210,6 +210,9 @@ export default {
 <style lang="scss">
 @import '~@/scss/colors';
 @import '~@/scss/sizes';
+
+$menu-height: 5.6rem;
+
 .json {
   display: flex;
   flex-direction: column;
@@ -222,7 +225,7 @@ export default {
     background-color: $accent;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 5.6rem;
+    height: $menu-height;
     padding: 1.5rem;
   }
 
@@ -232,12 +235,16 @@ export default {
 
   .jsoneditor {
     border: none;
+
+    &-outer.has-main-menu-bar {
+      margin-top: 0;
+      padding-top: 0;
+      height: calc(100% - #{$menu-height});
+    }
   }
 
   .jsoneditor-tree {
     background-color: $white-background;
-    border-bottom-left-radius: $border-radius;
-    border-bottom-right-radius: $border-radius;
   }
 
   &__errors {
