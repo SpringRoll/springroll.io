@@ -1,6 +1,6 @@
 <template>
   <div class="json">
-    <v-jsoneditor :options="options" :plus="false" height="400px" ref="jsonEditor"/>
+    <v-jsoneditor class="json__editor" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
       <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
         <li v-for="(error, index) in file" :key="index">
           {{ error }}
@@ -209,13 +209,15 @@ export default {
 
 <style lang="scss">
 @import '~@/scss/colors';
+@import '~@/scss/sizes';
 .json {
   display: flex;
   flex-direction: column;
 
-  .code-block {
+  &__editor {
     width: 100%;
   }
+
   .jsoneditor-menu {
     background-color: $accent;
     border-top-left-radius: 10px;
@@ -234,8 +236,8 @@ export default {
 
   .jsoneditor-tree {
     background-color: $white-background;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
   }
 
   &__errors {
@@ -244,31 +246,20 @@ export default {
     color: red;
   }
 
-
-  pre,
-  code {
-    overflow: auto;
-  }
-
-  &__container {
-    width: 100%;
-
-    //padding: 1rem;
-  }
-
   &__button {
-
-
-    &-cancel {
-      // width: 15.8rem;
-      // height: 3.6rem;
-      width: 100%;
-    }
 
     &-cancel,
     &-export {
       margin: 0 !important;
-      border-radius: 0 !important;
+    }
+
+    &-cancel {
+      border-radius: 0px 0px 0px 10px / 0px 0px 0px 10px !important;
+      width: 100%;
+    }
+
+    &-export {
+      border-radius: 0px 0px 10px 0px !important;
     }
 
     &-group {
