@@ -6,31 +6,39 @@
       ref="Quill"
      >
       <div id="toolbar" slot="toolbar">
-        <select class="ql-font">
-          <option selected="selected"></option>
-          <option value="serif"></option>
-          <option value="monospace"></option>
-        </select>
-        <select class="ql-size">
-          <option
-            v-for="size in sizeOptions"
-            :key="size.value"
-            :value="size.value"
-            :selected="size.default"
-          >{{size.label}}</option>
-        </select>
-        <select class="ql-color">
-          <option
-            v-for="color in colorOptions"
-            :key="color.value"
-            :value="color.value"
-            :selected="color.default"
-          />
-        </select>
-        <button class="ql-bold">Bold</button>
-        <button @click="escapeString" class="editor__escape-button">
-          <span v-pre>&#123;&#123; &#125;&#125;</span>
-        </button>
+        <span class="toolbar__wrapper">
+          <span class="toolbar__group">
+          <select class="ql-font">
+            <option selected="selected"></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+          <select class="ql-size">
+            <option
+              v-for="size in sizeOptions"
+              :key="size.value"
+              :value="size.value"
+              :selected="size.default"
+            >{{size.label}}</option>
+          </select>
+          <select class="ql-color">
+            <option
+              v-for="color in colorOptions"
+              :key="color.value"
+              :value="color.value"
+              :selected="color.default"
+            />
+          </select>
+          <button class="ql-bold">Bold</button>
+          <button @click="escapeString" class="editor__escape-button">
+            <span v-pre>&#123;&#123; &#125;&#125;</span>
+          </button>
+          </span>
+          <span class="toolbar__group --col">
+            <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
+            <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are below 40 characters</span>
+          </span>
+        </span>
       </div>
     </quill-editor>
     <div class="editor__controls">
@@ -102,6 +110,9 @@ export default {
     },
     canRemove() {
       return this.index < this.lastIndex;
+    },
+    characterCount() {
+      return this.content.replace(/\n$/, '').length;
     }
   },
   methods: {
@@ -194,7 +205,6 @@ export default {
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
-    this.$refs.Quill.quill.off('text-change', this.onEdit);
   }
 };
 </script>
@@ -217,12 +227,29 @@ export default {
     height: $quill;
   }
 
+  .toolbar {
+    &__wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__group {
+      display: flex;
+    }
+  }
+
   &__controls {
     background-color: $grey;
     display: flex;
     height: $controls;
     justify-content: space-between;
     padding: 1rem;
+  }
+
+  &__character-count {
+    display: flex;
+    align-items: center;
+    height: 24px;
   }
 
   &__button {
