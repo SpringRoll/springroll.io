@@ -204,7 +204,7 @@ export default {
 @import '~@/scss/fonts';
 @import '~@/scss/sizes';
 .editor {
-  $quill: 20rem;
+  $quill: 29.2rem;
   $controls: 10.8rem;
 
   border-bottom-left-radius: $border-radius;
