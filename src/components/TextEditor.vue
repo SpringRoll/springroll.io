@@ -43,6 +43,7 @@
     </quill-editor>
     <div class="editor__controls">
       <div class="editor__controls-error">
+        <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
         <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that individual captions have no more than 2 lines</span>
       </div>
       <div class="editor__controls-group">
