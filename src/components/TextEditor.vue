@@ -35,7 +35,6 @@
           </button>
           </span>
           <span class="toolbar__group --col">
-            <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are 40 characters or less</span>
             <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
           </span>
         </span>
@@ -43,6 +42,7 @@
     </quill-editor>
     <div class="editor__controls">
       <div class="editor__controls-error">
+        <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are 40 characters or less</span>
         <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
         <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that individual captions be no longer 2 lines</span>
       </div>
@@ -235,7 +235,7 @@ export default {
 
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
-  height: $quill + $controls + 3.6rem + $controls-error;
+  height: $quill + $controls + 3.6rem + $controls-error + $controls-error;
   overflow: hidden;
   width: 100%;
 
@@ -258,7 +258,7 @@ export default {
   &__controls {
     background-color: $grey;
     display: flex;
-    height: $controls + $controls-error;
+    height: $controls + $controls-error + $controls-error;
     justify-content: space-between;
     flex-direction: column;
     padding: 1rem;
@@ -270,7 +270,8 @@ export default {
     }
     &-error {
       display: flex;
-      height: $controls-error;
+      flex-direction: column;
+      height: $controls-error * 2;
       justify-content: space-between;
     }
   }
