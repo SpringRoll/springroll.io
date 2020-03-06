@@ -42,8 +42,13 @@
       </div>
     </quill-editor>
     <div class="editor__controls">
+      <div class="editor__controls-error">
+        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that individual captions have no more than 2 lines</span>
+      </div>
+      <div class="editor__controls-group">
       <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
       <TimeStampInput @time="onEndTimeUpdated" :default="end" name="end" />
+      </div>
     </div>
     <v-btn
       v-if="canRemove"
@@ -115,7 +120,12 @@ export default {
       return this.content.replace(/\n$/, '').length;
     },
     newLineCount() {
-      return this.content.match(/\n/g);
+      if (this.content.match(/\n/g)) {
+        return this.content.match(/\n/g).length;
+      } else {
+        return 0;
+      }
+
     }
   },
   methods: {
@@ -220,10 +230,11 @@ export default {
 .editor {
   $quill: 20rem;
   $controls: 10.8rem;
+  $controls-error: 2.4rem;
 
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
-  height: $quill + $controls + 3.6rem;
+  height: $quill + $controls + 3.6rem + $controls-error;
   overflow: hidden;
   width: 100%;
 
@@ -246,9 +257,21 @@ export default {
   &__controls {
     background-color: $grey;
     display: flex;
-    height: $controls;
+    height: $controls + $controls-error;
     justify-content: space-between;
+    flex-direction: column;
     padding: 1rem;
+
+    &-group {
+      display: flex;
+      height: $controls;
+      justify-content: space-between;
+    }
+    &-error {
+      display: flex;
+      height: $controls-error;
+      justify-content: space-between;
+    }
   }
 
   &__character-count {
