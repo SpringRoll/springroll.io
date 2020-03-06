@@ -35,8 +35,8 @@
           </button>
           </span>
           <span class="toolbar__group --col">
-            <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
             <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are below 40 characters</span>
+            <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
           </span>
         </span>
       </div>
@@ -113,10 +113,14 @@ export default {
     },
     characterCount() {
       return this.content.replace(/\n$/, '').length;
+    },
+    newLineCount() {
+      return this.content.match(/\n/g);
     }
   },
   methods: {
     onEdit(delta, oldContents, source) {
+
       if (!this.canEmit) {
         return;
       }
@@ -235,6 +239,7 @@ export default {
     }
     &__group {
       display: flex;
+      justify-content: space-between;
     }
   }
 
@@ -250,6 +255,10 @@ export default {
     display: flex;
     align-items: center;
     height: 24px;
+
+    &:first-child {
+      margin-right: 1rem;
+    }
   }
 
   &__button {
