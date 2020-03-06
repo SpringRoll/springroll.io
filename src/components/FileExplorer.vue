@@ -33,7 +33,7 @@
         </v-card-title>
         <v-card-text>
           <p>Importing new files will remove the currently imported files.</p>
-          <p>You previous work will remain and you will still be able to edit it directly via JSON</p>
+          <p>Your previous work will remain and you will still be able to edit it directly via JSON</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>

@@ -35,7 +35,7 @@
           </button>
           </span>
           <span class="toolbar__group --col">
-            <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are below 40 characters</span>
+            <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that caption lines are 40 characters or less</span>
             <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
           </span>
         </span>
@@ -44,7 +44,7 @@
     <div class="editor__controls">
       <div class="editor__controls-error">
         <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
-        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that individual captions have no more than 2 lines</span>
+        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is reccomended that individual captions be no longer 2 lines</span>
       </div>
       <div class="editor__controls-group">
       <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
