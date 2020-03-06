@@ -1,6 +1,10 @@
 <template>
   <div class="captions">
-    <div class="captions__toolbar" />
+    <div class="captions__toolbar">
+      <button @click="invertColors" class="captions__colors-button" :class="{'--inverted': inverted }">
+        A
+      </button>
+    </div>
     <div class="captions__content" />
     <div class="captions__navigation">
       <v-btn
@@ -30,7 +34,8 @@ export default {
       captionPlayer: null,
       index: 0,
       lastIndex: 0,
-      name: ''
+      name: '',
+      inverted: true,
     };
   },
   computed: {
@@ -115,9 +120,19 @@ export default {
     min-height: $toolbar;
   }
 
+  &__colors-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    height: 24px;
+    padding: 1rem;
+  }
+
   &__content {
     height: calc(100% - #{$navigation + $toolbar});
     padding: 1rem 1rem 0rem;
+    color: white;
+    background-color: black;
   }
 
   &__navigation {
