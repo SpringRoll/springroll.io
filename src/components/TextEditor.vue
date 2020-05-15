@@ -6,36 +6,50 @@
       ref="Quill"
      >
       <div id="toolbar" slot="toolbar">
-        <select class="ql-font">
-          <option selected="selected"></option>
-          <option value="serif"></option>
-          <option value="monospace"></option>
-        </select>
-        <select class="ql-size">
-          <option
-            v-for="size in sizeOptions"
-            :key="size.value"
-            :value="size.value"
-            :selected="size.default"
-          >{{size.label}}</option>
-        </select>
-        <select class="ql-color">
-          <option
-            v-for="color in colorOptions"
-            :key="color.value"
-            :value="color.value"
-            :selected="color.default"
-          />
-        </select>
-        <button class="ql-bold">Bold</button>
-        <button @click="escapeString" class="editor__escape-button">
-          <span v-pre>&#123;&#123; &#125;&#125;</span>
-        </button>
+        <span class="toolbar__wrapper">
+          <span class="toolbar__group">
+          <select class="ql-font">
+            <option selected="selected"></option>
+            <option value="serif"></option>
+            <option value="monospace"></option>
+          </select>
+          <select class="ql-size">
+            <option
+              v-for="size in sizeOptions"
+              :key="size.value"
+              :value="size.value"
+              :selected="size.default"
+            >{{size.label}}</option>
+          </select>
+          <select class="ql-color">
+            <option
+              v-for="color in colorOptions"
+              :key="color.value"
+              :value="color.value"
+              :selected="color.default"
+            />
+          </select>
+          <button class="ql-bold">Bold</button>
+          <button @click="escapeString" class="editor__escape-button">
+            <span v-pre>&#123;&#123; &#125;&#125;</span>
+          </button>
+          </span>
+          <span class="toolbar__group --col">
+            <span class="editor__character-count"><span :class="{'yellow--text text--darken-4': characterCount > 40}">{{ characterCount }}</span> / 40</span>
+          </span>
+        </span>
       </div>
     </quill-editor>
     <div class="editor__controls">
+      <div class="editor__controls-error">
+        <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that caption lines are 40 characters or less</span>
+        <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
+        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that individual captions be no longer 2 lines</span>
+      </div>
+      <div class="editor__controls-group">
       <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
       <TimeStampInput @time="onEndTimeUpdated" :default="end" name="end" />
+      </div>
     </div>
     <v-btn
       v-if="canRemove"
@@ -102,10 +116,22 @@ export default {
     },
     canRemove() {
       return this.index < this.lastIndex;
+    },
+    characterCount() {
+      return this.content.replace(/\n$/, '').length;
+    },
+    newLineCount() {
+      if (this.content.match(/\n/g)) {
+        return this.content.match(/\n/g).length;
+      } else {
+        return 0;
+      }
+
     }
   },
   methods: {
     onEdit(delta, oldContents, source) {
+
       if (!this.canEmit) {
         return;
       }
@@ -194,7 +220,6 @@ export default {
   destroyed() {
     EventBus.$off('caption_changed', this.onUpdate);
     EventBus.$off('caption_reset', this.reset);
-    this.$refs.Quill.quill.off('text-change', this.onEdit);
   }
 };
 </script>
@@ -204,12 +229,13 @@ export default {
 @import '~@/scss/fonts';
 @import '~@/scss/sizes';
 .editor {
-  $quill: 20rem;
+  $quill: 29.2rem;
   $controls: 10.8rem;
+  $controls-error: 2.4rem;
 
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
-  height: $quill + $controls + 3.6rem;
+  height: $quill + $controls + 3.6rem + $controls-error + $controls-error;
   overflow: hidden;
   width: 100%;
 
@@ -217,12 +243,47 @@ export default {
     height: $quill;
   }
 
+  .toolbar {
+    &__wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    &__group {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
   &__controls {
     background-color: $grey;
     display: flex;
-    height: $controls;
+    height: $controls + $controls-error + $controls-error;
     justify-content: space-between;
+    flex-direction: column;
     padding: 1rem;
+
+    &-group {
+      display: flex;
+      height: $controls;
+      justify-content: space-between;
+    }
+    &-error {
+      display: flex;
+      flex-direction: column;
+      height: $controls-error * 2;
+      justify-content: space-between;
+    }
+  }
+
+  &__character-count {
+    display: flex;
+    align-items: center;
+    height: 24px;
+
+    &:first-child {
+      margin-right: 1rem;
+    }
   }
 
   &__button {

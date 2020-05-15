@@ -11,6 +11,7 @@
         <label class="caption__label" for="c-preview">Text Preview</label>
         <CaptionPreview id="c-preview" class="caption__component" />
       </div>
+      <div class="caption__element-wrapper">
       <div class="caption__element">
         <label class="caption__label" for="c-edtior">Text Editor</label>
         <TextEditor id="c-editor" class="caption__component" />
@@ -18,6 +19,7 @@
       <div class="caption__element">
         <label class="caption__label" for="c-code">JSON Preview</label>
         <JsonPreview id="c-code" class="caption__component" />
+      </div>
       </div>
     </div>
   </div>
@@ -110,8 +112,21 @@ export default {
     }
   }
 
+  &__element-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 5rem;
+
+    .caption__element {
+      margin: 2.3rem 1rem 0;
+    }
+  }
+
   &__element {
     margin-top: 2.3rem;
+    flex: 1 1 50rem;
   }
 
   &__label {

@@ -1,11 +1,6 @@
 <template>
   <div class="json">
-    <v-jsoneditor :options="options" :plus="false" height="400px" ref="jsonEditor"/>
-      <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
-        <li v-for="(error, index) in file" :key="index">
-          {{ error }}
-        </li>
-      </ul>
+    <v-jsoneditor class="json__editor" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
         <v-btn
@@ -40,6 +35,11 @@
         :disabled="Object.keys(jsonErrors).length > 0"
       >Export Code</v-btn>
     </div>
+    <ul class="json__errors" v-for="(file, index) in jsonErrors" :key="index">
+      <li v-for="(error, index) in file" :key="index">
+        {{ error }}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -209,18 +209,23 @@ export default {
 
 <style lang="scss">
 @import '~@/scss/colors';
+@import '~@/scss/sizes';
+
+$menu-height: 5.6rem;
+
 .json {
   display: flex;
   flex-direction: column;
 
-  .code-block {
+  &__editor {
     width: 100%;
   }
+
   .jsoneditor-menu {
     background-color: $accent;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 5.6rem;
+    height: $menu-height;
     padding: 1.5rem;
   }
 
@@ -230,12 +235,16 @@ export default {
 
   .jsoneditor {
     border: none;
+
+    &-outer.has-main-menu-bar {
+      margin-top: 0;
+      padding-top: 0;
+      height: calc(100% - #{$menu-height});
+    }
   }
 
   .jsoneditor-tree {
     background-color: $white-background;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
   }
 
   &__errors {
@@ -244,34 +253,33 @@ export default {
     color: red;
   }
 
-  pre,
-  code {
-    overflow: auto;
-  }
-
-  &__container {
-    width: 100%;
-    height: 20rem;
-    padding: 1rem;
-  }
-
   &__button {
-    &-export {
-      width: 15.8rem;
-      height: 3.6rem;
-    }
 
     &-cancel,
     &-export {
       margin: 0 !important;
     }
 
+    &-cancel {
+      border-radius: 0px 0px 0px 10px / 0px 0px 0px 10px !important;
+      width: 100%;
+    }
+
+    &-export {
+      border-radius: 0px 0px 10px 0px !important;
+    }
+
     &-group {
       display: flex;
-      justify-content: space-between;
       width: 100%;
+      min-height: 3.6rem;
       align-items: center;
-      margin: 3rem 0;
+      border-radius: 2rem;
+
+
+      &> * {
+        width: 50%;
+      }
     }
   }
 
