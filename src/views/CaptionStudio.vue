@@ -1,6 +1,6 @@
 <template>
   <div class="caption__studio" :class="{'--explorerHidden': explorerHidden}">
-    <v-icon @click="() => explorerHidden = !explorerHidden" class="caption__hide-sidebar">{{ explorerHidden ? 'arrow_forward_ios' : 'arrow_back_ios' }}</v-icon>
+    <v-icon @click="() => explorerHidden = !explorerHidden" class="caption__hide-sidebar" :class="{ '--explorerHidden' : explorerHidden }">arrow_back_ios</v-icon>
     <FileExplorer :class="{'--explorerHidden': explorerHidden}"/>
     <div class="caption__container" :class="{'--disabled': !enabled}">
       <div class="caption__element">
@@ -93,8 +93,12 @@ export default {
     position: fixed !important;
     top: 50%;
     left: 26.5rem;
-    transition: left 0.4s !important;
+    transition: left 0.43s, transform 0.43s cubic-bezier(0.25, 0.8, 0.5, 1) !important;
     z-index: 3;
+
+    &.--explorerHidden {
+      transform: rotate(180deg);
+    }
 
     &:hover {
       left: 26rem;
