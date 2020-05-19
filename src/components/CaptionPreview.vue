@@ -1,11 +1,13 @@
 <template>
   <div class="captions">
     <div class="captions__toolbar">
-      <button @click="invertColors" class="captions__colors-button" :class="{'--inverted': inverted }">
-        A
-      </button>
+      <label class="captions__switch">
+        <span class="captions__label-text">Caption Colors</span>
+        <input class="captions__checkbox" type="checkbox" v-model="inverted">
+        <span class="captions__toggle"></span>
+      </label>
     </div>
-    <div class="captions__content" />
+    <div class="captions__content" :class="{'--inverted': inverted }"/>
     <div class="captions__navigation">
       <v-btn
         color="accent"
@@ -35,7 +37,7 @@ export default {
       index: 0,
       lastIndex: 0,
       name: '',
-      inverted: true,
+      inverted: false,
     };
   },
   computed: {
@@ -79,7 +81,7 @@ export default {
       if (i !== this.index) {
         EventBus.$emit('caption_move_index', i);
       }
-    }
+    },
   },
   mounted() {
     this.setup();
@@ -124,15 +126,22 @@ export default {
     background: none;
     border: none;
     cursor: pointer;
-    height: 24px;
+    height: 2.4rem;
     padding: 1rem;
   }
 
   &__content {
     height: calc(100% - #{$navigation + $toolbar});
     padding: 1rem 1rem 0rem;
+
+    color: black;
+    background-color: $white-background;
+
+    &.--inverted {
     color: white;
     background-color: black;
+
+    }
   }
 
   &__navigation {
@@ -143,6 +152,64 @@ export default {
     .v-btn {
       border-radius: 0;
       margin: 0 0.09rem;
+    }
+  }
+
+  &__switch {
+    margin: 1rem;
+    position: relative;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 17rem;
+
+  }
+    /* Hide default HTML checkbox */
+  &__checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .captions__toggle {
+      background-color: black;
+    }
+    &:checked + .captions__toggle:before {
+      background-color: $white-background;
+    }
+
+    &:hover + .captions__toggle {
+      box-shadow: 0 0 0.2px 0.2rem grey;
+    }
+    &:focus + .captions__toggle {
+      box-shadow: 0 0 0.2px 0.2rem grey;
+    }
+
+    &:checked + .captions__toggle:before {
+      transform: translateX(13px);
+    }
+  }
+
+  &__toggle {
+    position: relative;
+    cursor: pointer;
+    background-color: $white-background;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 2rem;
+    width: 3rem;
+    height: 1.7rem;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 1.3rem;
+      width: 1.3rem;
+      left: 0.2rem;
+      bottom: 0.2rem;
+      background-color: black;
+      -webkit-transition: .4s;
+      transition: .4s;
+      border-radius: 50%;
     }
   }
 }

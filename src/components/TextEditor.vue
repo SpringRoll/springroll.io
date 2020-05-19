@@ -44,7 +44,7 @@
       <div class="editor__controls-error">
         <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that caption lines are 40 characters or less</span>
         <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
-        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that individual captions be no longer 2 lines</span>
+        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that individual captions be no longer than 2 lines</span>
       </div>
       <div class="editor__controls-group">
       <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
