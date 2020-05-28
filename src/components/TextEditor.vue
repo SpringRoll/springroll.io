@@ -182,13 +182,12 @@ export default {
     escapeString() {
       const isEscaped = /^{{.*}}$/;
       const selection = getSelection();
-      const offset = selection.focusOffset;
-      const endset = selection.anchorOffset;
+      const offset = selection.anchorOffset < selection.focusOffset ? selection.anchorOffset : selection.focusOffset;
+      const endset = selection.anchorOffset > selection.focusOffset ? selection.anchorOffset : selection.focusOffset;
       const baseString = selection.anchorNode.data;
       const text = baseString.slice(offset, endset).trim();
 
       const parent = document.getElementById('quill-editor');
-      console.log(selection, baseString, text, offset, endset);
 
       if (
         !parent.contains(selection.anchorNode) ||
