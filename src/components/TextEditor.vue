@@ -43,8 +43,7 @@
     <div class="editor__controls">
       <div class="editor__controls-error">
         <span v-show="characterCount > 40" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that caption lines are 40 characters or less</span>
-        <!-- > 2 here accounts for the newline that the text editor inserts at the end of the text content-->
-        <span v-show="newLineCount > 2" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that individual captions be no longer 2 lines</span>
+        <span v-show="lineCount > 1" class="editor__character-count font-14"><v-icon>warning</v-icon> It is recommended that individual captions be no longer 2 lines</span>
       </div>
       <div class="editor__controls-group">
       <TimeStampInput @time="onStartTimeUpdated" :default="start" name="start" />
@@ -118,27 +117,26 @@ export default {
       return this.index < this.lastIndex;
     },
     characterCount() {
-      return this.content.replace(/\n$/, '').length;
+      return new DOMParser().parseFromString(this.content.replace(/<br>/, ''), 'text/html').body.textContent.length;
     },
-    newLineCount() {
-      if (this.content.match(/\n/g)) {
-        return this.content.match(/\n/g).length;
+    lineCount() {
+      if (this.content.match(/<br>/g)) {
+        return this.content.match(/<br>/g).length;
       } else {
         return 0;
       }
-
     }
   },
   methods: {
     onEdit(delta, oldContents, source) {
-
       if (!this.canEmit) {
         return;
       }
       if (source !== 'user') {
         return;
       }
-      const text = this.$refs.Quill.quill.getText();
+
+      const text = this.formatHTML(this.getInnerHTML());
       this.content = text;
       EventBus.$emit('caption_update', { content: text }, this.origin);
     },
@@ -164,7 +162,7 @@ export default {
       this.end = end;
       this.content = content;
       this.edited = edited;
-      this.$refs.Quill.quill.setText(content ? content : ' '); // empty string prevents unnecessary console errors
+      this.setInnerHTML = content ? content : ' '; // empty string prevents unnecessary console errors
       this.lastIndex = $event.lastIndex;
       this.index = $event.index;
       this.fileName = $event.name;
@@ -184,12 +182,13 @@ export default {
     escapeString() {
       const isEscaped = /^{{.*}}$/;
       const selection = getSelection();
-      const offset = selection.baseOffset;
-      const endset = selection.extentOffset;
+      const offset = selection.focusOffset;
+      const endset = selection.anchorOffset;
       const baseString = selection.anchorNode.data;
       const text = baseString.slice(offset, endset).trim();
 
       const parent = document.getElementById('quill-editor');
+      console.log(selection, baseString, text, offset, endset);
 
       if (
         !parent.contains(selection.anchorNode) ||
@@ -199,10 +198,22 @@ export default {
         return;
       }
 
+
       selection.anchorNode.data =
         baseString.substring(0, offset) +
         `{{${text}}}` +
         baseString.substring(endset, baseString.length);
+    },
+    formatHTML(html) {
+      const parser = new DOMParser();
+      const lines = Array.from(parser.parseFromString(html, 'text/html').querySelectorAll('p')).map(line => line.innerHTML);
+      return lines.join('<br>');
+    },
+    getInnerHTML() {
+      return this.$refs.Quill.quill.container.children[0].innerHTML;
+    },
+    setInnerHTML(newValue) {
+      this.$refs.Quill.quill.container.children[0].innerHTML = newValue;
     },
     reset() {
       this.canEmit = false;
