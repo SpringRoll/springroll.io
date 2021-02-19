@@ -3,11 +3,15 @@
     <v-jsoneditor class="json__editor" :options="options" :plus="false" height="400px" ref="jsonEditor"/>
     <div class="json__button-group">
       <v-dialog v-model="dialog" width="500">
-        <v-btn
-          slot="activator"
-          color="error"
-          class="font-semi-bold --capital json__button-cancel"
-        >Clear</v-btn>
+        <template v-slot:activator="{on}">
+          <v-btn
+            color="error"
+            class="font-semi-bold font-16 --capital json__button-cancel"
+            v-on="on"
+          >
+            Clear
+          </v-btn>
+        </template>
         <v-card>
           <v-card-title class="error" primary-title>
             <h2 class="font-semi-bold json__dialog-title">Warning</h2>

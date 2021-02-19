@@ -22,11 +22,13 @@
       <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
     </div>
     <v-dialog v-else v-model="dialog" width="500">
+      <template v-slot:activator="{ on }">
       <v-btn
-        slot="activator"
+        v-on="on"
         color="accent"
         class="v-btn accent explorer__input --file font-semi-bold font-16"
       >Import Files</v-btn>
+      </template>
       <v-card>
         <v-card-title class="error" primary-title>
           <h2 class="font-semi-bold json__dialog-title">Warning</h2>
