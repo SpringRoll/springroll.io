@@ -12,21 +12,21 @@
             Clear
           </v-btn>
         </template>
-        <v-card>
-          <v-card-title class="error" primary-title>
+        <v-card id="clear-captions-card">
+          <v-card-title class="error" color="black" primary-title>
             <h2 class="font-semi-bold json__dialog-title">Warning</h2>
           </v-card-title>
           <v-card-text>
-            <span class>This will clear all captions.</span>
+            <span class="json__dialog-text">This will clear all captions.</span>
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions class="json__dialog-actions">
             <v-spacer></v-spacer>
             <v-btn
               color="accent"
               @click="dialog = false"
-              class="font-semi-bold font-16 --capital"
+              class="font-semi-bold font-16 --capital json__dialog-buttons"
             >Cancel</v-btn>
-            <v-btn color="error" @click="reset" class="font-semi-bold font-16 --capital">Ok</v-btn>
+            <v-btn color="error" @click="reset" class="font-semi-bold font-16 --capital json__dialog-buttons">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -35,7 +35,7 @@
         target="_blank"
         :href="blob"
         color="accent"
-        class="font-semi-bold --capital json__button-export"
+        class="font-semi-bold font-16 --capital json__button-export"
         :disabled="Object.keys(jsonErrors).length > 0"
       >Export Code</v-btn>
     </div>
@@ -217,6 +217,10 @@ export default {
 
 $menu-height: 5.6rem;
 
+#clear-captions-card {
+  padding: 3rem;
+}
+
 .json {
   display: flex;
   flex-direction: column;
@@ -288,7 +292,17 @@ $menu-height: 5.6rem;
   }
 
   &__dialog-title {
-    color: $white;
+    margin-bottom: 2rem;
+  }
+  &__dialog-text {
+    margin-bottom: 2rem;
+    display: block;
+  }
+  &__dialog-actions {
+    margin-top: 1rem;
+  }
+  &__dialog-buttons:first-child {
+    margin-right: 1rem;
   }
 }
 </style>
