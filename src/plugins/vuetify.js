@@ -42,8 +42,12 @@ Vue.use(Vuetify, {
     VExpansionPanel,
     VDialog,
     VSpacer
-  },
+  }
+});
+
+const opts = {
   theme: {
+    dark: false,
     themes: {
       light: {
         primary: '#095B8F',
@@ -56,8 +60,6 @@ Vue.use(Vuetify, {
       }
     }
   }
-});
-
-const opts = {};
+};
 
 export default new Vuetify(opts);

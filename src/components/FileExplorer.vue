@@ -171,6 +171,7 @@ export default {
     height: 100%;
     position: absolute;
     opacity: 0;
+    cursor: pointer;
   }
 }
 </style>
