@@ -19,6 +19,13 @@ import Vuetify, {
   VExpansionPanel,
   VDialog,
   VSpacer,
+  VTooltip,
+  VTabItem,
+  VCardText,
+  VTabs,
+  VTab,
+  VToolbar,
+  VToolbarTitle,
 } from 'vuetify/lib';
 
 Vue.use(Vuetify, {
@@ -41,7 +48,14 @@ Vue.use(Vuetify, {
     VCard,
     VExpansionPanel,
     VDialog,
-    VSpacer
+    VSpacer,
+    VTooltip,
+    VTabItem,
+    VCardText,
+    VTabs,
+    VTab,
+    VToolbar,
+    VToolbarTitle,
   }
 });
 
