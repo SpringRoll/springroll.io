@@ -11,16 +11,6 @@
       solo
     ></v-select>
     <CodeBlock :code="codeBlocks[currentExample].code"></CodeBlock>
-    <!-- <div class="code__controls">
-      <v-btn color="accent" class="controls font-14" @click="currentExample='openDB'">Open DB</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='deleteStore'">Delete Store</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='createRecord'">Create Record</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='updateRecord'">Update Record</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='deleteRecord'">Delete Record</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='getRecord'">Get Record</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='deleteDB'">Delete DB</v-btn>
-      <v-btn color="accent" class="controls font-14" @click="currentExample='closeDB'">Close DB</v-btn>
-    </div> -->
   </div>
   <IDBDocs slot="docs"></IDBDocs>
 </Example>

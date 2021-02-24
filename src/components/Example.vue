@@ -7,7 +7,6 @@
       </div>
       <div class="example__column --row">
         <slot name="code"></slot>
-        <slot name="code-tabs"></slot>
       </div>
     </div>
     <div class="example__guide">
@@ -42,6 +41,8 @@ export default {
     }
 
     @media screen and (max-width: 768px) {
+      width: 100%;
+
       &.--row {
         padding-top: 12rem;
       }
