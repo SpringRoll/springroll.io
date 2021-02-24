@@ -32,10 +32,13 @@ export default {
     return {
       codeBlocks: {
         openDB: '',
+        deleteStore: '',
         createRecord: '',
         updateRecord: '',
         deleteRecord: '',
-        deleteBD: ''
+        getRecord: '',
+        deleteDB: '',
+        closeDB: '',
       },
     };
   },

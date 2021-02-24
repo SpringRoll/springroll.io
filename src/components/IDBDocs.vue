@@ -1,23 +1,26 @@
 <template>
-<v-card>
-  <v-toolbar flat color="primary" dark>
-    <v-toolbar-title class="font-21">Indexed DB</v-toolbar-title>
-  </v-toolbar>
-  <v-tabs vertical>
-    <v-tab class="font-16" v-for="(section) in docs" v-bind:key="section.name">
-      {{ section.name }}
-    </v-tab>
-    <v-tab-item v-for="(section, index) in docs" v-bind:key="index">
-      <v-card flat>
-        <v-card-text>
-          <ol v-html="section.steps" class="font-16">
-          </ol>
-        </v-card-text>
-      </v-card>
-    </v-tab-item>
+<div class="idb__container">
+  <a class="idb__readme" href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/state#indexeddb">UserData - IndexedDB README</a>
+  <v-card>
+    <v-toolbar flat color="primary" dark>
+      <v-toolbar-title class="font-21">Indexed DB</v-toolbar-title>
+    </v-toolbar>
+    <v-tabs vertical>
+      <v-tab class="font-16" v-for="(section) in docs" v-bind:key="section.name">
+        {{ section.name }}
+      </v-tab>
+      <v-tab-item v-for="(section, index) in docs" v-bind:key="index">
+        <v-card flat>
+          <v-card-text>
+            <ol v-html="section.steps" class="font-16">
+            </ol>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
 
-  </v-tabs>
-</v-card>
+    </v-tabs>
+  </v-card>
+</div>
 </template>
 
 <script>
