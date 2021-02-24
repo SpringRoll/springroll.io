@@ -14,7 +14,7 @@ $standard-width: 37.8rem;
 .code-block {
   color: $black !important;
   background-color: $white-background !important;
-  width: $standard-width !important;
+  width: 100% !important;
   min-height: 26.4rem !important;
   padding: 1.6rem 2.4rem !important;
   height: 100% !important;

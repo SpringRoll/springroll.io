@@ -7,6 +7,7 @@
       </div>
       <div class="example__column --row">
         <slot name="code"></slot>
+        <slot name="code-tabs"></slot>
       </div>
     </div>
     <div class="example__guide">

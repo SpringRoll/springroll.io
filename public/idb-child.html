@@ -138,7 +138,7 @@
 
     const openButton = document.querySelector('#open');
     const createButton = document.querySelector('#create');
-    const udpateButton = document.querySelector('#update');
+    const updateButton = document.querySelector('#update');
     const deleteButton = document.querySelector('#delete');
     const readButton = document.querySelector('#read');
     const deleteDBButton = document.querySelector('#deleteDB');
@@ -153,8 +153,6 @@
     const recordValue = document.querySelector('#recordValue');
 
     testApp.container.on('connected', async () => {
-
-      const userData = new springroll.UserData();
 
       openButton.addEventListener('click', async () => {
 
