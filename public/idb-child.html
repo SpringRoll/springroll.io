@@ -44,6 +44,7 @@
       display: flex;
       justify-content: space-evenly;
       align-items: flex-end;
+      flex-wrap: wrap;
     }
 
     .buttons>.action {
@@ -52,6 +53,7 @@
       cursor: pointer;
       margin: 0.4rem;
       border: none;
+      flex: 0 1 75px;
     }
 
     .action:hover {
@@ -68,6 +70,8 @@
         class="label">Database Name: </label>
       <label for="storeName"
         class="label">Store Name: </label>
+      <label for="deleteStoreName"
+        class="label">Delete Store Name: </label>
       <label for="version"
         class="label">Version: </label>
       <label for="recordKey"
@@ -83,6 +87,10 @@
       <input type="text"
         class="input"
         id="storeName"
+        value="">
+      <input type="text"
+        class="input"
+        id="deleteStoreName"
         value="">
       <input type="number"
         min="0"
@@ -102,15 +110,21 @@
 
   <div class="buttons">
     <button id="open"
-      class="action">Open Connection</button>
+      class="action">Open DB Connection</button>
+    <button id="deleteStore"
+      class="action">Delete Store</button>
     <button id="create"
       class="action">Create Record</button>
     <button id="update"
       class="action">Update Record</button>
     <button id="delete"
       class="action">Delete Record</button>
+    <button id="read"
+      class="action">Get Record</button>
     <button id="deleteDB"
       class="action">Delete Database</button>
+    <button id="closeDB"
+      class="action">Close DB Connection</button>
   </div>
 
   <script src="../js/SpringRoll-umd.js"></script>
@@ -124,12 +138,16 @@
 
     const openButton = document.querySelector('#open');
     const createButton = document.querySelector('#create');
-    const udpateButton = document.querySelector('#udpate');
+    const udpateButton = document.querySelector('#update');
     const deleteButton = document.querySelector('#delete');
+    const readButton = document.querySelector('#read');
     const deleteDBButton = document.querySelector('#deleteDB');
+    const closeButton = document.querySelector('#closeDB');
+    const deleteStoreButton = document.querySelector('#deleteStore');
 
     const dbName = document.querySelector('#dbName');
     const storeName = document.querySelector('#storeName');
+    const deleteStoreName = document.querySelector('#deleteStoreName');
     const version = document.querySelector('#version');
     const recordKey = document.querySelector('#recordKey');
     const recordValue = document.querySelector('#recordValue');
@@ -138,82 +156,55 @@
 
       const userData = new springroll.UserData();
 
-      document.querySelector('#createDB').onclick = async () => {
+      openButton.addEventListener('click', async () => {
 
-        let storesValue = document.getElementById('storeName').value;
-        let deleteStoreName = document.getElementById('deleteStoreName').value;
-        let DBNameValue = document.getElementById('DBName').value;
-        let DBVersion = document.getElementById('DBVersions').value;
-
-        // let openResult = await springroll.UserData.IDBOpen(DBNameValue);
-
-        let openResult = await springroll.UserData.IDBOpen(DBNameValue, DBVersion != "" ? DBVersion : null,
-          storesValue != "" ? {
-            stores: [{ storeName: storesValue }],
-
-          } : null, deleteStoreName != "" ? {
-            stores: [{ storeName: deleteStoreName }]
-          } : null
-        );
+        let openResult = await springroll.UserData.IDBOpen(dbName.value, version.value != "" ? version : null,
+          storeName.value != "" ? { stores: [{ storeName: storeName.value }], } : null);
         console.log(openResult);
-      }
+      });
 
-      document.querySelector('#addRecord').onclick = async () => {
+      deleteStoreButton.addEventListener('click', async () => {
 
-        let recordStore = document.getElementById('recordStore').value;
-        let recordKey = document.getElementById('recordKey').value;
-        let recordValue = document.getElementById('recordValue').value;
+        let deleteResult = await springroll.UserData.IDBOpen(dbName.value, version.value != "" ? version : null,
+          null, deleteStoreName.value != "" ? { stores: [{ storeName: deleteStoreName.value }] } : null);
+        console.log(deleteResult);
+      });
 
-        console.log(await springroll.UserData.IDBAdd(recordStore, recordValue, recordKey));
+      createButton.addEventListener('click', async () => {
 
+        console.log(await springroll.UserData.IDBAdd(storeName.value, recordValue.value, recordKey.value));
+      });
 
-      }
-      document.querySelector('#updateRecord').onclick = async () => {
+      updateButton.addEventListener('click', async () => {
 
-        let recordStore = document.getElementById('updateRecordStore').value;
-        let recordKey = document.getElementById('updateRecordKey').value;
-        let recordValue = document.getElementById('updateRecordValue').value;
+        console.log(await springroll.UserData.IDBUpdate(storeName.value, recordKey.value, recordValue.value));
+      });
 
-        console.log(await springroll.UserData.IDBUpdate(recordStore, recordKey, recordValue));
-      }
+      deleteButton.addEventListener('click', async () => {
 
-      document.querySelector('#deleteRecord').onclick = async () => {
-
-        let recordStore = document.getElementById('deleteRecordStore').value;
-        let recordKey = document.getElementById('deleteRecordKey').value;
-
-        console.log(await springroll.UserData.IDBRemove(recordStore, recordKey));
+        console.log(await springroll.UserData.IDBRemove(storeName.value, recordKey.value));
 
 
-      }
+      });
 
-      document.querySelector('#deleteDB').onclick = async () => {
+      deleteDBButton.addEventListener('click', async () => {
 
-        let deleteDBName = document.getElementById('deleteDBName').value;
+        console.log(await springroll.UserData.IDBDeleteDB(dbName.value));
 
-        console.log(await springroll.UserData.IDBDeleteDB(deleteDBName));
+      });
 
+      readButton.addEventListener('click', async () => {
 
-      }
-
-      document.querySelector('#readRecord').onclick = async () => {
-
-        let readRecordStore = document.getElementById('readRecordStore').value;
-        let readRecordKey = document.getElementById('readRecordKey').value;
-
-        console.log(await springroll.UserData.IDBRead(readRecordStore, readRecordKey).result);
-
-        let result = await springroll.UserData.IDBRead(readRecordStore, readRecordKey);
+        let result = await springroll.UserData.IDBRead(storeName.value, recordKey.value);
 
         console.log(result);
-        document.getElementById('recordOut').innerHTML = result.data.result;
+        //document.getElementById('recordOut').innerHTML = result.data.result;
 
+      });
 
-      }
-
-      document.querySelector('#closeDB').onclick = async () => {
+      closeButton.addEventListener('click', async () => {
         console.log(await springroll.UserData.IDBClose());
-      }
+      });
 
     });
 
