@@ -27,6 +27,7 @@ import Vuetify, {
   VTab,
   VToolbar,
   VToolbarTitle,
+  VDataTable,
 } from 'vuetify/lib';
 
 Vue.use(Vuetify, {
@@ -57,6 +58,7 @@ Vue.use(Vuetify, {
     VTab,
     VToolbar,
     VToolbarTitle,
+    VDataTable,
   }
 });
 
