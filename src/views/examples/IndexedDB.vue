@@ -63,15 +63,14 @@ export default {
       loading: false,
       dataVisual: '',
       headers: [{
-          text: 'Key',
-          value: 'key',
-          align: 'start'
-        },
-        {
-          text: 'Value',
-          value: 'value'
-        }
-      ],
+        text: 'Key',
+        value: 'key',
+        align: 'start'
+      },
+      {
+        text: 'Value',
+        value: 'value'
+      }],
       dbData: {
         dbName: '',
         store: '',
@@ -239,7 +238,7 @@ console.log(closeResult)
       } else {
         this.dbData.store = data.storeName ? data.storeName : '';
       }
-    }, //eslint-disable-next-line
+    },
     getData: async function () {
       this.visualizeError = '';
       if (!this.dbData.dbName) {
@@ -288,7 +287,7 @@ console.log(closeResult)
       request.onerror = (e) => {
         console.log('Error Getting: ', e);
         this.loading = false;
-      }
+      };
     },
     promisifiedRead(key) {
       return new Promise((resolve, reject) => {

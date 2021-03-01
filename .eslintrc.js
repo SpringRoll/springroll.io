@@ -12,29 +12,30 @@ module.exports = {
     should: true,
     springroll: true
   },
-  plugins: ["node", "prettier"],
-  extends: ["eslint:recommended", "plugin:vue/essential"],
+  plugins: ['node', 'prettier'],
+  extends: ['eslint:recommended', 'plugin:vue/essential'],
   parserOptions: {
-    sourceType: "module"
+    sourceType: 'module',
+    ecmaVersion: '2017'
   },
   rules: {
-    "prefer-const": [
-      "error",
+    'prefer-const': [
+      'error',
       {
-        destructuring: "any",
+        destructuring: 'any',
         ignoreReadBeforeAssign: false
       }
     ],
-    "space-before-blocks": [
-      "error",
-      { functions: "always", keywords: "always", classes: "always" }
+    'space-before-blocks': [
+      'error',
+      { functions: 'always', keywords: 'always', classes: 'always' }
     ],
-    "keyword-spacing": ["error"],
-    indent: ["error", 2],
-    semi: ["error", "always", { omitLastInOneLineBlock: true }],
-    "no-console": [0],
-    quotes: [2, "single"],
-    curly: ["error", "all"],
-    "no-var": "error"
+    'keyword-spacing': ['error'],
+    indent: ['error', 2],
+    semi: ['error', 'always', { omitLastInOneLineBlock: true }],
+    'no-console': [0],
+    quotes: [2, 'single'],
+    curly: ['error', 'all'],
+    'no-var': 'error'
   }
 };
