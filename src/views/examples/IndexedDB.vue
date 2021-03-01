@@ -2,9 +2,21 @@
 <Example>
   <div class="idb__game-container" slot="example">
     <iframe slot="example" class="idb__game" id="idb"></iframe>
-    <v-btn :loading="loading" color="primary" class="font-16" dark @click.stop="getData">
-      Display Data
-    </v-btn>
+    <v-tooltip top>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn :loading="loading" color="primary" class="font-16" dark v-bind="attrs" v-on="on" @click.stop="getData">
+          Display Data
+        </v-btn>
+      </template>
+      <span>Display latest used store</span>
+    </v-tooltip>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field label="Store to Display" v-model="dbData.store" v-bind="attrs" v-on="on"></v-text-field>
+      </template>
+      <span>Change to use a different store when displaying the database</span>
+    </v-tooltip>
+    <p v-if="visualizeError" class="data-display__error">{{ visualizeError }}</p>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="primary">
@@ -13,12 +25,7 @@
           </v-btn>
           <v-toolbar-title class="font-21">Settings</v-toolbar-title>
         </v-toolbar>
-          <v-data-table
-            :headers="headers"
-            :items="dataVisual"
-            :items-per-page="10"
-            class="elevation-1"
-          ></v-data-table>
+        <v-data-table :headers="headers" :items="dataVisual" :items-per-page="10" class="elevation-1"></v-data-table>
       </v-card>
     </v-dialog>
   </div>
@@ -51,12 +58,19 @@ export default {
   data() {
     return {
       currentExample: 'openDB',
+      visualizeError: '',
       dialog: false,
       loading: false,
       dataVisual: '',
-      headers: [
-        { text: 'Key', value: 'key', align: 'start'},
-        { text: 'Value', value: 'value'}
+      headers: [{
+          text: 'Key',
+          value: 'key',
+          align: 'start'
+        },
+        {
+          text: 'Value',
+          value: 'value'
+        }
       ],
       dbData: {
         dbName: '',
@@ -184,7 +198,7 @@ console.log(closeResult)
   },
   mounted() {
     const userDataPlugin = new UserDataPlugin();
-    const events = [ 'IDBOpen', 'IDBAdd', 'IDBRemove', 'IDBRead', 'IDBUpdate', 'IDBClose', 'IDBReadAll', 'IDBDeleteDB' ];
+    const events = ['IDBOpen', 'IDBAdd', 'IDBRemove', 'IDBRead', 'IDBUpdate', 'IDBClose', 'IDBReadAll', 'IDBDeleteDB'];
 
     const container = new Container('#idb', {
       plugins: [
@@ -199,7 +213,7 @@ console.log(closeResult)
     events.forEach(event => {
       this.container.client.on(event, (data) => {
         this.currentExample = this.eventMap[data.type];
-        this.setDBData(data.data);
+        this.setDBData(data.data, 'event');
       });
     });
 
@@ -210,25 +224,45 @@ console.log(closeResult)
   },
   methods: {
     setDBData(data) {
-      this.dbData.dbName = data.dbName ? data.dbName : '';
+
+      //reset data if the current database is removed
+      if (data.type === 'IDBRemove') {
+        this.dbData.dbName = '';
+        this.dbData.store = '';
+        return;
+      }
+
+      this.dbData.dbName = data.dbName ? data.dbName : this.dbData.dbName;
+
       if (data.additions) {
         this.dbData.store = data.additions.stores[0].storeName;
       } else {
-        this.dbData.store = data.storeName ?  data.storeName : '';
+        this.dbData.store = data.storeName ? data.storeName : '';
       }
-    },
-    /* eslint-disable */
-    getData: async function() {
+    }, //eslint-disable-next-line
+    getData: async function () {
+      this.visualizeError = '';
+      if (!this.dbData.dbName) {
+        this.visualizeError = 'Database Visualization requires an open DB connection';
+        return;
+      }
       this.loading = true;
       const request = window.indexedDB.open(this.dbData.dbName);
 
-      //const promisifiedRead = this.promisifiedRead.bind(this);
-
       request.onsuccess = (e) => {
         const db = e.target.result;
-        const trans = db.transaction(this.dbData.store, 'readwrite');
-        const store = trans.objectStore(this.dbData.store);
-        const request = store.getAllKeys(); //get the data
+        let trans, store, request;
+
+        try {
+          trans = db.transaction(this.dbData.store, 'readwrite');
+          store = trans.objectStore(this.dbData.store);
+          request = store.getAllKeys(); //get the data
+        } catch (error) {
+          console.error(error);
+          this.visualizeError = error;
+          this.loading = false;
+          return;
+        }
 
         request.onsuccess = async (e) => {
           const data = e.target.result; //  All records in store
@@ -236,7 +270,10 @@ console.log(closeResult)
 
           const results = [];
           for (const key of data) {
-            results.push({key: key, value: await this.promisifiedRead(key)});
+            results.push({
+              key: key,
+              value: await this.promisifiedRead(key)
+            });
           }
           this.dataVisual = results;
           this.loading = false;
@@ -244,9 +281,14 @@ console.log(closeResult)
         };
 
         request.onerror = (e) => {
+          this.loading = false;
           console.log('Error Getting: ', e);
         };
       };
+      request.onerror = (e) => {
+        console.log('Error Getting: ', e);
+        this.loading = false;
+      }
     },
     promisifiedRead(key) {
       return new Promise((resolve, reject) => {
@@ -298,15 +340,18 @@ console.log(closeResult)
 
 //TODO: organize this a bit more cleanly
 //Dealing with the vuetify font-sizes
-.v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+.v-data-table>.v-data-table__wrapper>table>tbody>tr>td {
   font-size: 16px;
 }
-.v-data-table > .v-data-table__wrapper > table > thead > tr > th {
+
+.v-data-table>.v-data-table__wrapper>table>thead>tr>th {
   font-size: 16px;
 }
+
 .v-data-footer__select .v-select__selections .v-select__selection--comma {
   font-size: 16px;
 }
+
 .v-data-footer {
   font-size: 16px !important;
 }

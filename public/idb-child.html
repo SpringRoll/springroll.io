@@ -40,7 +40,7 @@
 
     .buttons {
       width: 100%;
-      height: calc(50vh - 1rem);
+      height: calc(30vh - 1rem);
       display: flex;
       justify-content: space-evenly;
       align-items: flex-end;
@@ -92,8 +92,7 @@
         class="input"
         id="deleteStoreName"
         value="">
-      <input type="number"
-        min="0"
+      <input type="text"
         class="input"
         id="version"
         value="">
@@ -106,6 +105,10 @@
         id="recordValue"
         value="">
     </div>
+  </div>
+
+  <div class="messages">
+    <p id="message"></p>
   </div>
 
   <div class="buttons">
@@ -152,42 +155,78 @@
     const recordKey = document.querySelector('#recordKey');
     const recordValue = document.querySelector('#recordValue');
 
+    const messageLine = document.querySelector('#message');
+
     testApp.container.on('connected', async () => {
 
       openButton.addEventListener('click', async () => {
 
-        let openResult = await springroll.UserData.IDBOpen(dbName.value, version.value != "" ? version : null,
+        let formattedVersion = null;
+
+        if (version.value === 'true') {
+          formattedVersion = true;
+        } else if (version.value === 'false') {
+          formattedVersion = false;
+        } else {
+          formattedVersion = Number.isNaN(+version.value) ? null : +version.value;
+        }
+
+        console.log('FORMATTED', formattedVersion);
+
+        let openResult = await springroll.UserData.IDBOpen(dbName.value, formattedVersion,
           storeName.value != "" ? { stores: [{ storeName: storeName.value }], } : null);
+
         console.log(openResult);
+        messageLine.innerHTML = openResult.result;
       });
 
       deleteStoreButton.addEventListener('click', async () => {
+        let formattedVersion = null;
 
-        let deleteResult = await springroll.UserData.IDBOpen(dbName.value, version.value != "" ? version : null,
+        if (version.value === 'true') {
+          formattedVersion = true;
+        } else if (version.value === 'false') {
+          formattedVersion = false;
+        } else {
+          formattedVersion = Number.isNaN(+version.value) ? null : +version.value;
+        }
+
+        let deleteResult = await springroll.UserData.IDBOpen(dbName.value, version.value !== "" ? version : null,
           null, deleteStoreName.value != "" ? { stores: [{ storeName: deleteStoreName.value }] } : null);
         console.log(deleteResult);
+
+        messageLine.innerHTML = deleteResult.data.result;
       });
 
       createButton.addEventListener('click', async () => {
 
-        console.log(await springroll.UserData.IDBAdd(storeName.value, recordValue.value, recordKey.value));
+        const result = await springroll.UserData.IDBAdd(storeName.value, recordValue.value, recordKey.value);
+        console.log(result)
+        messageLine.innerHTML = result.data.result;
+
       });
 
       updateButton.addEventListener('click', async () => {
 
-        console.log(await springroll.UserData.IDBUpdate(storeName.value, recordKey.value, recordValue.value));
+        const result = await springroll.UserData.IDBUpdate(storeName.value, recordKey.value, recordValue.value);
+        console.log(result)
+        messageLine.innerHTML = result.data.result;
+
       });
 
       deleteButton.addEventListener('click', async () => {
 
-        console.log(await springroll.UserData.IDBRemove(storeName.value, recordKey.value));
-
+        const result = await springroll.UserData.IDBRemove(storeName.value, recordKey.value);
+        console.log(result)
+        messageLine.innerHTML = result.data.result;
 
       });
 
       deleteDBButton.addEventListener('click', async () => {
 
-        console.log(await springroll.UserData.IDBDeleteDB(dbName.value));
+        let result = await springroll.UserData.IDBDeleteDB(dbName.value);
+        console.log(result)
+        messageLine.innerHTML = result.data.result;
 
       });
 
@@ -196,7 +235,11 @@
         let result = await springroll.UserData.IDBRead(storeName.value, recordKey.value);
 
         console.log(result);
-        //document.getElementById('recordOut').innerHTML = result.data.result;
+        if (result.data.success) {
+          messageLine.innerHTML = `Value returned from Key "${recordKey.value}" = ${result.data.result}`;
+        } else {
+          messageLine.innerHTML = `IDBRead unsuccessful. Key either does not exist or the DB connection was not properly opened`;
+        }
 
       });
 
