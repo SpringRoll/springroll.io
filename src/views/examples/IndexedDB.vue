@@ -106,7 +106,8 @@ testApp.container.on('connected', async () => {
     //Open database call is also used to create new stores if required
     let openResult = await springroll.UserData.IDBOpen(
         dbName.value,
-        version.value,
+        // note that version expects a number/boolean so it should be cast if required(i.e. from an input field)
+        Number.parseInt(version.value),
         { stores: [{ storeName: storeName.value }] } //additions parameter. Used to create new store
     );
 

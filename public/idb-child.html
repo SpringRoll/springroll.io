@@ -168,10 +168,8 @@
         } else if (version.value === 'false') {
           formattedVersion = false;
         } else {
-          formattedVersion = Number.isNaN(+version.value) ? null : +version.value;
+          formattedVersion = Number.isNaN(Number.parseInt(version.value)) ? null : Number.parseInt(version.value);
         }
-
-        console.log('FORMATTED', formattedVersion);
 
         let openResult = await springroll.UserData.IDBOpen(dbName.value, formattedVersion,
           storeName.value != "" ? { stores: [{ storeName: storeName.value }], } : null);
@@ -188,7 +186,7 @@
         } else if (version.value === 'false') {
           formattedVersion = false;
         } else {
-          formattedVersion = Number.isNaN(+version.value) ? null : +version.value;
+          formattedVersion = Number.isNaN(Number.parseInt(version.value)) ? null : Number.parseInt(version.value);
         }
 
         let deleteResult = await springroll.UserData.IDBOpen(dbName.value, version.value !== "" ? version : null,
