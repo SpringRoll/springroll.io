@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - character count for captions and warning when over 40 characters per line
 - caption error reporting
 - Safe Scale Manager demo page
+- Indexed DB demo page under examples/
 
 ## Changed
 - Import is changed to allow for individual files rather than whole directories
