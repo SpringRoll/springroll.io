@@ -65,7 +65,7 @@ export default {
 
   &__guide {
     width: 100%;
-    margin-top: 9rem;
+    margin-top: 12rem;
   }
 }
 </style>
