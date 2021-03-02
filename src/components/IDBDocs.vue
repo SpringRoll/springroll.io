@@ -32,7 +32,8 @@ export default {
           steps: `<li>Enter a value for Database Name and Store Name </li>
                   <li>Optional: Enter 2 for DBVersion. The higher number is for ease of testing when deleting the database</li>
                   <li>Click the “Open Database” button</li>
-                  <li>To see this database, open the dev console with the f12 key</li>
+                  <li>To see this database click the "Display Data" button</li>
+                  <li>Optionally you can view the database information inside the dev tools console by hitting "f12"</li>
                   <li>Go to the Storage Tab, it may be hidden inside the >> menu </li>
                   <li>Under Indexed BD > should be your database with the given store.</li>`,
           name: 'Open Database'
@@ -47,7 +48,7 @@ export default {
                   <li>Enter a value for the recordKey</li>
                   <li>Enter a value for the recordValue</li>
                   <li>Press the “Create Record” button</li>
-                  <li>You can check the value either by using the dev tools or by following the Read Record step</li>`,
+                  <li>You can check the value either by using the "Display Data" button, using the dev tools or by following the Read Record step</li>`,
           name: 'Create a Record'
         },
         update: {
@@ -55,14 +56,14 @@ export default {
                   <li>Enter a value for the updateRecordKey</li>
                   <li>Enter a value for the updateRecordValue</li>
                   <li>Press the “Update Record” button</li>
-                  <li>You can check the value either by using the dev tools or by following the Read Record step</li>`,
+                  <li>You can check the value either by using the "Display Data" button, the dev tools or by following the Read Record step</li>`,
           name: 'Update a Record'
         },
         delete: {
           steps: `<li>Enter a value for deleteRecordStore, the value given in the open connection step</li>
                   <li>Enter a value for the deleteRecordKey</li>
                   <li>Press the “Delete Record” button</li>
-                  <li>You can check the value either by using the dev tools or by following the Read Record step, this should output undefined</li>`,
+                  <li>You can check the value either by using the "Display Data" button, the dev tools or by following the Read Record step, this should output undefined</li>`,
           name: 'Delete a Record'
         },
         read: {
