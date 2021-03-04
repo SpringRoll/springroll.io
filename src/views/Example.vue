@@ -29,6 +29,9 @@ export default {
         },
         {
           name: 'Bellhop'
+        },
+        {
+          name: 'IndexedDB'
         }
       ]
     };

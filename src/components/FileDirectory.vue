@@ -1,12 +1,12 @@
 <template>
   <v-list>
     <v-list-group class="directory" :value="true" prepend-icon="folder">
-      <v-list-tile slot="activator" class="directory__dir-name">
-        <v-list-tile-content>
-          <v-list-tile-title class="directory__name font-semi-bold font-16">{{ name }}</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile-content v-for="(value, index) in files" :key="index">
+      <v-list-item slot="activator" class="directory__dir-name">
+        <v-list-item-content>
+          <v-list-item-title class="directory__name font-semi-bold font-16">{{ name }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item-content v-for="(value, index) in files" :key="index">
         <label class="directory__file">
           <v-icon class="directory__icon" :class="{'--active': value.active}">audiotrack</v-icon>
           <input
@@ -24,7 +24,7 @@
           >{{value.file.name}}</label>
           <v-icon class="directory__icon" v-show="filesWithCaptions[value.file.name]">done</v-icon>
         </label>
-      </v-list-tile-content>
+      </v-list-item-content>
       <file-directory
         v-for="(value, key) in directory.dir"
         :key="key"

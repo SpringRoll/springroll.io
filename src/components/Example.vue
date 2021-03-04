@@ -9,6 +9,9 @@
         <slot name="code"></slot>
       </div>
     </div>
+    <div class="example__guide">
+      <slot name="docs"></slot>
+    </div>
   </div>
 </template>
 
@@ -21,18 +24,25 @@ export default {
 
 <style lang="scss">
 .example {
+
+  &__component {
+    display: flex;
+    flex-direction: column;
+  }
   &__column {
     display: flex;
     flex-direction: column;
     min-height: 26.4rem;
     margin-right: 10.9rem;
-    width: 37.8rem;
+    width: 50%;
 
     &.--large {
       width: 50%;
     }
 
     @media screen and (max-width: 768px) {
+      width: 100%;
+
       &.--row {
         padding-top: 12rem;
       }
@@ -46,10 +56,16 @@ export default {
   &__slots {
     display: flex;
     width: 100%;
+    margin-bottom: 2rem;
 
     @media screen and (max-width: 768px) {
       flex-direction: column;
     }
+  }
+
+  &__guide {
+    width: 100%;
+    margin-top: 12rem;
   }
 }
 </style>
