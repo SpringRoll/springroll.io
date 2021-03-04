@@ -1,6 +1,6 @@
 <template>
 <div class="idb__container">
-  <a class="idb__readme" href="https://github.com/SpringRoll/SpringRoll/tree/develop/src/state#indexeddb">UserData - IndexedDB README</a>
+  <a class="idb__readme" href="https://github.com/SpringRoll/SpringRoll/tree/main/src/state#indexeddb">UserData - IndexedDB README</a>
   <v-card>
     <v-toolbar flat color="primary" dark>
       <v-toolbar-title class="font-21">Indexed DB</v-toolbar-title>
