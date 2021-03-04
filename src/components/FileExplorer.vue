@@ -22,12 +22,14 @@
       <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
     </div>
     <v-dialog v-else v-model="dialog" width="500">
+      <template v-slot:activator="{ on }">
       <v-btn
-        slot="activator"
+        v-on="on"
         color="accent"
         class="v-btn accent explorer__input --file font-semi-bold font-16"
       >Import Files</v-btn>
-      <v-card>
+      </template>
+      <v-card id="import-warning-dialog">
         <v-card-title class="error" primary-title>
           <h2 class="font-semi-bold json__dialog-title">Warning</h2>
         </v-card-title>
@@ -42,10 +44,10 @@
             @click="dialog = false"
             class="v-btn accent explorer__input --dialog font-semi-bold font-16"
           >Cancel</v-btn>
-          <div class="v-btn error explorer__input --dialog font-semi-bold font-16">
+          <v-btn class="v-btn error explorer__input --dialog font-semi-bold font-16">
             <span>Import Files</span>
             <input class="explorer__file-input" @change="loadFiles" type="file" accept=".ogg,.mpeg,.mp3" multiple= />
-          </div>
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -99,6 +101,10 @@ export default {
 
 <style lang="scss">
 @import '~@/scss/colors';
+
+#import-warning-dialog {
+  padding: 1rem !important;
+}
 .explorer {
   width: 28.2rem;
   min-width: 28.2rem;
@@ -123,6 +129,7 @@ export default {
     position: relative;
     margin: 3rem 0 !important;
     flex: end;
+    cursor: pointer;
 
     &.--directory {
       margin: 3rem 0 1rem 0 !important;
@@ -164,6 +171,7 @@ export default {
     height: 100%;
     position: absolute;
     opacity: 0;
+    cursor: pointer;
   }
 }
 </style>

@@ -9,7 +9,7 @@
       :
       <input class="time-stamp-input__input" v-model="milliseconds" type="number" min="0" step="1"/>
     </div>
-    <v-btn flat @click="getTime" class="time-stamp-input__button font-16 font-semi-bold capitalize">Use Current Time</v-btn>
+    <v-btn text @click="getTime" class="time-stamp-input__button font-16 font-semi-bold capitalize">Use Current Time</v-btn>
   </div>
 </div>
 </template>

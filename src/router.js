@@ -15,6 +15,7 @@ import ColorFilter from '@/views/examples/ColorFilter';
 import ScaleManager from '@/views/examples/ScaleManager';
 import Controls from '@/views/examples/Controls';
 import Bellhop from '@/views/examples/Bellhop';
+import IndexedDB from '@/views/examples/IndexedDB';
 
 Vue.use(Router);
 
@@ -74,6 +75,11 @@ export default new Router({
           path: 'bellhop',
           name: 'Bellhop',
           component: Bellhop
+        },
+        {
+          path: 'indexeddb',
+          name: 'IndexedDB',
+          component: IndexedDB
         }
       ]
     }

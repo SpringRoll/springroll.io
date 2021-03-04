@@ -1,49 +1,82 @@
+import '@mdi/font/css/materialdesignicons.css'; // Ensure you are using css-loader
 import Vue from 'vue';
-import {
-  Vuetify,
+import Vuetify, {
   VForm,
   VApp,
   VBtn,
-  VGrid,
-  VToolbar,
+  VMain,
+  VAppBar,
   VTextField,
   VSlider,
   VSelect,
   VList,
+  VListGroup,
+  VListItem,
+  VListItemContent,
+  VListItemTitle,
   VIcon,
   VNavigationDrawer,
   VCard,
   VExpansionPanel,
-  VDialog
-} from 'vuetify';
-import 'vuetify/src/stylus/app.styl';
+  VDialog,
+  VSpacer,
+  VTooltip,
+  VTabItem,
+  VCardText,
+  VTabs,
+  VTab,
+  VToolbar,
+  VToolbarTitle,
+  VDataTable,
+} from 'vuetify/lib';
 
 Vue.use(Vuetify, {
   components: {
     VForm,
     VApp,
     VBtn,
-    VGrid,
-    VToolbar,
+    VAppBar,
+    VMain,
     VTextField,
     VSlider,
     VSelect,
     VList,
+    VListGroup,
+    VListItem,
+    VListItemContent,
+    VListItemTitle,
     VIcon,
     VNavigationDrawer,
     VCard,
     VExpansionPanel,
-    VDialog
-  },
-  theme: {
-    primary: '#095B8F',
-    secondary: '#123550',
-    accent: '#0C7AC0',
-    error: '#FF5252',
-    info: '#2196F3',
-    success: '#4CAF50',
-    warning: '#FFC107'
+    VDialog,
+    VSpacer,
+    VTooltip,
+    VTabItem,
+    VCardText,
+    VTabs,
+    VTab,
+    VToolbar,
+    VToolbarTitle,
+    VDataTable,
   }
 });
 
-import './vuetify.styl';
+const opts = {
+  theme: {
+    dark: false,
+    themes: {
+      light: {
+        primary: '#095B8F',
+        secondary: '#123550',
+        accent: '#0C7AC0',
+        error: '#FF5252',
+        info: '#2196F3',
+        success: '#4CAF50',
+        warning: '#FFC107'
+      }
+    }
+  }
+};
+
+export default new Vuetify(opts);

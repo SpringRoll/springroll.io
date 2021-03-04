@@ -1,11 +1,11 @@
 <template>
-  <v-content>
+  <v-main>
     <v-container fluid>
       <transition name="swap">
         <router-view class="page"></router-view>
       </transition>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <style lang="scss">
