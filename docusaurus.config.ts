@@ -48,7 +48,7 @@ const config: Config = {
             'https://github.com/SpringRoll',
         },
         theme: {
-          customCss: './src/css/custom.scss',
+          customCss: './src/scss/custom.scss',
         },
       } satisfies Preset.Options,
     ],
