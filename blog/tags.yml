@@ -1,16 +1,9 @@
-facebook:
-  label: Facebook
-  permalink: /facebook
-  description: Facebook tag description
-hello:
-  label: Hello
-  permalink: /hello
-  description: Hello tag description
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
-hola:
-  label: Hola
-  permalink: /hola
-  description: Hola tag description
+springroll:
+  label: SpringRoll
+  permalink: /springroll
+  description: SpringRoll tag description
+releases:
+  label: Releases
+  permalink: /releases
+  description: Various SpringRoll ecosystem releases
+
