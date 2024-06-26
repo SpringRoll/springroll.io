@@ -86,25 +86,25 @@ const app = new window.springroll.Application();
 SpringRoll consists of a handful of modules intended to help developers improve the accessibility of their game.
 
 ### Application Module
-The `Application` class provides the main communication bus through which the game can send and receive messages to the container. It also manages global game state, such as pause and captions display. More information can be found in the [Application module documentation](./application-class). It also consists of a simple [plugin architecture](./plugin-architecture) for hooking into the load sequence of applications.
+The `Application` class provides the main communication bus through which the game can send and receive messages to the container. It also manages global game state, such as pause and captions display. More information can be found in the [Application module documentation](./application-class). It also consists of a simple [plugin architecture](./plugins) for hooking into the load sequence of applications.
 
 ### Accessibility Module
-SpringRoll contains submodules for various accessibility testing and enhancement. The [Color Filter module](./src/accessibility/color-filter) provides filters for testing color blindness support in your game. Enabling the class allows developers to see what their game would look like for various types of color vision deficiency. The [Speech Synth module](./accessibility/speech-synth) gives developers the ability to synthesize speech from text.
+SpringRoll contains submodules for various accessibility testing and enhancement. The [Color Filter module](./accessibility/color-filter) provides filters for testing color blindness support in your game. Enabling the class allows developers to see what their game would look like for various types of color vision deficiency. The [Speech Synth module](./accessibility/speech-synth) gives developers the ability to synthesize speech from text.
 
 ### Controller Module
 The [Controller module](./controller) provides a mechanism for mapping keyboard input to functions which can help centralize user input management and make supporting multiple input mechanisms easier.
 
 ### Debugger Module
-The [Debugger module](./src/debug) provides a centralized set of methods for logging that can be enabled or disabled at runtime.
+The [Debugger module](./debug) provides a centralized set of methods for logging that can be enabled or disabled at runtime.
 
 ### Localization Module
-The Localization module provides support for supporting [multiple languages in games](./src/localization/localizer) and [captions](./src/localization/captions)
+The Localization module provides support for supporting [multiple languages in games](./localization/localizer) and [captions](./localization/captions)
 
 ### Scale Manager Module
-The [Scale Manager module](./src/scale-manager) helps developers to react to screen size changes.
+The [Scale Manager module](./scale-manager) helps developers to react to screen size changes.
 
 ### State Manager Module
-The [State Manager module](./src/state) provides classes for creating subscribable properties that notify listeners when they are changed. This is used for managing pause, captions, and audio mute state in the [Application class](./src/), but can also be used for other generic uses.
+The [State Manager module](./state) provides classes for creating subscribable properties that notify listeners when they are changed. This is used for managing pause, captions, and audio mute state in the [Application class](./application-class), but can also be used for other generic uses.
 
 ## BrowserStack Testing
 To test Springroll v2 on BrowserStack. Copy `.env.sample` and rename it to `.env`. Replace the placeholder values with your own BrowserStack credentials, and then run `npm run test:bs`.
