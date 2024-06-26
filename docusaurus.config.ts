@@ -66,9 +66,15 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'springrollSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'SpringRoll',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'containerSidebar',
+          position: 'left',
+          label: 'SpringRoll Container',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -85,8 +91,12 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'SpringRoll',
+              to: '/docs/springroll/getting-started',
+            },
+            {
+              label: 'SpringRoll Container',
+              to: '/docs/springroll-container/getting-started',
             },
           ],
         },
