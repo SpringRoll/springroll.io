@@ -28,6 +28,10 @@ export default function GameDemo(): JSX.Element {
         <button type="button" className={styles.optionButton}>
           <span>Mute</span>
         </button>
+        <button type="button" className={styles.optionButton}>
+          <span>Hint</span>
+        </button>
+
 
         <h2 className={styles.gameHeader}>Game Events</h2>
 
