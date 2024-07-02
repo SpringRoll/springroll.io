@@ -21,16 +21,16 @@ export default function GameDemo(): JSX.Element {
 
       <div className={styles.gameEvents}>
         <h2 className={styles.gameHeader}>Game Options</h2>
+        
         <button type="button" className={styles.optionButton}>
           <span>Pause</span>
         </button>
         <button type="button" className={styles.optionButton}>
           <span>Mute</span>
         </button>
-        <button type="button" className={styles.optionButton}>
-          <span>Hint</span>
-        </button>
+
         <h2 className={styles.gameHeader}>Game Events</h2>
+
         <div className={styles.gameEvent}>Localiztion</div>
         <div className={styles.gameEvent}>Speech Synch</div>
         <div className={styles.gameEvent}>Pause</div>
