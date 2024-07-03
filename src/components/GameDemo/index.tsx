@@ -1,6 +1,8 @@
 import { useEffect, JSX } from 'react';
+import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { Container } from 'springroll-container';
+import Heading from '@theme/Heading';
 
 /**
  * Game Demo Component - Creates a springroll container and loads the demo game into it. Referenced in docs/Examples/game.mdx
@@ -20,26 +22,30 @@ export default function GameDemo(): JSX.Element {
       <iframe id="demo-game" className={styles.gameContainer}></iframe>
 
       <div className={styles.gameEvents}>
-        <h2 className={styles.gameHeader}>Game Options</h2>
+        <Heading as="h2" className={clsx('hero__subtitle', styles.gameHeader)}>
+          Game Options
+        </Heading>
         
-        <button type="button" className={styles.optionButton}>
+        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Pause</span>
         </button>
-        <button type="button" className={styles.optionButton}>
+        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Mute</span>
         </button>
-        <button type="button" className={styles.optionButton}>
+        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Hint</span>
         </button>
 
 
-        <h2 className={styles.gameHeader}>Game Events</h2>
+        <Heading as="h2" className={clsx('hero__subtitle', styles.gameHeader)}>
+          Game Events
+        </Heading>
 
-        <div className={styles.gameEvent}>Localiztion</div>
-        <div className={styles.gameEvent}>Speech Synch</div>
-        <div className={styles.gameEvent}>Pause</div>
-        <div className={styles.gameEvent}>Sound Mute</div>
-        <div className={styles.gameEvent}>Captions Start</div>
+        <div className={clsx('button button--secondary', styles.gameOptionButton)}>Localiztion</div>
+        <div className={clsx('button button--secondary', styles.gameOptionButton)}>Speech Synch</div>
+        <div className={clsx('button button--secondary', styles.gameOptionButton)}>Pause</div>
+        <div className={clsx('button button--secondary', styles.gameOptionButton)}>Sound Mute</div>
+        <div className={clsx('button button--secondary', styles.gameOptionButton)}>Captions Start</div>
       </div>
     </section>
   );
