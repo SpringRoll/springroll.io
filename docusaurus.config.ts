@@ -57,6 +57,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    announcementBar: {
+      id: 'springroll_release',
+      content:
+        'SpringRoll 2.6.0 is out now!',
+    },
     navbar: {
       title: 'SpringRoll',
       logo: {

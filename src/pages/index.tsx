@@ -4,6 +4,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
+//@ts-ignore
+import LogoUrl from '@site/static/img/logo.png';
 
 import styles from './index.module.scss';
 
@@ -11,17 +13,25 @@ function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
+      <div className={clsx('container', styles.hero__inner)}>
+        <img className={styles.mainLogo} src={LogoUrl} alt="SpringRoll Logo" />
+        <Heading as="h1" className="hero__title font-aleo">
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/docs/springroll/getting-started">
-            SpringRoll Tutorial - 5min ⏱️
-          </Link>
+        <p className="hero__subtitle font-aleo">{siteConfig.tagline}</p>
+
+        <div className={styles.tutorial__buttons}>
+        <p className="hero__subtitle font-aleo">Get started: </p>
+            <Link
+              className="button button--secondary button--lg"
+              to="/docs/springroll/getting-started">
+              SpringRoll
+            </Link>
+            <Link
+              className="button button--secondary button--lg"
+              to="/docs/springroll-container/getting-started">
+              SpringRoll Container
+            </Link>
         </div>
       </div>
     </header>
