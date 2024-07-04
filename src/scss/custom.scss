@@ -25,6 +25,14 @@
   --ifm-font-weight-normal: normal;
   --ifm-font-weight-semibold: 600;
   --ifm-font-weight-bold: 700;
+  --springroll-hero-bg-color: #F2F2F2;
+  --springroll-wave-opacity: 0.4;
+}
+
+.hero--primary {
+  --ifm-hero-background-color: var(--springroll-hero-bg-color)
+  // --ifm-heading-color: white;
+  --ifm-hero-text-color: var(--springroll-hero-text-color);
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -37,4 +45,7 @@
   --ifm-color-primary-lighter: #05ccf8;
   --ifm-color-primary-lightest: #23d3fb;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --springroll-hero-bg-color: rgb(43, 49, 55);
+  --springroll-wave-opacity: 0.5;
+  --springroll-hero-text-color: white;
 }

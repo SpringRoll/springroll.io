@@ -19,19 +19,22 @@ function HomepageHeader() {
           {siteConfig.title}
         </Heading>
         <p className="hero__subtitle font-aleo">{siteConfig.tagline}</p>
-
         <div className={styles.tutorial__buttons}>
-        <p className="hero__subtitle font-aleo">Get started: </p>
             <Link
-              className="button button--secondary button--lg"
+              className="button button--secondary"
               to="/docs/springroll/getting-started">
-              SpringRoll
+              SpringRoll Quick Start
             </Link>
             <Link
-              className="button button--secondary button--lg"
+              className="button button--secondary"
               to="/docs/springroll-container/getting-started">
-              SpringRoll Container
+              Container Quick Start
             </Link>
+            {/* <Link
+              className="button button--secondary"
+              to="/docs/Examples/game">
+              Demo Game
+            </Link> */}
         </div>
       </div>
     </header>

@@ -1,3 +1,4 @@
+@import '../scss/colors.scss';
 /**
  * CSS files with the .module.css suffix will be treated as CSS modules
  * and scoped locally.
@@ -20,7 +21,7 @@
     bottom: 0;
     content: " ";
     height: 35rem;
-    opacity: 0.2;
+    opacity: var(--springroll-wave-opacity);
     position: absolute;
     width: 100%;
     z-index: 1;
@@ -49,16 +50,33 @@
 
 .tutorial__buttons {
   align-items: center;
+  justify-content: center;
   display: flex;
   flex-wrap: wrap;
   margin-top: 2.6rem;
   --ifm-button-size-multiplier: 1.6;
   z-index: 1;
   gap: 3.6rem;
+
+  :first-child {
+    background-color: $dark-mod-primary;
+    border-color: $dark-mod-primary;
+
+    &:hover {
+      background-color: $dark-mod-primary-dark;
+    }
+  }
+
+  :last-child {
+    background-color: var(--ifm-color-secondary-dark);
+    &:hover {
+      background-color: var(--ifm-color-secondary-darker);
+    }
+  }
 }
 
 .mainLogo {
-  // margin-bottom: 5rem;
+  margin-bottom: 1rem;
 }
 
 @media screen and (max-width: 996px) {

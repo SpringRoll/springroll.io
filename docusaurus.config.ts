@@ -37,15 +37,15 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/SpringRoll',
+          // editUrl:
+          //   'https://github.com/SpringRoll',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/SpringRoll',
+          // editUrl:
+          //   'https://github.com/SpringRoll',
         },
         theme: {
           customCss: './src/scss/custom.scss',
@@ -116,7 +116,7 @@ const config: Config = {
           ],
         },
         {
-          title: 'Community',
+          title: 'Direct Links',
           items: [
             {
               label: 'SpringRoll Container',
