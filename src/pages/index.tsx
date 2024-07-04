@@ -22,7 +22,7 @@ function HomepageHeader() {
         <div className={styles.tutorial__buttons}>
             <Link
               className="button button--secondary"
-              to="/docs/springroll/getting-started">
+              to="/docs/springroll/getting-started#installation">
               SpringRoll Quick Start
             </Link>
             <Link
@@ -30,11 +30,6 @@ function HomepageHeader() {
               to="/docs/springroll-container/getting-started">
               Container Quick Start
             </Link>
-            {/* <Link
-              className="button button--secondary"
-              to="/docs/Examples/game">
-              Demo Game
-            </Link> */}
         </div>
       </div>
     </header>

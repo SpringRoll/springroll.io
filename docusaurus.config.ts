@@ -60,7 +60,9 @@ const config: Config = {
     announcementBar: {
       id: 'springroll_release',
       content:
-        'SpringRoll 2.6.0 is out now!',
+        '<a href="https://github.com/SpringRoll/SpringRoll/releases/tag/2.6.0" target="_blank">SpringRoll 2.6.0</a> is out now!',
+      backgroundColor: '#095B8F',
+      textColor: 'white',
     },
     navbar: {
       title: 'SpringRoll',
