@@ -1,4 +1,4 @@
-@import 'colors';
+@import './colors.scss';
 @import 'mixins';
 @import 'fonts';
 
@@ -10,13 +10,13 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #095b8f;
-  --ifm-color-primary-dark: #085281;
-  --ifm-color-primary-darker: #084d7a;
-  --ifm-color-primary-darkest: #064064;
-  --ifm-color-primary-light: #0a649d;
-  --ifm-color-primary-lighter: #0a69a4;
-  --ifm-color-primary-lightest: #0c76ba;
+  --ifm-color-primary: #{$primary};
+  --ifm-color-primary-dark: #{$primary-dark};
+  --ifm-color-primary-darker: #{$primary-darker};
+  --ifm-color-primary-darkest: #{$primary-darkest};
+  --ifm-color-primary-light: #{$primary-light};
+  --ifm-color-primary-lighter: #{$primary-lighter};
+  --ifm-color-primary-lightest: #{$primary-lightest};
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --ifm-font-family-base: 'Assistant';
@@ -25,13 +25,12 @@
   --ifm-font-weight-normal: normal;
   --ifm-font-weight-semibold: 600;
   --ifm-font-weight-bold: 700;
-  --springroll-hero-bg-color: #F2F2F2;
-  --springroll-wave-opacity: 0.4;
+  --springroll-hero-bg-color: #{$white-background};
+  --springroll-hero-text-color: #{$black};
 }
 
 .hero--primary {
-  --ifm-hero-background-color: var(--springroll-hero-bg-color)
-  // --ifm-heading-color: white;
+  --ifm-hero-background-color: var(--springroll-hero-bg-color);
   --ifm-hero-text-color: var(--springroll-hero-text-color);
 }
 
@@ -41,15 +40,14 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #04b1d8;
-  --ifm-color-primary-dark: #049fc2;
-  --ifm-color-primary-darker: #0396b8;
-  --ifm-color-primary-darkest: #037c97;
-  --ifm-color-primary-light: #04c3ee;
-  --ifm-color-primary-lighter: #05ccf8;
-  --ifm-color-primary-lightest: #23d3fb;
+  --ifm-color-primary: #{$dark-primary};
+  --ifm-color-primary-dark: #{$dark-primary-dark};
+  --ifm-color-primary-darker: #{$dark-primary-darker};
+  --ifm-color-primary-darkest: #{$dark-primary-darkest};
+  --ifm-color-primary-light: #{$dark-primary-light};
+  --ifm-color-primary-lighter: #{$dark-primary-lighter};
+  --ifm-color-primary-lightest: #{$dark-primary-lightest};
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --springroll-hero-bg-color: rgb(43, 49, 55);
-  --springroll-wave-opacity: 0.5;
-  --springroll-hero-text-color: white;
+  --springroll-hero-bg-color: #2b3137;
+  --springroll-hero-text-color: #{$white};
 }
