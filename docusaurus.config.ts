@@ -76,6 +76,12 @@ const config: Config = {
           position: 'left',
           label: 'SpringRoll Container',
         },
+        {
+          type: 'docSidebar',
+          sidebarId: 'examplesSidebar',
+          position: 'left',
+          label: 'Examples',
+        },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/SpringRoll',
@@ -97,6 +103,10 @@ const config: Config = {
             {
               label: 'SpringRoll Container',
               to: '/docs/springroll-container/getting-started',
+            },
+            {
+              label: 'Examples',
+              to: '/docs/Examples/introduction',
             },
           ],
         },
