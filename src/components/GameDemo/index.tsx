@@ -1,8 +1,9 @@
 import { useEffect, JSX } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { Container } from 'springroll-container';
+import { Container, SoundPlugin } from 'springroll-container';
 import Heading from '@theme/Heading';
+
 
 /**
  * Game Demo Component - Creates a springroll container and loads the demo game into it. Referenced in docs/Examples/game.mdx
@@ -12,7 +13,11 @@ export default function GameDemo(): JSX.Element {
   // Instantiate the container and load the demo game after the component mounts  
   useEffect(() => {
     const container = new Container('#demo-game', {
-      plugins: []
+      plugins: [
+        new SoundPlugin({
+          soundButtons: '#btnMute',
+        })
+      ]
     });
 
     container.openPath('http://springroll.io/springroll-io-demo-game/');
@@ -26,13 +31,14 @@ export default function GameDemo(): JSX.Element {
           Game Options
         </Heading>
         
-        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
+        <button id="btnPause" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Pause</span>
         </button>
-        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
-          <span>Mute</span>
+        <button id="btnMute" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
+          <span className="unmutedLabel">Mute</span>
+          <span className="mutedLabel">Unmute</span>
         </button>
-        <button type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
+        <button id="btnHint" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Hint</span>
         </button>
 
