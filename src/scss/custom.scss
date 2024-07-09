@@ -26,22 +26,22 @@
   * Set the mute and unmute button colors 
   * Hide or show the button labels based on the mute state
   */
-  .muted {
+  .muted, .paused {
     background-color: #123550;
     color: #ebe4e4;
-    .mutedLabel {
+    .toggleOff {
       display: inherit;
     }
-    .unmutedLabel {
+    .toggleOn {
       display: none;
     }
   }
-  .unmuted {
+  .unmuted, .unpaused {
     background-color: #0C7AC0;
-    .mutedLabel {
+    .toggleOff {
       display: none;
     }
-    .unmutedLabel {
+    .toggleOn {
       display: inherit;
     }
   }

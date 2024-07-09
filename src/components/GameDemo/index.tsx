@@ -1,7 +1,7 @@
 import { useEffect, JSX } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
-import { Container, SoundPlugin } from 'springroll-container';
+import { Container, SoundPlugin, PausePlugin } from 'springroll-container';
 import Heading from '@theme/Heading';
 
 
@@ -16,7 +16,8 @@ export default function GameDemo(): JSX.Element {
       plugins: [
         new SoundPlugin({
           soundButtons: '#btnMute',
-        })
+        }),
+        new PausePlugin('#btnPause'),
       ]
     });
 
@@ -32,11 +33,12 @@ export default function GameDemo(): JSX.Element {
         </Heading>
         
         <button id="btnPause" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
-          <span>Pause</span>
+          <span className="toggleOn">Pause</span>
+          <span className="toggleOff">Unpause</span>
         </button>
         <button id="btnMute" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
-          <span className="unmutedLabel">Mute</span>
-          <span className="mutedLabel">Unmute</span>
+          <span className="toggleOn">Mute</span>
+          <span className="toggleOff">Unmute</span>
         </button>
         <button id="btnHint" type="button" className={clsx('button button--primary', styles.gameOptionButton)}>
           <span>Hint</span>
