@@ -10,18 +10,23 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #0C7AC0;
-  --ifm-color-primary-dark: #085281;
-  --ifm-color-primary-darker: #084d7a;
-  --ifm-color-primary-darkest: #064064;
-  --ifm-color-primary-light: #0a649d;
-  --ifm-color-primary-lighter: #0a69a4;
-  --ifm-color-primary-lightest: #0c76ba;
+  --ifm-color-primary: #{$primary};
+  --ifm-color-primary-dark: #{$primary-dark};
+  --ifm-color-primary-darker: #{$primary-darker};
+  --ifm-color-primary-darkest: #{$primary-darkest};
+  --ifm-color-primary-light: #{$primary-light};
+  --ifm-color-primary-lighter: #{$primary-lighter};
+  --ifm-color-primary-lightest: #{$primary-lightest};
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
   --ifm-font-family-base: 'Assistant';
   --ifm-footer-background-color: #123550;
-  
+  --ifm-font-weight-light: 300;
+  --ifm-font-weight-normal: normal;
+  --ifm-font-weight-semibold: 600;
+  --ifm-font-weight-bold: 700;
+  --springroll-hero-bg-color: #{$white-background};
+  --springroll-hero-text-color: #{$black};
   /** 
   * Set the mute and unmute button colors 
   * Hide or show the button labels based on the mute state
@@ -51,14 +56,25 @@
   }
 }
 
+.hero--primary {
+  --ifm-hero-background-color: var(--springroll-hero-bg-color);
+  --ifm-hero-text-color: var(--springroll-hero-text-color);
+}
+
+.close {
+  color: white;
+}
+
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #0c7ac0;
-  --ifm-color-primary-dark: #0b6ead;
-  --ifm-color-primary-darker: #0a68a3;
-  --ifm-color-primary-darkest: #085586;
-  --ifm-color-primary-light: #0d86d3;
-  --ifm-color-primary-lighter: #0e8cdd;
-  --ifm-color-primary-lightest: #199df1;
+  --ifm-color-primary: #{$dark-primary};
+  --ifm-color-primary-dark: #{$dark-primary-dark};
+  --ifm-color-primary-darker: #{$dark-primary-darker};
+  --ifm-color-primary-darkest: #{$dark-primary-darkest};
+  --ifm-color-primary-light: #{$dark-primary-light};
+  --ifm-color-primary-lighter: #{$dark-primary-lighter};
+  --ifm-color-primary-lightest: #{$dark-primary-lightest};
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --springroll-hero-bg-color: #2b3137;
+  --springroll-hero-text-color: #{$white};
 }

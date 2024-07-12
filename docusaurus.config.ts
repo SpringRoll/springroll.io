@@ -37,15 +37,15 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/SpringRoll',
+          // editUrl:
+          //   'https://github.com/SpringRoll',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/SpringRoll',
+          // editUrl:
+          //   'https://github.com/SpringRoll',
         },
         theme: {
           customCss: './src/scss/custom.scss',
@@ -57,6 +57,13 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    announcementBar: {
+      id: 'springroll_release',
+      content:
+        '<a href="https://github.com/SpringRoll/SpringRoll/releases/tag/2.6.0" target="_blank">SpringRoll 2.6.0</a> is out now!',
+      backgroundColor: '#095B8F',
+      textColor: 'white',
+    },
     navbar: {
       title: 'SpringRoll',
       logo: {
@@ -111,7 +118,7 @@ const config: Config = {
           ],
         },
         {
-          title: 'Community',
+          title: 'Direct Links',
           items: [
             {
               label: 'SpringRoll Container',
