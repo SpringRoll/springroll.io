@@ -10,32 +10,31 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
+    title: 'Lightweight',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Written in pure JavaScript, SpringRoll is only ~120KB when minified and is designed to be framework/engine agnostic. It can be dropped into
+        any JS environment. 
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'End to End communication',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        SpringRoll and SpringRoll Container take care of all communication. Perform the initial setup and let SpringRoll handle the rest.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Extensible',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        SpringRoll has a powerful plugin based architecture. If you require additional functionality you can write
+        custom plugins to do anything you need.
       </>
     ),
   },
