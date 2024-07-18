@@ -1,4 +1,4 @@
-import { useState, JSX } from 'react';
+import { useState, JSX, useMemo } from 'react';
 import { SpeechSynth } from 'springroll';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
@@ -24,52 +24,39 @@ export default function SpeechSynthExample(): JSX.Element {
   const [pitch, setPitch] = useState(speaker.pitch);
   const [rate, setRate] = useState(speaker.rate);
   const [voice, setVoice] = useState(0);
-  const [codeExample, setCodeExample] = useState(`const speaker = new SpeechSynth({ \n  volume: ${volume
+
+  const codeExample = useMemo(
+    () => `const speaker = new SpeechSynth({ \n  volume: ${volume
       }, \n  rate ${rate}, \n  pitch: ${pitch}, \n  voice: ${voice
-      } \n}); \n\n speaker.say('${message}');
-      `);
+      } \n}); \n\n speaker.say('${message}');`,
+      [volume, rate, pitch, voice, message]
+  );
 
   const totalVoices = speaker.voiceOptions.length || 0;
 
-  // Updates the displayed code example. Because of how React updates state this requires 
-  // updating the values manually rather than just relying on state
-  const updateCodeExample = ({ newMessage, newPitch, newVolume, newRate, newVoice }: CodeExampleParams) => {
-    const codeMessage = newMessage || newMessage === '' ? newMessage : message;
-    setCodeExample(`const speaker = new SpeechSynth({ \n  volume: ${newVolume || volume 
-      }, \n  rate ${newRate || rate}, \n  pitch: ${newPitch || pitch}, \n  voice: ${newVoice || voice
-      } \n}); \n\n speaker.say('${codeMessage}');
-      `);
-  };
-
   // Input change handlers, they set the values on the SpeechSynth instance and update the displayed example
   const handleMessageChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const newMessage = e.currentTarget.value;
-    setMessage(newMessage);
-    updateCodeExample({newMessage});
+    setMessage(e.currentTarget.value);
   };
   const handleVolumeChange = (e: React.FormEvent<HTMLInputElement>) => {
     const newVolume = +e.currentTarget.value;
     setVolume(newVolume);
     speaker.volume = newVolume;
-    updateCodeExample({newVolume});
   };
   const handlePitchChange = (e: React.FormEvent<HTMLInputElement>) => {
     const newPitch = +e.currentTarget.value;
     setPitch(newPitch);
     speaker.pitch = newPitch;
-    updateCodeExample({newPitch});
   };
   const handleRateChange = (e: React.FormEvent<HTMLInputElement>) => {
     const newRate = +e.currentTarget.value;
     setRate(newRate);
     speaker.rate = newRate;
-    updateCodeExample({newRate});
   };
   const handleVoiceChange = (e: React.FormEvent<HTMLInputElement>) => {
     const newVoice = +e.currentTarget.value;
     setVoice(newVoice);
     speaker.setVoice(newVoice);
-    updateCodeExample({newVoice});
   };
   
   return (
