@@ -27,6 +27,33 @@
   --ifm-font-weight-bold: 700;
   --springroll-hero-bg-color: #{$white-background};
   --springroll-hero-text-color: #{$black};
+  /** 
+  * Set the mute and unmute button colors 
+  * Hide or show the button labels based on the mute state
+  */
+  .muted, .paused {
+    background-color: #123550;
+    color: #ebe4e4;
+    .toggleOff {
+      display: inherit;
+    }
+    .toggleOn {
+      display: none;
+    }
+  }
+  .unmuted, .unpaused {
+    background-color: #0C7AC0;
+    .toggleOff {
+      display: none;
+    }
+    .toggleOn {
+      display: inherit;
+    }
+  }
+  /** Hide the muted label by default */
+  .mutedLabel {
+    display: none;
+  }
 }
 
 .hero--primary {
