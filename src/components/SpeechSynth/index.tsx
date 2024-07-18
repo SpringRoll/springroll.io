@@ -4,14 +4,6 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import CodeBlock from '@theme/CodeBlock';
 
-interface CodeExampleParams {
-  newMessage?: string,
-  newPitch?: number,
-  newVolume?: number,
-  newVoice?: number,
-  newRate?: number,
-}
-
 /**
  * Speech Synth Component - Simple demo page showing off SpringRoll's speech synth module. Referenced in docs/Examples/speechsynth.mdx
  * @returns JSX.Element
