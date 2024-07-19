@@ -17,6 +17,8 @@ export default function SpeechSynthExample(): JSX.Element {
   const [rate, setRate] = useState(0);
   const [voice, setVoice] = useState(0);
 
+  // SpeechSynth uses the window object which isn't available in Node
+  // so the build process requires it to be dynamically imported to avoid errors
   useEffect(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       import('springroll').then(({ SpeechSynth }) => {
@@ -25,6 +27,7 @@ export default function SpeechSynthExample(): JSX.Element {
     }
   }, []);
 
+  // setting default values once SpeechSynth is available
   useEffect(() => {
     if(speaker){
       setTotalVoices(speaker.voiceOptions.length|| 0);
