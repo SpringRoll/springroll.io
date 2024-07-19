@@ -1,5 +1,4 @@
-import { useState, JSX, useMemo } from 'react';
-import { SpeechSynth } from 'springroll';
+import { useState, JSX, useMemo, useEffect } from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.scss';
 import CodeBlock from '@theme/CodeBlock';
@@ -10,12 +9,33 @@ import CodeBlock from '@theme/CodeBlock';
  */
 export default function SpeechSynthExample(): JSX.Element {
 
-  const [speaker] = useState(new SpeechSynth({}));
+  const [speaker, setSpeaker] = useState(null);
   const [message, setMessage] = useState('');
-  const [volume, setVolume] = useState(speaker.volume);
-  const [pitch, setPitch] = useState(speaker.pitch);
-  const [rate, setRate] = useState(speaker.rate);
+  const [totalVoices, setTotalVoices] = useState(0);
+  const [volume, setVolume] = useState(0);
+  const [pitch, setPitch] = useState(0);
+  const [rate, setRate] = useState(0);
   const [voice, setVoice] = useState(0);
+
+  // SpeechSynth uses the window object which isn't available in Node
+  // so the build process requires it to be dynamically imported to avoid errors
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      import('springroll').then(({ SpeechSynth }) => {
+        setSpeaker(new SpeechSynth({}));
+      });
+    }
+  }, []);
+
+  // setting default values once SpeechSynth is available
+  useEffect(() => {
+    if(speaker){
+      setTotalVoices(speaker.voiceOptions.length|| 0);
+      setVolume(speaker.volume);
+      setPitch(speaker.pitch);
+      setRate(speaker.rate);
+    }
+  }, [speaker]);
 
   const codeExample = useMemo(
     () => `const speaker = new SpeechSynth({ \n  volume: ${volume
@@ -24,7 +44,6 @@ export default function SpeechSynthExample(): JSX.Element {
       [volume, rate, pitch, voice, message]
   );
 
-  const totalVoices = speaker.voiceOptions.length || 0;
 
   // Input change handlers, they set the values on the SpeechSynth instance and update the displayed example
   const handleMessageChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -50,6 +69,10 @@ export default function SpeechSynthExample(): JSX.Element {
     setVoice(newVoice);
     speaker.setVoice(newVoice);
   };
+
+  if (!speaker) {
+    return <div>Loading speech synthesis...</div>;
+  }
   
   return (
     <section className={clsx('container', styles.speechSynthRoot)}>
