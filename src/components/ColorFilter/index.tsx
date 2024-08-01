@@ -1,93 +1,89 @@
-import { useState, JSX, useMemo, useEffect } from 'react';
-import CodeBlock from '@theme/CodeBlock';
-import Example from '@site/static/img/example.jpg';
-import { ColorFilter } from 'springroll';
+import {
+  useState,
+  JSX,
+  useMemo,
+  useEffect,
+  ChangeEventHandler,
+  useRef,
+} from "react";
+import CodeBlock from "@theme/CodeBlock";
+//@ts-ignore
+import Example from "@site/static/img/example.jpg";
+import styles from './styles.module.scss';
+import { ColorFilter } from "springroll";
+import clsx from "clsx";
 
 /**
- * Resize Component - Simple demo page showing off SpringRoll's SafeScaleManager. Referenced in docs/Examples/resize.mdx
+ * Color Filter Component - Simple demo page showing off SpringRoll's ColorFilter. Referenced in docs/Examples/filter.mdx
  * @returns JSX.Element
  */
 export default function ColorFilterExample(): JSX.Element {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [ratio, setRatio] = useState(0);
-
   const [colorFilter, setColorFilter] = useState(null);
   const [options, setOptions] = useState([]);
-  // SafeScaleManager uses the window object which isn't available in Node
-  // so the build process requires it to be dynamically imported to avoid errors
+  const [selectedOption, setSelectedOption] = useState("none");
+  const filterExampleImageRef = useRef<HTMLImageElement | null>(null);
+
+  //Instantiate the ColorFilter and set the reference to the example image
   useEffect(() => {
     setColorFilter(new ColorFilter());
-    // setOptions(colorFilter.types.map((type) => <option value={type}>{type}</option>));
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      // import('springroll').then(({ SafeScaleManager }) => {
-      //   // setManager(
-      //   //   new SafeScaleManager({
-      //   //     width: 1320,
-      //   //     height: 780,
-      //   //     safeWidth: 1024,
-      //   //     safeHeight: 660,
-      //   //     callback: function (resizeData) {
-      //   //       console.log('This is called on window resize');
-      //   //       console.log('width: ', resizeData.width);
-      //   //       console.log('height: ', resizeData.height);
-      //   //       console.log('scale ratio: ', resizeData.scale);
-
-      //   //       setWidth(resizeData.width);
-      //   //       setHeight(resizeData.height);
-      //   //       setRatio(resizeData.scaleRatio);
-      //   //     }
-      //   //   })
-      //   // );
-      // });
-    }
+    filterExampleImageRef.current = document.getElementById("filterExampleImage") as HTMLImageElement;
   }, []);
 
+  // Create the options for the select box based on the filter types
   useEffect(() => {
     if (colorFilter) {
-      setOptions(Object.entries(colorFilter.types).map(([key, value]) => 
-        <option key={type} value={type}>{type}</option>
-      )));
+      setOptions(
+        colorFilter.types.map((type) => (
+          <option key={type.name} value={type.value}>
+            {type.name}
+          </option>
+        )),
+      );
     }
   }, [colorFilter]);
 
+  // Apply the selected filter to the example image, or remove the filter if "none" is selected
+  useEffect(() => {
+    if (!colorFilter) return;
+    if (selectedOption !== "none") {
+      console.log(`Selected option: ${selectedOption}`);
+      colorFilter.applyFilter(filterExampleImageRef.current, selectedOption);
+    } else {
+      colorFilter.removeFilter();
+    }
+  }, [selectedOption]);
+
   const codeExample = useMemo(
-    () => `const manager = new SafeScaleManager({ 
-  width: 1320,
-  height: 780,
-  safeWidth: 1024,
-  safeHeight: 660,
-  callback: function (resizeData){
-    console.log('This is called on window resize');
-    console.log('width: ', resizeData.width); // ${width}
-    console.log('height: ', resizeData.height); // ${height}
-    console.log('scale ratio: ', resizeData.scale); // ${ratio}
-  }
-});`,
-    [width, height, ratio]
+    () => (selectedOption == "none") ? 'filter.removeFilter()' : `const filter = new ColorFilter(); \n\nfilter.changeFilter('${selectedOption}');`,
+    [selectedOption],
   );
+
+  // Handle the select box change event
+  const handleChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+    setSelectedOption(event.currentTarget.value);
+  };
 
   return (
     <section>
-      <div className="row">
-        <div slot="example">
-        <p className="filter__label font-12">Color Filter</p>
-          <select id="types">
+      <div className={clsx('row', styles.filterContainer)}>
+        <div className="col col--5">
+          <p className={styles.filterLabel}>Color Filter</p>
+          <select id="types" className={styles.selectBox} onChange={handleChange}>
+            <option key="none" value="none">
+              None
+            </option>
             {options.length > 0 && options}
-          </select> 
-          
-          <img src={Example} alt="Color Filter Example Image" />
-        
-          {/* <img width="50%" height="50%" class="filter__image" ref="image" src="@/assets/example.jpg" alt="Example Image">
-          <label class="filter__label font-12">Color Filter</label>
-          <v-select class="filter__select" v-model="selected" item-text="name" :items="types" @input="changeFilter($event)" /> */}
+          </select>
+
+          <img
+            id="filterExampleImage"
+            className={styles.exampleImage}
+            src={Example}
+            alt="Color Filter Example Image"
+          />
         </div>
         <div className="col">
-          {codeExample && (
-            <CodeBlock>
-              {codeExample}
-            </CodeBlock>
-          )}
+          {codeExample && <CodeBlock className={styles.filterCodeBlock}>{codeExample}</CodeBlock>}
         </div>
       </div>
     </section>
