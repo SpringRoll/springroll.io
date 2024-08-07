@@ -1,0 +1,28 @@
+.filterContainer{
+    align-items: center;
+    vertical-align: middle;
+    height:100%;
+}
+.filterCodeBlock{
+    margin:0px;
+}
+
+.filterLabel {
+    margin: 0 var(--ifm-leading) 0 var(--ifm-leading);
+    width: 100;
+}
+
+.exampleImage {
+    width: 100%;
+    height: auto;
+    margin: var(--ifm-leading);
+}
+
+.selectBox {
+    background-color: var(--ifm-menu-color-background-active);
+    border: 0px;
+    border-radius: 0.25rem;
+    padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+    margin: 0 var(--ifm-leading) 0 var(--ifm-leading);
+    width: 100%;
+}

@@ -19,7 +19,9 @@ const sidebars: SidebarsConfig = {
     'Examples/introduction',
     'Examples/game',
     'Examples/speechsynth',
+    'Examples/filter',
     'Examples/resize',
+    'Examples/controls',
   ],
 
   // But you can create a sidebar manually
