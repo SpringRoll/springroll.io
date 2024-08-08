@@ -15,7 +15,7 @@ export default function ResizeExample(): JSX.Element {
   // so the build process requires it to be dynamically imported to avoid errors
   useEffect(() => {
 
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
+    if (typeof window !== 'undefined') {
       import('springroll').then(({ SafeScaleManager }) => {
         setManager(
           new SafeScaleManager({
