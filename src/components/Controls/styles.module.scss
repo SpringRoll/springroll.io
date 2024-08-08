@@ -1,0 +1,34 @@
+.rows {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 7.8rem;
+}
+
+.columns {
+    display: flex;
+    justify-content: center;
+}
+
+.key {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: capitalize;
+    margin: 0.45rem;
+    transition: background-color 0.25s;
+}
+
+.keyColor {
+    background-color: var(--ifm-menu-color-background-active);
+    color: var(--ifm-color-primary);
+}
+
+.keyActive {
+    background-color: var(--ifm-color-primary-darkest);;
+    color: #FFFFFF;
+}
