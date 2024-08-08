@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible"
+    content="IE=edge,chrome=1">
+  <meta name="description"
+    content="">
+  <title>
+    Springroll
+  </title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+  <div id="frame">
+    <div id="gameContent">
+    </div>
+  </div>
+  <script src="node_modules/bellhop-iframe/dist/bellhop-umd.js"></script>
+  <script type="text/javascript">
+    const bellhop = new window.Bellhop();
+    bellhop.connect();
+    bellhop.send('init');
+  </script>
+</body>
+
+</html>
