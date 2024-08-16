@@ -1,0 +1,91 @@
+.exampleFrame {
+    width: 100%;
+    height: 100%;
+    min-height: 396px;
+    max-height: 431px;
+    min-width: 336px;
+    max-width: 391px;
+    margin: 5px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: var(--modal-bg);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    height: 80%;
+    overflow: hidden; // Changed from auto to hidden
+    z-index: 1001;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.closeButton {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+
+    &:hover {
+        color: #666;
+    }
+}
+
+.selectBox {
+    background-color: var(--ifm-menu-color-background-active);
+    border: 0px;
+    border-radius: 0.25rem;
+    padding: var(--ifm-menu-link-padding-vertical) var(--ifm-menu-link-padding-horizontal);
+    margin: 0 var(--ifm-leading) 0 var(--ifm-leading);
+    width: 100%;
+}
+
+.codeBlock {
+    min-width: 600px;
+    margin: 5px;
+}
+
+.storeInputField {
+    border: 1px solid var(--ifm-color-primary-darkest);
+    color: var(--docsearch-text-color);
+    flex: 1 1 0%;
+    font-size: calc(0.875rem * var(--ifm-button-size-multiplier));
+    line-height: 1.5;
+    padding: calc(var(--ifm-button-padding-vertical) * var(--ifm-button-size-multiplier)) calc(var(--ifm-button-padding-horizontal) * var(--ifm-button-size-multiplier));
+    height: 100%;
+    outline: 1px;
+    margin-left: 5px;
+    width: 80%;
+}
+
+.ibdReadme {
+    /* Style your README link here */
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.pillContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    list-style-type: none;
+}

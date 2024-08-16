@@ -22,6 +22,7 @@ const sidebars: SidebarsConfig = {
     'Examples/filter',
     'Examples/resize',
     'Examples/controls',
+    'Examples/indexeddb',
   ],
 
   // But you can create a sidebar manually
