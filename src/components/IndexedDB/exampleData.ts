@@ -32,9 +32,8 @@ openButton.addEventListener('click', async () => {
 //Open database call is also used to create new stores if required
 let openResult = await springroll.UserData.IDBOpen(
     dbName.value,
-    // note that version expects a number/boolean so it should be cast if required(i.e. from an input field)
-    Number.parseInt(version.value),
-    { stores: [{ storeName: storeName.value }] } //additions parameter. Used to create new store
+    Number.parseInt(version.value),// Must be an integer, any other type may give unexpected results
+    { stores: [{ storeName: storeName.value }] } // Additions parameter. Used to create new store
 );
 
 console.log(openResult);
@@ -44,9 +43,11 @@ console.log(openResult);
             'openDB'
         ),
     deleteStore: createBlockData(
-        `let deleteResult = await springroll.UserData.IDBOpen(
+        `// If you have an active DB connection, close it before deleting the store
+        const closeResult = await springroll.UserData.IDBClose();
+let deleteResult = await springroll.UserData.IDBOpen(
 dbName.value,
-version.value != "" ? version : null,
+version.value, // Must be an integer, and higher than the current version
 null, // additions parameter unused when deleting
 deleteStoreName.value != "" ? { stores: [{ storeName: deleteStoreName.value }] } : null
 );
@@ -114,4 +115,5 @@ export const eventMap: Record<string, string> = {
     IDBUpdate: 'updateRecord',
     IDBClose: 'closeDB',
     IDBDeleteDB: 'deleteDB',
+    IDBReadAll: 'readAll'
 };

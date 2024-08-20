@@ -39,6 +39,7 @@ export default function IbdDocs(): JSX.Element {
         name: 'Delete a Store',
         steps: [
           'Enter a value for Delete Store Name',
+          'Enter a version number at least 1 higher than the previous version (check the "Storage" section in dev tools)',
           'Click the "Delete Store" button',
         ],
       },
@@ -99,12 +100,12 @@ export default function IbdDocs(): JSX.Element {
     };
   
     return (
-      <div>
+      <>
         <Link className={styles.ibdReadme} to="https://github.com/SpringRoll/SpringRoll/tree/main/src/state#indexeddb">
           UserData - IndexedDB README
         </Link>
         <div className="card">
-          <div className="card__header">
+          <div className={clsx("card__header", styles.cardHeader)}>
             <h3>How to use this example</h3>
           </div>
           <div className="card__body">
@@ -128,6 +129,6 @@ export default function IbdDocs(): JSX.Element {
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
 };

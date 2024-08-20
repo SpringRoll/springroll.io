@@ -59,6 +59,7 @@ export default function IndexedDBExample(): JSX.Element {
     }, []);
 
     const setDBData = (data: any) => {
+        console.log(`setDBData: `, data);
         if (data.type === 'IDBRemove') {
             setDbData({ dbName: '', store: '' });
             return;
@@ -71,11 +72,13 @@ export default function IndexedDBExample(): JSX.Element {
     };
 
     const getData = async () => {
+        
         setVisualizeError('');
         if (!dbData.dbName) {
             setVisualizeError('Database Visualization requires an open DB connection');
             return;
         }
+        console.log(`getData: `, dbData);
         setLoading(true);
         const request = window.indexedDB.open(dbData.dbName);
 
@@ -152,8 +155,8 @@ export default function IndexedDBExample(): JSX.Element {
             <div className="row">
                 <div className="col col--5">
                     <iframe className={clsx("row", styles.exampleFrame)} id="idb"></iframe>
-                    <div className="row">
-                        <button className="button button--primary" onClick={getData} disabled={loading}>
+                    <div className={clsx( styles.buttonRow)}>
+                        <button className={clsx("button button--primary", styles.button)} onClick={getData} disabled={loading}>
                             Display Data
                         </button>
                         <input
@@ -179,14 +182,14 @@ export default function IndexedDBExample(): JSX.Element {
                 </div>
                 <div className="col col--5">
                     <select
-                        className={clsx('row',styles.selectBox)}
+                        className={clsx(styles.selectBox)}
                         value={currentExample}
                         onChange={(e) => setCurrentExample(e.target.value)} >
                         {Object.values(codeBlocks).map(block => (
                             <option key={block.value} value={block.value}>{block.text}</option>
                         ))}
                     </select>
-                    <CodeBlock className={clsx('row',styles.codeBlock)}>{codeBlocks[currentExample].code}</CodeBlock>
+                    <CodeBlock className={clsx(styles.codeBlock)}>{codeBlocks[currentExample].code}</CodeBlock>
                     
                 </div>
                 <IbdDocs />
