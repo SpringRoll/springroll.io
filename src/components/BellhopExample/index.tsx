@@ -62,7 +62,7 @@ bellhop.on('clearMessages', () => {
   }
   
   return (
-    <section className={clsx('container', styles.BellhopRoot)}>
+    <section className='container'>
       <div className='row'>
         <div className={clsx('col', styles.bellhop_gameContainer)}>
           <iframe id="demo-game" className={styles.bellhop_iframe} src='/BellHopExampleChild/'></iframe>
