@@ -1,14 +1,21 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-interface Column {
+
+// A table column
+export interface Column {
   key: string;
   label: string;
 }
-
+// A table row
+export interface Row {
+  key: string;
+  value: string | number;
+}
+// A collection of table columns and rows
 export interface DataTableProps {
   columns: Column[];
-  rows: Array<Record<string, any>>;
+  rows: Row[];
 }
 
 /**

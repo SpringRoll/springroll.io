@@ -1,23 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, UserDataPlugin } from 'springroll-container';
 import CodeBlock from '@theme/CodeBlock';
 import styles from './styles.module.scss';
 import clsx from 'clsx';
-import DataTable, { DataTableProps } from '../DataTable'
+import DataTable, { Column, Row } from '../DataTable'
 import { codeBlocks, eventMap } from './exampleData';
 import IbdDocs from './ibdDocs';
 
+// The names of the database and store
 interface DBData {
     dbName: string;
     store: string;
 }
 
-interface DataVisual {
-    key: string;
-    value: any;
-}
-
-const columns: DataTableProps['columns'] = [
+// The columns for the data table
+const columns: Column[] = [
     { key: 'key', label: 'Key' },
     { key: 'value', label: 'Value' }
 ];
@@ -31,35 +27,57 @@ export default function IndexedDBExample(): JSX.Element {
     const [visualizeError, setVisualizeError] = useState<string>('');
     const [dialog, setDialog] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [dataVisual, setDataVisual] = useState<DataVisual[]>([]);
+    const [rows, setRows] = useState<Row[]>([]);
     const [dbData, setDbData] = useState<DBData>({ dbName: '', store: '' });
-    const containerRef = useRef<Container | null>(null);
+
+    const containerRef = useRef(null);
+    const isMountedRef = useRef(true);
 
     useEffect(() => {
-        const events = Object.keys(eventMap);
+        // Import and initialize SpringRoll container
+        const initContainer = async () => {
+            // If the component is unmounting (changing pages), skip this because cleanup should be happening
+            if (!isMountedRef.current) return;
+            const { Container, UserDataPlugin } = await import('springroll-container');
+            const events = Object.keys(eventMap);
 
-        const container = new Container('#idb', {
-            plugins: [new UserDataPlugin()]
-        });
-
-        containerRef.current = container;
-
-        container.openPath('/idb-child.html');
-
-        events.forEach(event => {
-            container.client.on(event, (data: any) => {
-                setCurrentExample(eventMap[data.type]);
-                setDBData(data.data);
+            const container = new Container('#idb', {
+                plugins: [
+                    new UserDataPlugin()
+                ]
             });
-        });
+
+            containerRef.current = container;
+
+            container.openPath('/idbExample');
+
+            // Setup event listeners
+            events.forEach(event => {
+                container.client.on(event, (data: any) => {
+                    setCurrentExample(eventMap[data.type]);
+                    setDBData(data.data);
+                });
+            });
+
+
+        }
+        // Run the init function
+        initContainer();
 
         return () => {
-            container.destroy();
+            isMountedRef.current = false;
+
+            // Destroy the container and client
+            if (containerRef.current) {
+                containerRef.current.client.destroy();
+                containerRef.current.destroy();
+                containerRef.current = null;
+            }
         };
     }, []);
 
+    // Set the dbData state when the data changes
     const setDBData = (data: any) => {
-        console.log(`setDBData: `, data);
         if (data.type === 'IDBRemove') {
             setDbData({ dbName: '', store: '' });
             return;
@@ -71,24 +89,25 @@ export default function IndexedDBExample(): JSX.Element {
         }));
     };
 
+    // Get the data for visualization
     const getData = async () => {
-        
         setVisualizeError('');
         if (!dbData.dbName) {
             setVisualizeError('Database Visualization requires an open DB connection');
             return;
         }
-        console.log(`getData: `, dbData);
         setLoading(true);
         const request = window.indexedDB.open(dbData.dbName);
 
         request.onsuccess = (e) => {
             const db = (e.target as IDBOpenDBRequest).result;
-            let trans, store, request;
+            let transaction: IDBTransaction;
+            let store: IDBObjectStore;
+            let request: IDBRequest;
 
             try {
-                trans = db.transaction(dbData.store, 'readwrite');
-                store = trans.objectStore(dbData.store);
+                transaction = db.transaction(dbData.store, 'readwrite');
+                store = transaction.objectStore(dbData.store);
                 request = store.getAllKeys(); // get the data
             } catch (error) {
                 console.error(error);
@@ -108,7 +127,7 @@ export default function IndexedDBExample(): JSX.Element {
                         value: await promisifiedRead(key)
                     });
                 }
-                setDataVisual(results);
+                setRows(results);
                 setLoading(false);
                 setDialog(true);
             };
@@ -125,6 +144,7 @@ export default function IndexedDBExample(): JSX.Element {
         };
     };
 
+    // Read data from the database
     const promisifiedRead = (key: string): Promise<any> => {
         return new Promise((resolve, reject) => {
             const request = window.indexedDB.open(dbData.dbName);
@@ -155,7 +175,7 @@ export default function IndexedDBExample(): JSX.Element {
             <div className="row">
                 <div className="col col--5">
                     <iframe className={clsx("row", styles.exampleFrame)} id="idb"></iframe>
-                    <div className={clsx( styles.buttonRow)}>
+                    <div className={clsx(styles.buttonRow)}>
                         <button className={clsx("button button--primary", styles.button)} onClick={getData} disabled={loading}>
                             Display Data
                         </button>
@@ -166,14 +186,14 @@ export default function IndexedDBExample(): JSX.Element {
                             onChange={(e) => setDbData({ ...dbData, store: e.target.value })}
                             placeholder="Store to Display"
                         />
-                        {visualizeError && <p className="data-display__error">{visualizeError}</p>}
+                        {visualizeError && <p>{visualizeError}</p>}
                         {dialog && (
                             <div className={styles.modalOverlay}>
                                 <div className={styles.modal}>
-                                <button aria-label="Close" className={clsx("clean-btn close",styles.closeButton)} type="button"  onClick={() => setDialog(false)}>
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                    <DataTable rows={dataVisual} columns={columns} />
+                                    <button className={clsx("clean-btn close", styles.closeButton)} type="button" onClick={() => setDialog(false)}>
+                                        <span>&times;</span>
+                                    </button>
+                                    <DataTable rows={rows} columns={columns} />
                                 </div>
                             </div>
                         )}
@@ -190,7 +210,6 @@ export default function IndexedDBExample(): JSX.Element {
                         ))}
                     </select>
                     <CodeBlock className={clsx(styles.codeBlock)}>{codeBlocks[currentExample].code}</CodeBlock>
-                    
                 </div>
                 <IbdDocs />
             </div>
