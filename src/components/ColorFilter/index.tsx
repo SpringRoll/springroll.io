@@ -7,10 +7,10 @@ import {
   useRef,
 } from "react";
 import CodeBlock from "@theme/CodeBlock";
+import ExecutionEnvironment from '@docusaurus/ExecutionEnvironment';
 //@ts-ignore
 import Example from "@site/static/img/example.jpg";
 import styles from './styles.module.scss';
-import { ColorFilter } from "springroll";
 import clsx from "clsx";
 
 /**
@@ -25,13 +25,16 @@ export default function ColorFilterExample(): JSX.Element {
 
   //Instantiate the ColorFilter and set the reference to the example image
   useEffect(() => {
-    setColorFilter(new ColorFilter());
-    filterExampleImageRef.current = document.getElementById("filterExampleImage") as HTMLImageElement;
+    if (!ExecutionEnvironment.canUseDOM) return;
+    import('springroll').then(({ ColorFilter }) => {
+      setColorFilter(new ColorFilter());
+      filterExampleImageRef.current = document.getElementById("filterExampleImage") as HTMLImageElement;
+    });
   }, []);
 
   // Create the options for the select box based on the filter types
   useEffect(() => {
-    if (colorFilter) {
+    if (!colorFilter || !ExecutionEnvironment.canUseDOM) return;
       setOptions(
         colorFilter.types.map((type) => (
           <option key={type.name} value={type.value}>
@@ -39,12 +42,12 @@ export default function ColorFilterExample(): JSX.Element {
           </option>
         )),
       );
-    }
+
   }, [colorFilter]);
 
   // Apply the selected filter to the example image, or remove the filter if "none" is selected
   useEffect(() => {
-    if (!colorFilter) return;
+    if (!colorFilter || !ExecutionEnvironment.canUseDOM) return;
     if (selectedOption !== "none") {
       console.log(`Selected option: ${selectedOption}`);
       colorFilter.applyFilter(filterExampleImageRef.current, selectedOption);
