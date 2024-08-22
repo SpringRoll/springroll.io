@@ -53,9 +53,9 @@
     border: none;
     font-size: 2rem;
     cursor: pointer;
-
+    color: var(--ifm-color-primary-darkest);
     &:hover {
-        color: #666;
+        color: var(--ifm-color-primary);
     }
 }
 
