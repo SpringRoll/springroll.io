@@ -1,18 +1,41 @@
-# [Springroll.io](https://springroll.io/)
+# Website
 
-This is the repository for the [springroll.io](https://springroll.io/) site. Due to an issue with Github's hosting practices, the source code and the built version of [springroll.io](https://springroll.io/) can't be in the same repository. To update [springroll.io](https://springroll.io/), you must push the built version of [springroll.io](https://springroll.io/) to the [deployment repository](https://github.com/SpringRoll/SpringRoll.github.io)
+This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
-## Commands
+### Installation
 
-### serve - Runs the dev server
+```
+$ yarn
+```
 
-### build - Builds site for deployment
+### Local Development
 
+```
+$ yarn start
+```
 
-## Notes
-### SafeScaleManagerDemo
-To get this to work properly you'll have to update the path names.
-e.g.
-`src="main.js"` => `src="/SafeScaleManagerDemo/main.js"`
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-You'll also have to edit main.js directly to update the path for the Springroll logo
+### Build
+
+```
+$ yarn build
+```
+
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+### Deployment
+
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
