@@ -21,6 +21,7 @@ const sidebars: SidebarsConfig = {
     'Examples/speechsynth',
     'Examples/filter',
     'Examples/resize',
+    'Examples/bellhop',
     'Examples/controls',
   ],
 

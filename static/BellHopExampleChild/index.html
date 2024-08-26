@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible"
+    content="IE=edge,chrome=1">
+  <meta name="description"
+    content="">
+  <title>
+    Springroll
+  </title>
+  <style>
+    #frame {
+      background-color: white;
+    }
+  </style>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+</head>
+
+<body>
+  <div id="frame">
+    <ul id="messageList"></ul>
+  </div>
+  <script src="./bellhop-umd.js"></script>
+  <script type="module">
+    const bellhop = new window.Bellhop();
+    
+    bellhop.connect();
+
+    const messageList = document.querySelector('#messageList');
+
+    bellhop.on('message', (event) => {
+      const newMessage = document.createElement('li');
+      newMessage.innerText = event.data.message;
+      messageList.appendChild(newMessage);
+      console.log(event.data.message);
+    });
+
+    bellhop.on('clearMessages', () => {
+      messageList.innerHTML = '';
+    })
+  </script>
+</body>
+
+</html>

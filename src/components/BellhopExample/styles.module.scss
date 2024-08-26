@@ -1,0 +1,24 @@
+@import "../../scss/fonts";
+@import "../../scss/colors";
+
+.bellhop {
+
+  &_iframe {
+    background-color: white !important;
+    height: 100%;
+    width: 100%;
+  }
+
+  &_gameContainer {
+    margin-bottom: 1rem;
+  }
+
+  &_controls {
+    display: flex;
+    flex-direction: column;
+
+    &> button {
+      margin: 1rem;
+    }
+  }
+}
