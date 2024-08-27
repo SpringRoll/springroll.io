@@ -27,6 +27,13 @@
   --ifm-font-weight-bold: 700;
   --springroll-hero-bg-color: #{$white-background};
   --springroll-hero-text-color: #{$black};
+  --doc-sidebar-width: 250px !important;
+  --table-header-bg: var(--ifm-color-primary-darkest);
+  --table-header-color: #{$white};
+  --table-border-color: var(--ifm-color-primary-darkest);
+  --table-row-hover-bg: #123550; 
+  --modal-bg: var(--springroll-hero-bg-color);
+
   /** 
   * Set the mute and unmute button colors 
   * Hide or show the button labels based on the mute state
@@ -77,4 +84,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --springroll-hero-bg-color: #2b3137;
   --springroll-hero-text-color: #{$white};
+
+
 }

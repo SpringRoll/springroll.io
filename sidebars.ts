@@ -23,6 +23,7 @@ const sidebars: SidebarsConfig = {
     'Examples/resize',
     'Examples/bellhop',
     'Examples/controls',
+    'Examples/indexeddb',
   ],
 
   // But you can create a sidebar manually

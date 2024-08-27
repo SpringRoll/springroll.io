@@ -39,3 +39,9 @@ $ GIT_USER=<Your GitHub username> yarn deploy
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
+### Examples
+
+#### IndexedDB
+
+The IndexedDB example iframe content is stored in `static/idbExample/`. It currently uses the `2.6.0` version of `SpringRoll-umd.js`. 

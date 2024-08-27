@@ -90,7 +90,7 @@ export default function GameDemo(): JSX.Element {
           Game Options
         </Heading>
 
-        <button id="btnPause" type="button" className={clsx('button button--primar unpaused', styles.gameOptionButton)}>
+        <button id="btnPause" type="button" className={clsx('button button--primary unpaused', styles.gameOptionButton)}>
           <span className="toggleOn">Pause</span>
           <span className="toggleOff">Unpause</span>
         </button>
