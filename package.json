@@ -1,8 +1,10 @@
 {
   "name": "springroll-io",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
+    "preserve": "./scripts/clone-demo-game.sh",
+    "prebuild": "./scripts/clone-demo-game.sh",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"

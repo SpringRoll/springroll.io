@@ -32,7 +32,7 @@ export default {
         'soundMute': { label: 'Sound Mute',  on: false },
         'captionStart': { label: 'Captions Start',  on: false },
       },
-      gameUrl: location.protocol + '//springroll.io/springroll-io-demo-game/'
+      gameUrl: '/springroll-io-demo-game/index.html'
     };
   },
   methods: {
