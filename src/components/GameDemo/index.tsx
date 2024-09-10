@@ -60,7 +60,7 @@ export default function GameDemo(): JSX.Element {
       });
 
       // Open the game 
-      containerRef.current.openPath('http://springroll.io/springroll-io-demo-game/');
+      containerRef.current.openPath('/springroll-io-demo-game/index.html');
 
     };
 
