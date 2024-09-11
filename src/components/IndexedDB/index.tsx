@@ -49,7 +49,7 @@ export default function IndexedDBExample(): JSX.Element {
 
             containerRef.current = container;
 
-            container.openPath('/idbExample');
+            container.openPath('/idbExample/index.html');
 
             // Setup event listeners
             events.forEach(event => {
