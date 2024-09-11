@@ -65,7 +65,7 @@ bellhop.on('clearMessages', () => {
     <section className='container'>
       <div className='row'>
         <div className={clsx('col', styles.bellhop_gameContainer)}>
-          <iframe id="demo-game" className={styles.bellhop_iframe} src='/BellHopExampleChild/'></iframe>
+          <iframe id="demo-game" className={styles.bellhop_iframe} src='/BellHopExampleChild/index.html'></iframe>
         </div>
         <div className={clsx('col', styles.bellhop_controls)}>
           <button id='sendButton' className="button button--primary" onClick={sendPostMessage}>Send Message</button>
