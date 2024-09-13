@@ -8,6 +8,7 @@ import Heading from '@theme/Heading';
 import LogoUrl from '@site/static/img/logo.png';
 
 import styles from './index.module.scss';
+import PBSKids from '../components/PBSKids';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -45,6 +46,7 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
       <main>
         <HomepageFeatures />
+        <PBSKids />
       </main>
     </Layout>
   );

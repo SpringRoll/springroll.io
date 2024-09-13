@@ -1,0 +1,45 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.PBSKidsContainer {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.description {
+  flex-basis: calc(100% - 200px); // set minimum width for description
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  flex-wrap: wrap;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  max-height: 200px;
+  flex-basis: 200px;
+}
+
+.logo {
+  width: 200px;
+  height: 100%;
+}
+
+// add media query for wide viewports
+@media (max-width: 800px) {
+
+  // adjust the breakpoint as needed
+  .PBSKidsContainer {
+    flex-direction: column; // change flex direction to column on narrow viewports
+  }
+}
