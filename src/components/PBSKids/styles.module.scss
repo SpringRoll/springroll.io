@@ -35,10 +35,8 @@
   height: 100%;
 }
 
-// add media query for wide viewports
+// add media query for narrow viewports
 @media (max-width: 800px) {
-
-  // adjust the breakpoint as needed
   .PBSKidsContainer {
     flex-direction: column; // change flex direction to column on narrow viewports
   }
