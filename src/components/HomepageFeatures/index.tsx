@@ -11,7 +11,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Lightweight',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/svg/icon-feather-quill-bird-write.svg').default,
     description: (
       <>
         Written in pure JavaScript, SpringRoll is only ~120KB when minified and is designed to be framework/engine agnostic. It can be dropped into
@@ -21,7 +21,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'End to End communication',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('@site/static/svg/icon-communication.svg').default,
     description: (
       <>
         SpringRoll and SpringRoll Container take care of all communication. Perform the initial setup and let SpringRoll handle the rest.
@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Extensible',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/svg/icon-plug.svg').default,
     description: (
       <>
         SpringRoll has a powerful plugin based architecture. If you require additional functionality you can write
@@ -58,6 +58,7 @@ export default function HomepageFeatures(): JSX.Element {
   return (
     <section className={styles.features}>
       <div className="container">
+      
         <div className="row">
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />

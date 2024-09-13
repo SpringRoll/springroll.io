@@ -33,6 +33,7 @@
   --table-border-color: var(--ifm-color-primary-darkest);
   --table-row-hover-bg: #123550; 
   --modal-bg: var(--springroll-hero-bg-color);
+  --springroll-feature-icon-color: #000000;
 
   /** 
   * Set the mute and unmute button colors 
@@ -84,6 +85,6 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
   --springroll-hero-bg-color: #2b3137;
   --springroll-hero-text-color: #{$white};
-
+  --springroll-feature-icon-color: #FFFFFF;
 
 }
