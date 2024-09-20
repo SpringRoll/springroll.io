@@ -1,9 +1,0 @@
-springroll:
-  label: SpringRoll
-  permalink: /springroll
-  description: SpringRoll tag description
-releases:
-  label: Releases
-  permalink: /releases
-  description: Various SpringRoll ecosystem releases
-
