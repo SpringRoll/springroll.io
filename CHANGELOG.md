@@ -18,16 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Captions styling has been updated.
 - The demo is now displayed using SpringRoll Container instead of just using Bellhop.
 
-###### Color Filter Changes
+#### Color Filter Changes
 - The example image is no longer stretched. 
 
-###### Resize Changes
+#### Resize Changes
 - This example now uses the `SafeScaleManager` instead of `ScaleManager`. 
 
-###### Bellhop
+#### Bellhop
 - This example has been simplified to only demonstrate how to use Bellhop without using SpringRoll specific events.
 
-###### Indexed DB
+#### Indexed DB
 - The data display table was rewritten and simplified. It was using a built-in Vue component. 
 - The help section below the example now has a horizontal row of tabs instead of vertical.
 - There are new error checks for things that used to silently fail.
