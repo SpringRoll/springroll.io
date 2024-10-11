@@ -1,0 +1,51 @@
+.gameDemoRoot {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: 100%;
+  height:55.2vh;
+}
+
+.gameContainer {
+  background-color: transparent !important;
+  height: 100%;
+  width: 100%;
+}
+
+.gameHeader {
+  margin-top: 1rem;
+  margin-bottom: 0;
+}
+
+.gameOptionButton {
+  height: 2.4rem;
+  width: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  margin: .26rem;
+  transition: background-color .25s;
+}
+
+.gameEvents {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.gameEventBadge {
+  height: 1.5srem;
+  width: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  text-transform: capitalize;
+  margin: .26rem;
+}
+

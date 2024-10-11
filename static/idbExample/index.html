@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>iFrame</title>
+  <style>
+    @font-face {
+      font-family: 'Assistant';
+      font-style: normal;
+      font-weight: 400;
+      src: url('./fonts/Assistant/Assistant-Regular.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Assistant';
+      font-style: normal;
+      font-weight: 600;
+      src: url('./fonts/Assistant/Assistant-SemiBold.ttf') format('truetype');
+    }
+
+    :root {
+      --primary-color: #04b1d8;
+      --font-color-base: #ffffff;
+      --spacing-vertical: 0.5rem;
+    }
+
+    body {
+      font-family: 'Assistant', sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--font-color-base);
+      background-color: #2b3137;
+      margin: 0;
+      padding: var(--spacing-vertical)  0.5rem;
+      min-height: 396px;
+      max-height: 431px;
+      max-width: 391px;
+      width: 100%;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: var(--spacing-vertical);
+    }
+
+    .form-group {
+      margin-bottom: 0.25rem;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .input {
+      display: block;
+      width: 100%;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--font-color-base);
+      background-color: #3a3f47;
+      background-clip: padding-box;
+      border: 1px solid #4a4f57;
+      border-radius: 0.25rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      box-sizing: border-box;
+    }
+
+    .input:focus {
+      color: var(--font-color-base);
+      background-color: #3a3f47;
+      border-color: var(--primary-color);
+      outline: 0;
+      box-shadow: 0 0 0 0.1rem #095b8f40;
+    }
+
+    .messages {
+      margin-bottom: var(--spacing-vertical);
+      font-size: 0.85rem;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .action {
+      display: inline-block;
+      font-weight: 400;
+      text-align: center;
+      vertical-align: middle;
+      user-select: none;
+      border: 1px solid transparent;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      border-radius: 0.25rem;
+      color: #000;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action:hover {
+      color: var(--font-color-base);
+      background-color: #049fc2;
+      border-color: #0396b8;
+    }
+
+    .action:focus {
+      box-shadow: 0 0 0 0.1rem #095b8f80;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="info">
+      <div class="form-group">
+        <label for="dbName" class="label">Database Name:</label>
+        <input type="text" class="input" id="dbName" value="">
+      </div>
+      <div class="form-group">
+        <label for="storeName" class="label">Store Name:</label>
+        <input type="text" class="input" id="storeName" value="">
+      </div>
+      <div class="form-group">
+        <label for="version" class="label">Version:</label>
+        <input type="text" class="input" id="version" value="">
+      </div>
+      <div class="form-group">
+        <label for="recordKey" class="label">Record Key:</label>
+        <input type="text" class="input" id="recordKey" value="">
+      </div>
+      <div class="form-group">
+        <label for="recordValue" class="label">Record Value:</label>
+        <input type="text" class="input" id="recordValue" value="">
+      </div>
+    </div>
+
+    <div class="messages">
+      <p id="message"></p>
+    </div>
+
+    <div class="buttons">
+      <button id="open" class="action">Open DB Connection</button>
+      <button id="deleteStore" class="action">Delete Store</button>
+      <button id="create" class="action">Create Record</button>
+      <button id="update" class="action">Update Record</button>
+      <button id="delete" class="action">Delete Record</button>
+      <button id="read" class="action">Get Record</button>
+      <button id="deleteDB" class="action">Delete Database</button>
+      <button id="closeDB" class="action">Close DB Connection</button>
+    </div>
+  </div>
+
+  <script src="/idbExample/SpringRoll-umd.js"></script>
+  <script type="module">
+
+    const testApp = new springroll.Application({
+      features: {
+        userData: true
+      }
+    });
+
+    // Subscribe to pause state, prevents console warning
+    testApp.state.pause.subscribe(isPaused => {
+      console.log('Paused?', isPaused);
+    });
+
+    const openButton = document.querySelector('#open');
+    const createButton = document.querySelector('#create');
+    const updateButton = document.querySelector('#update');
+    const deleteButton = document.querySelector('#delete');
+    const readButton = document.querySelector('#read');
+    const deleteDBButton = document.querySelector('#deleteDB');
+    const closeButton = document.querySelector('#closeDB');
+    const deleteStoreButton = document.querySelector('#deleteStore');
+
+    const dbName = document.querySelector('#dbName');
+    const storeName = document.querySelector('#storeName');
+    const version = document.querySelector('#version');
+    const recordKey = document.querySelector('#recordKey');
+    const recordValue = document.querySelector('#recordValue');
+
+    const messageLine = document.querySelector('#message');
+
+    let connectionOpen = false;
+    
+    // Format the version number from the input field to integer 
+    const formatVersion = () => {
+      let formattedVersion = 1;
+
+      if (typeof version.value === 'string') {
+        formattedVersion = Number.parseInt(version.value);
+        if (Number.isNaN(formattedVersion)) {
+          formattedVersion = 1; // Use a default version if the input is invalid
+        }
+      } else {
+        formattedVersion = version.value;
+      }
+
+      return formattedVersion;
+    };
+
+    // Sets the text in the message line
+    const setMessage = (message) => {
+      messageLine.textContent = message;
+    }
+
+    // Checks if the database name field is not empty
+    const checkDBField = () => {
+      if (!dbName.value || dbName.value === "") {
+        setMessage("Please enter a database name");
+        return false;
+      }
+      return true;
+    }
+
+    // Checks if the store name field is not empty
+    const checkStoreNameField = () => {
+      if (!storeName.value || storeName.value === "") {
+        setMessage("Please enter a store name");
+        return false;
+      }
+      return true;
+    }
+
+    // Checks if the connection is open
+    const checkConnection = () => {
+      if (!connectionOpen) {
+        setMessage("Please open a connection first");
+        return false;
+      }
+      return true;
+    }
+
+    testApp.container.on('connected', async () => {
+
+      //Open database, this call is also used to create new stores if required
+      openButton.addEventListener('click', async () => {
+        if (!checkDBField() || !checkStoreNameField()) return;
+
+        try {
+          let openResult = await springroll.UserData.IDBOpen(
+            dbName.value,
+            formatVersion(),
+            { stores: [{ storeName: storeName.value }] }, //additions parameter. Used to create new store
+          );
+          connectionOpen = true;
+          console.log(openResult);
+          setMessage(openResult.result);
+        } catch (err) {
+          console.error(err);
+          setMessage(err.message);
+        }
+
+      });
+    });
+
+    // Delete store
+    deleteStoreButton.addEventListener('click', async () => {
+      if (!checkDBField() || !checkStoreNameField()) return;
+
+      if (connectionOpen) {
+        await springroll.UserData.IDBClose();
+      }
+
+      let deleteResult = await springroll.UserData.IDBOpen(
+        dbName.value,
+        formatVersion(),
+        null,
+        { stores: [{ storeName: storeName.value }] } // deletions parameter. Used to delete a store
+      );
+      console.log(deleteResult);
+
+      setMessage(deleteResult.result);
+    });
+
+    // Create record
+    createButton.addEventListener('click', async () => {
+      if (!checkConnection()) return;
+      const result = await springroll.UserData.IDBAdd(storeName.value, recordValue.value, recordKey.value);
+      console.log(result)
+      setMessage(result.data.result);
+
+    });
+
+    // Update record
+    updateButton.addEventListener('click', async () => {
+      if (!checkConnection()) return;
+      const result = await springroll.UserData.IDBUpdate(storeName.value, recordKey.value, recordValue.value);
+      console.log(result)
+      setMessage(result.data.result);
+    });
+
+    // Delete record
+    deleteButton.addEventListener('click', async () => {
+      const result = await springroll.UserData.IDBRemove(storeName.value, recordKey.value);
+      console.log(result)
+      setMessage(result.data.result);
+    });
+
+    // Delete a database
+    deleteDBButton.addEventListener('click', async () => {
+      if (!checkDBField() || !checkConnection()) return;
+      let result = await springroll.UserData.IDBDeleteDB(dbName.value);
+      console.log(result)
+      setMessage(result.data.result);
+    });
+
+    // Get a record
+    readButton.addEventListener('click', async () => {
+      if (!checkConnection()) return;
+      let result = await springroll.UserData.IDBRead(storeName.value, recordKey.value);
+
+      console.log(result);
+      if (result.data.success) setMessage(`Value returned from Key "${recordKey.value}" = ${result.data.result}`);
+      else setMessage(`IDBRead unsuccessful. Key either does not exist or the DB connection was not properly opened`);
+    });
+
+    // Close DB connection
+    closeButton.addEventListener('click', async () => {
+      try {
+        let closeResult = await springroll.UserData.IDBClose();
+        connectionOpen = false;
+        console.log(closeResult);
+        setMessage(closeResult.result);
+      } catch (err) {
+        console.error(err);
+        setMessage(err.message);
+      }
+    });
+  </script>
+</body>
+
+</html>

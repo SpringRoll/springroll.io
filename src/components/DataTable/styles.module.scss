@@ -1,0 +1,23 @@
+.tableContainer {
+    flex-grow: 1;
+    overflow: auto;
+    margin-top: 30px; /*Add some space below the close button*/
+  }
+  
+  .dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    display: table;
+ 
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-color: var(--table-border-color) !important;
+    }
+  
+    th {
+      background-color: var(--table-header-bg);
+      color: var(--table-header-color);
+      cursor: pointer;
+    }
+  }
